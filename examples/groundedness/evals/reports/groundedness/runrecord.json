@@ -1,0 +1,204 @@
+{
+  "comparable": {
+    "changed_dimensions": [],
+    "current": {
+      "dimensions": {
+        "authority": "88e912834d888fe4b4924d0e09b54888260e84c499b8bff2135455d24e3505b9",
+        "baseline": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "config": "10f6fb63708407c441fa720acd4f1eff0c099f7494b84a7838f842b919d9094f",
+        "dataset": "8a5cf9f03843bae812ac164e62d838a69d71a8480dcf63bcc5f298d2d1ac3aa5",
+        "evaluator": "f8c14762ba9d9d302213ba32ce17739fbb289227611895a1fadafaf14d39be84",
+        "evidence": "203294751725e6661d9622beab31831b2c9ea49deba4a5af966e56074b954e07",
+        "example": "de51b0006c615eb79f7bbe2dfa69d03b091f90c4bf56800a36877f67a0648026",
+        "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+        "metric_spec": "6293639a008456ab53ce09b82f019cdce2717fe783f0a099ae8f45b70b34b9d5",
+        "policy": "a69f50eee46e418afc253e05b3768b9e53f8c2beb44287e16aea3f2de18b700f"
+      }
+    },
+    "gating_dimensions": [
+      "framework",
+      "metric_spec",
+      "evaluator",
+      "dataset",
+      "config",
+      "policy"
+    ],
+    "requested": false,
+    "state": "comparison_not_requested"
+  },
+  "provenance": {
+    "dimensions": {
+      "authority": "88e912834d888fe4b4924d0e09b54888260e84c499b8bff2135455d24e3505b9",
+      "baseline": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "config": "10f6fb63708407c441fa720acd4f1eff0c099f7494b84a7838f842b919d9094f",
+      "dataset": "8a5cf9f03843bae812ac164e62d838a69d71a8480dcf63bcc5f298d2d1ac3aa5",
+      "evaluator": "f8c14762ba9d9d302213ba32ce17739fbb289227611895a1fadafaf14d39be84",
+      "evidence": "203294751725e6661d9622beab31831b2c9ea49deba4a5af966e56074b954e07",
+      "example": "de51b0006c615eb79f7bbe2dfa69d03b091f90c4bf56800a36877f67a0648026",
+      "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+      "metric_spec": "6293639a008456ab53ce09b82f019cdce2717fe783f0a099ae8f45b70b34b9d5",
+      "policy": "a69f50eee46e418afc253e05b3768b9e53f8c2beb44287e16aea3f2de18b700f"
+    }
+  },
+  "run_id": "groundedness",
+  "scorecard": {
+    "authority": {
+      "field_presence": {
+        "blocked": false,
+        "can_gate": false,
+        "level": "informational",
+        "reasons": [
+          "metric_status=informational",
+          "threshold_proposed",
+          "dataset_proposed"
+        ]
+      },
+      "set_overlap": {
+        "blocked": false,
+        "can_gate": false,
+        "level": "informational",
+        "reasons": [
+          "metric_status=informational",
+          "threshold_proposed",
+          "dataset_proposed"
+        ]
+      },
+      "structural_shape": {
+        "blocked": false,
+        "can_gate": false,
+        "level": "informational",
+        "reasons": [
+          "metric_status=informational",
+          "threshold_proposed",
+          "dataset_proposed"
+        ]
+      }
+    },
+    "baseline_state": "comparison_not_requested",
+    "metrics": [
+      {
+        "aggregation": "mean",
+        "included_count": 3,
+        "metric": "set_overlap",
+        "status_counts": {
+          "scored": 3
+        },
+        "value": 0.3128205128205128
+      },
+      {
+        "aggregation": "mean",
+        "included_count": 3,
+        "metric": "field_presence",
+        "status_counts": {
+          "scored": 3
+        },
+        "value": 1.0
+      },
+      {
+        "aggregation": "mean",
+        "included_count": 3,
+        "metric": "structural_shape",
+        "status_counts": {
+          "scored": 3
+        },
+        "value": 1.0
+      }
+    ],
+    "verdict": {
+      "blocked_gates": [],
+      "ci_should_fail": false,
+      "failing_gates": [],
+      "informational_metrics": [
+        "set_overlap",
+        "field_presence",
+        "structural_shape"
+      ],
+      "passing_gates": [],
+      "reasons": {},
+      "verdict": "informational"
+    }
+  },
+  "scores": [
+    {
+      "evaluator_version": "set_overlap@1",
+      "example_id": "datasets/grounded.jsonl#1",
+      "metric": "set_overlap",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#1",
+      "validity": "valid",
+      "value": 0.4
+    },
+    {
+      "evaluator_version": "set_overlap@1",
+      "example_id": "datasets/grounded.jsonl#2",
+      "metric": "set_overlap",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#2",
+      "validity": "valid",
+      "value": 0.07692307692307693
+    },
+    {
+      "evaluator_version": "set_overlap@1",
+      "example_id": "datasets/grounded.jsonl#3",
+      "metric": "set_overlap",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#3",
+      "validity": "valid",
+      "value": 0.46153846153846156
+    },
+    {
+      "evaluator_version": "field_presence@1",
+      "example_id": "datasets/grounded.jsonl#1",
+      "metric": "field_presence",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#1",
+      "validity": "valid",
+      "value": 1.0
+    },
+    {
+      "evaluator_version": "field_presence@1",
+      "example_id": "datasets/grounded.jsonl#2",
+      "metric": "field_presence",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#2",
+      "validity": "valid",
+      "value": 1.0
+    },
+    {
+      "evaluator_version": "field_presence@1",
+      "example_id": "datasets/grounded.jsonl#3",
+      "metric": "field_presence",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#3",
+      "validity": "valid",
+      "value": 1.0
+    },
+    {
+      "evaluator_version": "structural_shape@1",
+      "example_id": "datasets/grounded.jsonl#1",
+      "metric": "structural_shape",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#1",
+      "validity": "valid",
+      "value": 1.0
+    },
+    {
+      "evaluator_version": "structural_shape@1",
+      "example_id": "datasets/grounded.jsonl#2",
+      "metric": "structural_shape",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#2",
+      "validity": "valid",
+      "value": 1.0
+    },
+    {
+      "evaluator_version": "structural_shape@1",
+      "example_id": "datasets/grounded.jsonl#3",
+      "metric": "structural_shape",
+      "status": "scored",
+      "unit_id": "datasets/grounded.jsonl#3",
+      "validity": "valid",
+      "value": 1.0
+    }
+  ]
+}

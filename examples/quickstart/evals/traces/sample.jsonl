@@ -1,0 +1,2 @@
+{"trace_id": "t1", "behavior": {"input": "capital of France?", "output": {"answer": "Paris"}}}
+{"trace_id": "t2", "behavior": {"input": "color of the clear sky?", "output": {"answer": "blue"}}}

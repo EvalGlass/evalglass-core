@@ -1,0 +1,41 @@
+#!/usr/bin/env sh
+# EvalGlass integration-time launcher (EGP-P1-1).
+#
+# Runs the BUNDLED framework skill from the plugin so a marketplace-only user needs no
+# `pip install evalglass`. It is INTEGRATION-TIME ONLY: it drives discover/plan/install/
+# revendor against a host repo. It is NEVER referenced by a host's vendored runtime or CI
+# (ADR 0022) — host evaluation runs the vendored `_evalglass` via `PYTHONPATH=evals` instead.
+#
+# Usage:  evalglass-launch <discover|plan|install|revendor> [args...]
+#
+# Errors here are *setup* diagnostics (exit 2), never evaluation results.
+set -eu
+
+# Resolve the plugin root: prefer ${CLAUDE_PLUGIN_ROOT} (set by Claude Code), else derive it
+# from this script's own location (…/bin/evalglass-launch -> plugin root).
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+  ROOT="$CLAUDE_PLUGIN_ROOT"
+else
+  ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+fi
+
+SRC="$ROOT/src"
+if [ ! -d "$SRC/evalglass" ]; then
+  echo "evalglass-launch: bundled framework not found under '$SRC'." >&2
+  echo "  Set CLAUDE_PLUGIN_ROOT to the plugin root, or run from the plugin checkout." >&2
+  echo "  (This is a setup error, not an evaluation result.)" >&2
+  exit 2
+fi
+
+# Choose an interpreter without assuming a bare 'python' exists.
+if command -v python3 >/dev/null 2>&1; then
+  PY=python3
+elif command -v python >/dev/null 2>&1; then
+  PY=python
+else
+  echo "evalglass-launch: no python3/python interpreter on PATH (setup error)." >&2
+  exit 2
+fi
+
+# Run the bundled skill with the bundled source on PYTHONPATH; forward all arguments verbatim.
+exec env PYTHONPATH="$SRC${PYTHONPATH:+:$PYTHONPATH}" "$PY" -m evalglass.installer "$@"

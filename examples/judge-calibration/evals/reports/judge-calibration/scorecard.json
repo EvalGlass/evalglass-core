@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "faithfulness": {
+      "blocked": false,
+      "can_gate": false,
+      "level": "informational",
+      "reasons": [
+        "threshold_proposed",
+        "judge_uncalibrated"
+      ]
+    },
+    "field_presence": {
+      "blocked": false,
+      "can_gate": false,
+      "level": "informational",
+      "reasons": [
+        "metric_status=informational",
+        "threshold_proposed"
+      ]
+    }
+  },
+  "baseline_state": "comparison_not_requested",
+  "metrics": [
+    {
+      "aggregation": "mean",
+      "included_count": 3,
+      "metric": "faithfulness",
+      "status_counts": {
+        "scored": 3
+      },
+      "value": 0.7333333333333334
+    },
+    {
+      "aggregation": "mean",
+      "included_count": 3,
+      "metric": "field_presence",
+      "status_counts": {
+        "scored": 3
+      },
+      "value": 1.0
+    }
+  ],
+  "verdict": {
+    "blocked_gates": [],
+    "ci_should_fail": false,
+    "failing_gates": [],
+    "informational_metrics": [
+      "faithfulness",
+      "field_presence"
+    ],
+    "passing_gates": [],
+    "reasons": {},
+    "verdict": "informational"
+  }
+}
