@@ -397,6 +397,7 @@
       <h2>Scope And Principle</h2>
     </div>
     <p>EvalGlass is a vendored, local-first evaluation framework for LLM applications. It should be small enough to adopt, but not so small that it becomes a toy score runner. The streamlined architecture keeps the real evaluation capabilities: reference and non-reference metrics, trace-native input, typed evidence, judge-assisted metrics, provenance, baseline comparability, authority, and one Verdict Engine.</p>
+    <p><strong>Positioning &mdash; Core executes; Discovery finds; Intelligence explains.</strong> Core is the open, host-directed evaluation runtime: you tell it what to evaluate and it executes honestly, giving a rigorous system to <em>define, run, compare, and retain</em> evaluations. It never inspects an application to decide, on its own, what should be tested. Deriving <em>what</em> to measure from an application (metric discovery) is a separate concern that lives in the <code>evalglass-discovery</code> repo; explaining <em>why</em> a failure happens is another. This document specifies Core only.</p>
     <div class="note">
       <p><strong>Primary rule:</strong> a green or non-failing EvalGlass result must never imply more evidence, authority, calibration, comparability, or validity than the run actually has.</p>
     </div>
