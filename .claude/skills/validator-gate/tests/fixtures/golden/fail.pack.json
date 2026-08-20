@@ -1,0 +1,43 @@
+{
+  "artifacts": [
+    {
+      "authority": "product",
+      "content": {
+        "verdict": "blocked"
+      },
+      "id": "sc",
+      "kind": "scorecard"
+    },
+    {
+      "authority": "external",
+      "content": {
+        "claimed_status": "pass"
+      },
+      "id": "rep",
+      "kind": "report"
+    }
+  ],
+  "checkpoint": "EG.golden",
+  "claims": [
+    {
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "id": "report-matches-verdict",
+      "required_artifacts": [
+        "sc",
+        "rep"
+      ],
+      "text": "the report matches the verdict"
+    }
+  ],
+  "schema_version": "validator.evidence.v1",
+  "source_boundary": {
+    "external_contracts": [
+      "rep"
+    ],
+    "product": [
+      "sc"
+    ]
+  }
+}

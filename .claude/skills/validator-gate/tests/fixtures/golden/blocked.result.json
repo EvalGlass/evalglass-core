@@ -1,0 +1,35 @@
+{
+  "blocked_on": [
+    "required artifact 'absent' for claim 'report-matches-verdict' is absent from the evidence pack"
+  ],
+  "checkpoint": "EG.golden",
+  "claims_validated": [
+    "report-matches-verdict"
+  ],
+  "evidence_used": [
+    "rep",
+    "sc"
+  ],
+  "families_run": [
+    "authority_verdict"
+  ],
+  "findings": [
+    {
+      "claim_id": "report-matches-verdict",
+      "evidence_refs": [
+        "rep",
+        "sc"
+      ],
+      "family_id": "authority_verdict",
+      "reason": "single effective product verdict 'pass'; public surfaces do not overclaim",
+      "remediation": "",
+      "risk_ref": null,
+      "status": "PASS"
+    }
+  ],
+  "gate": "validator",
+  "risk_references_used": [],
+  "schema_version": "validator.result.v1",
+  "status": "BLOCKED",
+  "warnings": []
+}

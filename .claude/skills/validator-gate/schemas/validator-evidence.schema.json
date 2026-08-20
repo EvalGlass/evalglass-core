@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evalglass/validator-gate/validator-evidence.schema.json",
+  "title": "EvidencePack",
+  "description": "Source of truth for one validator-gate run. Additive evolution: unknown properties are tolerated by consumers.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "checkpoint"],
+  "properties": {
+    "schema_version": { "const": "validator.evidence.v1" },
+    "checkpoint": { "type": "string" },
+    "source_boundary": {
+      "type": "object",
+      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+    },
+    "gate_plan": { "type": "object", "additionalProperties": true },
+    "step_complete": { "type": "object", "additionalProperties": true },
+    "claims": { "type": "array", "items": { "$ref": "#/$defs/claim" } },
+    "artifacts": { "type": "array", "items": { "$ref": "#/$defs/artifactRef" } },
+    "scan_gate_result": { "type": ["object", "null"], "additionalProperties": true },
+    "code_review_result": { "type": ["object", "null"], "additionalProperties": true },
+    "known_gaps": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "text"],
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" },
+        "risk_surfaces": { "type": "array", "items": { "type": "string" } },
+        "expected_families": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "contract_boundary",
+              "authority_verdict",
+              "evidence_provenance",
+              "scenario_checker",
+              "integration_boundary"
+            ]
+          }
+        },
+        "required_artifacts": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "kind", "authority"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": {
+          "enum": [
+            "run_record",
+            "scorecard",
+            "verdict",
+            "diagnostic",
+            "report",
+            "trace",
+            "scenario",
+            "checker_output",
+            "baseline",
+            "provenance",
+            "authority_record",
+            "schema",
+            "scan_result",
+            "review_result"
+          ]
+        },
+        "authority": {
+          "enum": [
+            "product",
+            "egts",
+            "execution_loop",
+            "scan_gate",
+            "validator_gate",
+            "generated_or_proposed",
+            "external"
+          ]
+        },
+        "path": { "type": ["string", "null"] },
+        "content": { "type": ["object", "null"], "additionalProperties": true },
+        "produced_by": { "type": ["string", "null"] },
+        "claim_ids": { "type": "array", "items": { "type": "string" } },
+        "stale": { "type": "boolean" },
+        "notes": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+# Scan Gate REQUIRED profile policy for the EvalGlass framework repo.
+# Hermetic, no-network proof for required-tier / CI / script / manifest changes.
+# Same trust rules as fast, run under the stricter `required` profile (detectors
+# enforce extra hermeticity in their slices). Validated by scripts/policy.py.
+version: evalglass-scan-policy@2026-05-27
+
+profiles:
+  required:
+    detectors:
+      - path_classifier
+      - imports_effects
+      - secrets
+      - generated_authority
+      - ci_script_guard
+      - manifest_drift
+    network: disabled
+
+path_groups:
+  all:
+    - "**"
+  required_tier:
+    - "src/evalglass/core/**"
+    - "tests/core_isolation/**"
+  harness:
+    - "src/evalglass/harness/**"
+  adapters:
+    - "src/evalglass/adapters/**"
+  optional_lane:
+    - "src/evalglass/optional/**"
+    - "src/evalglass/extensions/**"
+  generated_authority:
+    - "**/baselines/**"
+    - "**/calibration/**"
+    - "**/thresholds/**"
+  host_owned:
+    - "evals/datasets/**"
+    - "evals/rubrics/**"
+    - "evals/evaluators/**"
+  ci:
+    - ".github/workflows/**"
+  scripts:
+    - "**/*.sh"
+    - "**/entrypoint.sh"
+  manifest:
+    - "pyproject.toml"
+    - "uv.lock"
+    - "**/Dockerfile"
+  # Execution-Loop gate tooling (the gate skills themselves). Hermetic/offline by
+  # contract: a network/provider import breaks that claim. Core-effects and
+  # verdict-engine rules do not apply (skills legitimately do I/O and emit status).
+  skills:
+    - ".claude/skills/**/*.py"
+
+rules:
+  - id: required.no_live_model_imports
+    detector: imports_effects
+    severity: fail
+    applies_to: [required_tier]
+    message: "Required-tier code cannot import live model providers or vendor SDKs."
+  - id: required.no_optional_lane_imports
+    detector: imports_effects
+    severity: fail
+    applies_to: [required_tier]
+    message: "Required-tier code cannot import optional-lane packages."
+  - id: core.no_effects
+    detector: imports_effects
+    severity: fail
+    applies_to: [required_tier]
+    message: "The effect-free Evaluation Core cannot perform I/O, network, clock, or randomness."
+  - id: verdict.single_engine
+    detector: imports_effects
+    severity: fail
+    applies_to: [harness, adapters]
+    message: "Only the Verdict Engine may decide pass/fail/blocked/informational."
+  - id: secrets.no_new_secrets
+    detector: secrets
+    severity: fail
+    applies_to: [all]
+    message: "No new credentials, tokens, or private keys in changed files."
+  - id: generated.no_unmarked_authority
+    detector: generated_authority
+    severity: fail
+    applies_to: [generated_authority]
+    message: "Generated gold/thresholds/calibration cannot be treated as authority without approval."
+  - id: generated.no_host_owned_overwrite
+    detector: generated_authority
+    severity: fail
+    applies_to: [host_owned]
+    message: "Scaffolding/vendoring must not overwrite or delete host-owned files."
+  - id: ci.no_verdict_spoof
+    detector: ci_script_guard
+    severity: fail
+    applies_to: [ci, scripts]
+    message: "CI/shell cannot spoof or downgrade a verdict (grep-based pass, ignored exits)."
+  - id: ci.continue_on_error
+    detector: ci_script_guard
+    severity: warn
+    applies_to: [ci]
+    message: "continue-on-error lets a step fail silently; confirm it does not bypass a gate."
+  - id: manifest.review_required
+    detector: manifest_drift
+    severity: warn
+    applies_to: [manifest]
+    message: "Dependency/manifest changes need review evidence."
+  - id: skills.no_network_imports
+    detector: imports_effects
+    severity: fail
+    applies_to: [skills]
+    message: "Hermetic gate skills cannot import network/LLM-provider clients (offline by contract)."

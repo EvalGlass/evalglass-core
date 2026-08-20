@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evalglass/scan-gate/scan-result.schema.json",
+  "title": "ScanResult",
+  "description": "Authoritative output of one scan-gate run. Additive evolution: unknown properties are tolerated by consumers.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "scan_id", "status", "policy_version", "profile_run"],
+  "properties": {
+    "schema_version": { "const": "scan-gate.result.v1" },
+    "scan_id": { "type": "string" },
+    "status": { "enum": ["PASS", "WARN", "BLOCKED", "FAIL"] },
+    "policy_version": { "type": "string" },
+    "profile_run": { "type": "string" },
+    "summary": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "tool_ledger": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/toolLedgerEntry" }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "rule_id",
+        "severity",
+        "surface",
+        "evidence",
+        "tool",
+        "tool_version",
+        "policy_version",
+        "recommendation"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "rule_id": { "type": "string" },
+        "severity": { "enum": ["fail", "block", "warn", "info"] },
+        "surface": { "type": "string" },
+        "file": { "type": ["string", "null"] },
+        "line": { "type": ["integer", "null"] },
+        "evidence": { "type": "string" },
+        "tool": { "type": "string" },
+        "tool_version": { "type": "string" },
+        "policy_version": { "type": "string" },
+        "recommendation": { "type": "string" }
+      }
+    },
+    "toolLedgerEntry": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["tool", "version", "network", "adapter_status"],
+      "properties": {
+        "tool": { "type": "string" },
+        "version": { "type": "string" },
+        "network": { "enum": ["disabled", "controlled", "enabled"] },
+        "adapter_status": { "enum": ["completed", "skipped", "error", "timeout"] },
+        "exit_code": { "type": ["integer", "null"] },
+        "raw_output_path": { "type": ["string", "null"] },
+        "skipped_reason": { "type": ["string", "null"] },
+        "findings_count": { "type": "integer" }
+      }
+    }
+  }
+}

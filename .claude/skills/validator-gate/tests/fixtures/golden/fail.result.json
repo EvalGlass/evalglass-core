@@ -1,0 +1,33 @@
+{
+  "blocked_on": [],
+  "checkpoint": "EG.golden",
+  "claims_validated": [
+    "report-matches-verdict"
+  ],
+  "evidence_used": [
+    "rep"
+  ],
+  "families_run": [
+    "authority_verdict"
+  ],
+  "findings": [
+    {
+      "claim_id": "report-matches-verdict",
+      "evidence_refs": [
+        "rep"
+      ],
+      "family_id": "authority_verdict",
+      "reason": "public surface(s) ['rep'] claim a status stronger than the product verdict 'blocked'",
+      "remediation": "Make the public status reflect the product verdict payload.",
+      "risk_ref": "authority_verdict",
+      "status": "FAIL"
+    }
+  ],
+  "gate": "validator",
+  "risk_references_used": [
+    "authority_verdict"
+  ],
+  "schema_version": "validator.result.v1",
+  "status": "FAIL",
+  "warnings": []
+}

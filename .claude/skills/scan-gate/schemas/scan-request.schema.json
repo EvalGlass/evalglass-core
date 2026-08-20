@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evalglass/scan-gate/scan-request.schema.json",
+  "title": "ScanRequest",
+  "description": "Inputs to one scan-gate run. Additive evolution: unknown properties are tolerated by consumers.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "scan_id", "repo_root", "base_ref", "head_ref", "profile", "policy_ref"],
+  "properties": {
+    "schema_version": { "const": "scan-gate.request.v1" },
+    "scan_id": { "type": "string" },
+    "repo_root": { "type": "string" },
+    "base_ref": { "type": "string" },
+    "head_ref": { "type": "string" },
+    "profile": { "enum": ["fast", "main", "required"] },
+    "policy_ref": { "type": "string" },
+    "include_untracked": { "type": "boolean" }
+  }
+}
