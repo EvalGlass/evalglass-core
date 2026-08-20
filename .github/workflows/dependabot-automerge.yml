@@ -1,12 +1,16 @@
 name: Dependabot auto-merge
 
-# Auto-approve and enable squash auto-merge for Dependabot PRs that bump
-# non-major versions. Major bumps still require human review (and likely an
-# ADR per CLAUDE.md §8).
+# Enable squash auto-merge for Dependabot PRs that bump non-major versions.
+# Major bumps still require human review (and likely an ADR per CLAUDE.md §8).
 #
-# Uses pull_request_target so that the workflow has write permissions even
-# though the PR head is a different branch. The actor filter restricts the
-# code path to the official Dependabot bot.
+# `main` requires zero approving reviews, so auto-merge lands the PR once the
+# required checks pass — no self-approval step is needed, and the repository
+# keeps "Allow GitHub Actions to create and approve pull requests" disabled
+# (least privilege for the GITHUB_TOKEN).
+#
+# Uses pull_request_target so the job has write permissions even though the PR
+# head is a different branch. It never checks out or executes PR code; the actor
+# filter restricts the code path to the official Dependabot bot.
 
 on:
   pull_request_target:
@@ -27,13 +31,6 @@ jobs:
         uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Approve PR (non-major)
-        if: steps.meta.outputs.update-type != 'version-update:semver-major'
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr review --approve "$PR_URL"
 
       - name: Enable auto-merge (non-major)
         if: steps.meta.outputs.update-type != 'version-update:semver-major'
