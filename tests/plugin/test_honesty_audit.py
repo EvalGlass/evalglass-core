@@ -50,7 +50,7 @@ def _audited_files() -> list[Path]:
     targets += sorted((REPO_ROOT / ".codex-plugin").glob("*.json"))
     targets += sorted((REPO_ROOT / "skills").glob("*/SKILL.md"))
     targets += sorted((REPO_ROOT / "hooks").glob("*.sh"))
-    for sub in ("plugin-docs", "docs/plugin", "examples", "assets", "bin"):
+    for sub in ("plugin-docs", "examples", "assets", "bin"):
         targets += sorted((REPO_ROOT / sub).rglob("*.md"))
     return targets
 

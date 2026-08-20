@@ -309,7 +309,7 @@ EvalGlass is a small, vendored framework with an effect-free Evaluation Core, a 
 Engine, and an effectful Runtime Harness behind ports. User-facing docs live at
 **[evalglass.com/docs](https://evalglass.com/docs)**. To work on the framework itself, start here:
 
-- [`docs/architecture.md`](./docs/architecture.md) and [`docs/architecture_build_contract.md`](./docs/architecture_build_contract.md) — the framework architecture and build contract.
+- [`docs/architecture.md`](./docs/architecture.md) — the framework architecture and build contract.
 - [`adrs/`](./adrs/) — architecture decision records (plugin packaging is [ADR 0022](./adrs/0022-plugin-packaging-and-delivery.md); Codex second runtime is [ADR 0023](./adrs/0023-codex-second-runtime-packaging.md)).
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`CLAUDE.md`](./CLAUDE.md) — the per-slice workflow and operating guide.
 

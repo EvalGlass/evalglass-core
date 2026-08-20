@@ -8,7 +8,7 @@
 - **Related:** the score contract (`core/scores.py`), authority (`core/authority.py`),
   verdict (`core/verdict.py`), provenance (`core/provenance.py`), aggregation
   (`core/aggregation.py`), calibration (`harness/calibration.py`); the isolation gate
-  ([0001](0001-effect-boundary.md) family); this tranche's per-slice ADRs follow (0040+).
+  ([0001](0001-architecture-boundary.md) family); this tranche's per-slice ADRs follow (0040+).
 
 This ADR records the *framing decision* for the M7 tranche so the individual
 slice ADRs (Estimate schema, DecisionPolicy, digest-bound AuthorityGrant, per-run

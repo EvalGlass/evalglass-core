@@ -2,8 +2,7 @@
 
 `plugin.json` · `pyproject.toml [project].version` · `src/evalglass/__init__.py:__version__` ·
 `CITATION.cff` (and, once P3 lands, `.codex-plugin/plugin.json`) must all carry the same version.
-The release-time location — the git tag — is asserted by the release checklist
-(`docs/plugin/RELEASE_CHECKLIST.md`), not in a unit test.
+The release-time location — the git tag — is asserted at release time, not in a unit test.
 
 Versions are read from the repo-under-test's files (not the installed package), so this checks the
 working tree, not whatever `evalglass` happens to be importable.

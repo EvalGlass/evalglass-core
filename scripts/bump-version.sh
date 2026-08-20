@@ -3,7 +3,7 @@
 # bump-version.sh — keep every version-bearing surface in lockstep (ADR 0022/0023).
 #
 # One repo means one version line. `.version-bump.json` declares the surfaces and formats;
-# this script reads/writes them. The git tag is asserted at release time (RELEASE_CHECKLIST).
+# this script reads/writes them. The git tag is asserted at release time.
 # It NEVER touches a host-owned / vendored runtime tree (evals/).
 #
 # Usage:

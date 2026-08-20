@@ -9,8 +9,7 @@ depend on *which* runtime installed it. This strengthens the single-runtime dele
   (``CLAUDE_PLUGIN_ROOT`` set), by Codex (``CODEX_PLUGIN_ROOT`` set), or with neither present;
 * the generated host tree carries **no** runtime-specific token for either runtime.
 
-The *live* Codex trigger transcript is a maintainer acceptance probe
-(``docs/plugin/P3-codex-acceptance-runbook.md``), not a unit test.
+The *live* Codex trigger transcript is a maintainer acceptance probe, not a unit test.
 """
 
 from __future__ import annotations
