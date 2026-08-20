@@ -1,0 +1,43 @@
+name: License check
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: license-check-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  # NOTE: `actions/dependency-review-action` is intentionally omitted because
+  # this is a private repository without GitHub Advanced Security. Add it back
+  # when GHAS is enabled — see Phase 1 in the scaffold PR description.
+
+  licensecheck:
+    name: licensecheck (declared deps)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - name: Run licensecheck
+        run: |
+          uv tool run licensecheck --format ansi | tee licensecheck.txt
+      - name: Publish to PR summary
+        if: always()
+        run: |
+          {
+            echo "## License check"
+            echo ""
+            echo '```'
+            cat licensecheck.txt || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

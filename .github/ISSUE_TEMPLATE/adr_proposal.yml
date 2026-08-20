@@ -1,0 +1,54 @@
+name: ADR proposal
+description: Propose an Architecture Decision Record
+title: "adr: "
+labels: ["adr", "design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to discuss a decision *before* writing the ADR file under
+        `/adrs/`. Once consensus is reached, open a PR that adds `/adrs/NNNN-slug.md`.
+        See `/adrs/README.md`.
+  - type: input
+    id: title
+    attributes:
+      label: Decision title (one line)
+      placeholder: "Adopt X for Y"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What forces are at play? What constraints from CLAUDE.md apply?
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options considered
+      description: At least two. Be specific.
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Recommendation
+    validations:
+      required: true
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences (what this commits us to / what it forecloses)
+    validations:
+      required: true
+  - type: dropdown
+    id: reversibility
+    attributes:
+      label: Reversibility
+      options:
+        - "Reversible (low blast radius)"
+        - "Reversible at cost"
+        - "One-way door (hard to undo)"
+    validations:
+      required: true

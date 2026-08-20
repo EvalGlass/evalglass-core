@@ -1,0 +1,23 @@
+* text=auto eol=lf
+
+*.py        text diff=python
+*.md        text
+*.yml       text
+*.yaml      text
+*.toml      text
+*.json      text
+*.jsonl     text
+*.cfg       text
+*.ini       text
+*.properties text
+
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.pdf       binary
+
+# Generated / large assets — keep diffs collapsed in PRs
+docs/*.html linguist-documentation
+docs/*.html -diff

@@ -1,0 +1,21 @@
+# CODEOWNERS for EvalGlass.
+# Lines later in the file take precedence (GitHub semantics).
+# See https://docs.github.com/en/repositories/managing-your-repositories-settings-and-features/customizing-your-repository/about-code-owners.
+
+# Default: any change requires review from the maintainers team.
+*                                       @EvalGlass/maintainers
+
+# Architectural seams — these are load-bearing for the trust model (CLAUDE.md §4).
+# Keep ownership tight; do not delegate without an ADR.
+/src/evalglass/core/                    @EvalGlass/maintainers
+/src/evalglass/core/verdict/            @EvalGlass/maintainers
+/tools/check_core_isolation.py          @EvalGlass/maintainers
+
+# Public contracts and gate logic.
+/sonar-project.properties               @EvalGlass/maintainers
+/.github/workflows/                     @EvalGlass/maintainers
+/.github/CODEOWNERS                     @EvalGlass/maintainers
+/pyproject.toml                         @EvalGlass/maintainers
+
+# Decision records — by policy, ADRs require maintainer review (CLAUDE.md §1).
+/adrs/                                  @EvalGlass/maintainers

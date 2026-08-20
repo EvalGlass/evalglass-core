@@ -1,0 +1,22 @@
+{
+  "_comment": "Single source of truth for every version-bearing surface (ADR 0022/0023). One repo, one version line. scripts/bump-version.sh reads this for --check / --audit / --set. The git tag (tag_format) is asserted at release time. Host-owned/vendored trees (evals/) are never touched.",
+  "version_sources": [
+    { "path": ".claude-plugin/plugin.json", "format": "json", "field": "version" },
+    { "path": ".codex-plugin/plugin.json", "format": "json", "field": "version" },
+    { "path": "pyproject.toml", "format": "toml", "field": "version" },
+    { "path": "src/evalglass/__init__.py", "format": "python", "field": "__version__" },
+    { "path": "CITATION.cff", "format": "yaml", "field": "version" }
+  ],
+  "tag_format": "v{version}",
+  "never_touch": ["evals/", "evals/_evalglass/"],
+  "audit_exclude": [
+    ".git/",
+    "node_modules/",
+    "uv.lock",
+    "CHANGELOG.md",
+    "docs/",
+    "adrs/",
+    "tests/",
+    "examples/"
+  ]
+}
