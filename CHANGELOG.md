@@ -5,6 +5,38 @@ All notable changes to EvalGlass are recorded here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Pre-1.0, the public API and
 plugin surface may still change.
 
+## [0.2.0] - 2026-08-20 (pre-alpha)
+
+Refines the packaging and the product positioning on top of the complete `0.1.0` core; the runtime,
+public contracts, authority, and verdict behaviour are unchanged.
+
+### Added
+
+- **Modular optional-dependency extras — lean by default, complete by composition.** Grouped extras
+  compose the granular connector extras via self-reference: `evalglass[traces]` installs all three
+  trace connectors (Langfuse + Phoenix + LangSmith), and `evalglass[all]` the full optional surface;
+  `openai` and `hosted` are stdlib-only markers (the OpenAI-compatible judge and the hosted/async
+  sinks use stdlib `urllib`, so there is no SDK to install). Because the grouped extras are pure
+  self-references they pin **no** provider SDK directly — `project.dependencies` stays PyYAML-only,
+  the required import closure stays SDK-free, and the strict dependency-budget guard is unchanged.
+
+### Changed
+
+- **Canonical Core positioning.** The README and the architecture docs now state the product
+  boundary explicitly — **Core executes · Discovery finds · Intelligence explains** — and frame Core
+  as the open, host-directed evaluation runtime that gives your team a rigorous system to *define,
+  run, compare, and retain* evaluations over checks you own. It never inspects an application to
+  decide, on its own, what to test; deriving *what* to measure (metric discovery) is a separate
+  concern that lives in the [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discovery)
+  repo.
+
+### Notes
+
+- No runtime, public-contract, authority, or verdict-behaviour changes since `0.1.0`. The vendored
+  runtime and all typed artifacts are behaviourally identical; only the version-bearing surfaces,
+  the reproducibility fingerprints in the committed goldens (which fold in `__version__`), and the
+  docs move to `0.2.0`.
+
 ## [0.1.0] - 2026-08-20 (pre-alpha)
 
 Initial public release of **EvalGlass core** — the pure evaluation framework. EvalGlass is a small,
@@ -211,4 +243,5 @@ separate [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discover
   ships no generator by design (governance-only).
 - Tagging and any PyPI / marketplace publishing are deliberate maintainer steps, not automated.
 
+[0.2.0]: https://github.com/EvalGlass/evalglass-core/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/EvalGlass/evalglass-core/releases/tag/v0.1.0

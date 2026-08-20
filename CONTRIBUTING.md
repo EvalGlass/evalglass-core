@@ -101,4 +101,4 @@ No other third-party secrets are required — the framework is local-first and t
 
 ## Releases
 
-Pre-release (`v0.1.0`, pre-alpha). The plugin release gates — version alignment, strict manifest validation, the honesty audit, and the deletion-invariant — are tracked in [`docs/plugin/RELEASE_CHECKLIST.md`](./docs/plugin/RELEASE_CHECKLIST.md). Tagging and any PyPI/marketplace publishing are deliberate maintainer steps, not automated yet.
+Pre-release (`v0.2.0`, pre-alpha). The plugin release gates — version alignment, strict manifest validation, the honesty audit, and the deletion-invariant — are tracked in [`docs/plugin/RELEASE_CHECKLIST.md`](./docs/plugin/RELEASE_CHECKLIST.md). Tagging and any PyPI/marketplace publishing are deliberate maintainer steps, not automated yet.

@@ -38,7 +38,7 @@ and intent-anchored `promptfoo`, `deepeval`, `llm-testing`, `llm-as-judge`.
 
 ## Tag and release
 
-- [ ] Tag `v0.1.0` only after every box above is checked.
+- [ ] Tag `vX.Y.Z` (the release version) only after every box above is checked.
 - [ ] GitHub Release notes = the CHANGELOG entry (scope + limitations, incl. `connect --live`
       and synthetic-data generation deferred).
 
