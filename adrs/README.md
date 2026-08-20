@@ -68,9 +68,9 @@ Some ADRs carry a **Source:** line naming the planning artifact the decision was
 - [0036 — LangSmith trace connector](0036-langsmith-trace-connector.md)
 - [0037 — Per-source-function score view is not built (M6 never-build)](0037-per-source-function-view-not-built.md)
 - [0038 — M7 "Epistemic Core": level up alpha's measurement without shedding its breadth](0038-m7-epistemic-core-tranche.md)
-- 0039 — *retired: metric discovery moved to the `evalglass-discovery` repo.*
+- 0039 — *retired: automated metric discovery is out of scope for the core (metrics are host-authored).*
 - [0040 — Generic OpenAI-compatible judge lane](0040-openai-compatible-judge-lane.md)
-- 0041 — *retired: the discovery scaffolder moved to the `evalglass-discovery` repo.*
+- 0041 — *retired: no automated discovery scaffolder ships in the core (metrics are host-authored).*
 - [0042 — Host command judge (subprocess JudgeModel)](0042-host-command-judge.md)
 - [0043 — HTML Scorecard report (dashboard + deltas)](0043-html-scorecard-report.md)
 - [0044 — Interval bounds are rounded to a platform-independent precision](0044-portable-interval-floats.md)

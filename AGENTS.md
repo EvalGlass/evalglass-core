@@ -30,7 +30,8 @@ begin. The umbrella routes a verb to the right backing skill under `skills/`:
 Deciding *what* to measure is **host-directed**: EvalGlass supplies the machinery, not the metric
 set. When the host names a check the app needs, **`authoring-a-metric`** scaffolds it as a
 `MetricSpec` across the runtime / reference / judge tiers — the framework derives no metrics on its
-own (automated discovery lives in the separate `evalglass-discovery` repo).
+own (automated metric discovery is deliberately out of scope; EvalGlass runs the checks the host
+authors and infers none itself).
 
 Bare invocation of the umbrella prints an honest status dashboard and runs nothing. A fresh run is
 **informational** until the host has earned authority (validated gold, an approved threshold, a

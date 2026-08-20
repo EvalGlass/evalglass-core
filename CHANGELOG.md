@@ -5,6 +5,23 @@ All notable changes to EvalGlass are recorded here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Pre-1.0, the public API and
 plugin surface may still change.
 
+## [0.2.2] - 2026-08-20 (pre-alpha)
+
+Plugin-storefront alignment — no runtime, public-contract, authority, or verdict-behaviour change:
+the vendored runtime and all typed artifacts are behaviourally identical to `0.2.1`.
+
+### Changed
+
+- **Plugin-facing docs align with the shipped capability (no false confidence, applied to our own
+  storefront).** Removed every reference that implied an "advanced discovery engine" — the
+  `Core executes · Discovery finds · Intelligence explains` three-tier framing and the pointers to a
+  separate (private, unreachable) `evalglass-discovery` repo — from the README, architecture doc,
+  `AGENTS.md`, the plugin/marketplace descriptions, and the ADR index. What `evalglass-core` actually
+  ships is a single, conservative, read-only **candidate call-site inventory** (`installer discover`);
+  automated *metric discovery* (deriving what to measure from an app's traces, prompts, and schemas)
+  is deliberately **out of scope** — EvalGlass runs the checks the host authors and derives none on
+  its own. No runtime, public-contract, authority, or verdict-behaviour change.
+
 ## [0.2.1] - 2026-08-20 (pre-alpha)
 
 Public-launch preparation — the final pre-public cut. No runtime, public-contract, authority, or
@@ -55,12 +72,10 @@ public contracts, authority, and verdict behaviour are unchanged.
 ### Changed
 
 - **Canonical Core positioning.** The README and the architecture docs now state the product
-  boundary explicitly — **Core executes · Discovery finds · Intelligence explains** — and frame Core
-  as the open, host-directed evaluation runtime that gives your team a rigorous system to *define,
-  run, compare, and retain* evaluations over checks you own. It never inspects an application to
-  decide, on its own, what to test; deriving *what* to measure (metric discovery) is a separate
-  concern that lives in the `evalglass-discovery`
-  repo.
+  boundary explicitly — **Core executes** — and frame Core as the open, host-directed evaluation
+  runtime that gives your team a rigorous system to *define, run, compare, and retain* evaluations
+  over checks you own. It never inspects an application to decide, on its own, what to test; deriving
+  *what* to measure (metric discovery) is deliberately out of scope for the core.
 
 ### Notes
 
@@ -82,8 +97,8 @@ approved threshold, and (for judges) calibration.
 EvalGlass is the **framework, not the oracle**: it supplies the machinery and lets *you* decide what
 to measure. You know your app and how it fails; tell the agent the check you want and the
 `authoring-a-metric` skill scaffolds it. Automated *metric discovery* — deriving what to measure from
-an app's traces, prompts, and schemas — is deliberately **out of scope** for the core and lives in a
-separate `evalglass-discovery` repo.
+an app's traces, prompts, and schemas — is deliberately **out of scope** for the core; EvalGlass runs
+the checks you author and derives none on its own.
 
 ### Added
 
@@ -267,9 +282,8 @@ separate `evalglass-discovery` repo.
 - A fresh run is **informational** by design — real non-reference signal, but not a quality pass;
   gating requires host-validated gold, an approved threshold, and (for judges) calibration.
 - **Automated metric discovery is intentionally out of scope.** The core gives you the framework; you
-  direct the agent to author the metrics your app needs. The agentic discovery engine that derives
-  metrics from an app's traces, prompts, and schemas lives in the separate
-  `evalglass-discovery` repo.
+  direct the agent to author the metrics your app needs. EvalGlass never derives metrics from an app's
+  traces, prompts, or schemas on its own — the host decides what to measure.
 - Optional lanes (live trace connectors, real-provider judges) are opt-in, pinned, and deletable; no
   required path imports them and no required test uses a live provider. Synthetic-data *generation*
   ships no generator by design (governance-only).

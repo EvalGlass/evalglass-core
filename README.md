@@ -14,7 +14,7 @@ Honest, local-first scorecards you operate through your coding agent.
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-3776ab.svg)
 ![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange.svg)
 
-<sub>Pre-alpha `v0.2.1`</sub>
+<sub>Pre-alpha `v0.2.2`</sub>
 
 </div>
 
@@ -260,10 +260,10 @@ over checks **you** own. It never inspects your application to decide, on its ow
 test.
 
 That boundary is deliberate. Deriving *what* to measure from an application — reading its traces,
-prompts, and schemas to propose a bespoke suite — is **metric discovery**, and it lives in the
-separate `evalglass-discovery` repo, not here. In
-short: **Core executes · Discovery finds · Intelligence explains.** Core is the substrate the others
-build on; nothing in it decides your evaluation agenda for you.
+prompts, and schemas to propose a bespoke suite — is **metric discovery**, and it is deliberately
+**out of scope**: EvalGlass runs the checks *you* author and derives none on its own. You (with your
+coding agent) decide the evaluation agenda; EvalGlass supplies the machinery and executes it
+honestly. Nothing in it inspects your app to decide, on its own, what you ought to test.
 
 ## Compared to other eval tools
 

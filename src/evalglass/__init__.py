@@ -9,5 +9,5 @@ This is the public top-level package. The architectural seams live in:
 See ``CLAUDE.md`` for the architecture boundary and trust-model rules.
 """
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __all__ = ["__version__"]
