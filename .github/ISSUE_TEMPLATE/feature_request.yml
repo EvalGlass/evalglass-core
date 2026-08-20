@@ -1,0 +1,49 @@
+name: Feature request
+description: Propose a new capability or change to EvalGlass
+title: "feat: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening a feature request, please check `CLAUDE.md` §2 ("Product
+        intent") and §11 ("Anti-patterns"). Some adjacent things — prompt
+        auto-tuning, model auto-selection, hosted SaaS, tracing backends — are
+        explicitly out of scope.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user-visible problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: A sketch of what you'd build. Cite the milestone (M0–M5) it fits.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - "Evaluation Core"
+        - "Runtime Harness"
+        - "Adapters"
+        - "Skill (integration-time)"
+        - "Extensions / integrations"
+        - "Tooling / CI / docs"
+    validations:
+      required: true
+  - type: checkboxes
+    id: adr
+    attributes:
+      label: ADR
+      options:
+        - label: This change is "public or hard to reverse" and an ADR will be proposed alongside the implementation PR.

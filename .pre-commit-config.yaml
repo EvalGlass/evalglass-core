@@ -1,0 +1,69 @@
+# Pre-commit hooks for EvalGlass.
+# Install with `uv run pre-commit install` after the first PR merges.
+# See CONTRIBUTING.md.
+
+default_install_hook_types: [pre-commit, pre-push]
+default_language_version:
+  python: python3.12
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-symlinks
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: ["--markdown-linebreak-ext=md"]
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: detect-private-key
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.4
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+      - id: ruff-format
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+        args: ["--ignore-words-list=hist,assertIn"]
+        exclude: ^(uv\.lock|docs/.*\.html|LICENSE)$
+
+  # Local hook: Evaluation Core isolation gate (CLAUDE.md §4).
+  - repo: local
+    hooks:
+      - id: core-isolation
+        name: Evaluation Core isolation check
+        entry: python tools/check_core_isolation.py
+        language: system
+        types: [python]
+        files: ^src/evalglass/core/
+        pass_filenames: false
+
+  # Slower checks — run on pre-push so commits stay fast.
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy (strict)
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-push]
+      - id: pytest-fast
+        name: pytest (fast suite, no slow marker)
+        entry: uv run pytest -m "not slow" -q
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-push]

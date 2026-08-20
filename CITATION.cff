@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: EvalGlass
+message: "If you use EvalGlass in your work, please cite it."
+type: software
+authors:
+  - name: "EvalGlass"
+    email: contact@evalglass.com
+repository-code: "https://github.com/EvalGlass/evalglass-core"
+url: "https://github.com/EvalGlass/evalglass-core"
+abstract: >-
+  EvalGlass is a local-first, no-false-confidence evaluation framework for agentic
+  AI applications, delivered as a Claude Code and Codex plugin. It measures the quality of
+  LLM calls from host-owned evidence and reports only what the evidence honestly
+  supports — a single Verdict Engine, typed authority, and an informational-by-default
+  posture that never implies more than the run earned.
+keywords:
+  - llm-evaluation
+  - ai-safety
+  - evaluation
+  - scorecard
+  - groundedness
+  - local-first
+license: Apache-2.0
+version: 0.1.0

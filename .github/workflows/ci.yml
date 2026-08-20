@@ -1,0 +1,258 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  PYTHON_DEFAULT: "3.12"
+
+jobs:
+  lint:
+    name: lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ env.PYTHON_DEFAULT }}
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run ruff check --output-format=github .
+      - run: uv run ruff format --check .
+
+  typecheck:
+    name: typecheck (mypy strict)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ env.PYTHON_DEFAULT }}
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run mypy
+      # Gate skills each define their own `scripts` package, so they are type-checked
+      # in separate invocations (one MYPYPATH per skill) to avoid a module clash.
+      - name: typecheck scan-gate skill
+        run: uv run mypy --explicit-package-bases .claude/skills/scan-gate/scripts
+        env:
+          MYPYPATH: .claude/skills/scan-gate
+      - name: typecheck validator-gate skill
+        run: uv run mypy --explicit-package-bases .claude/skills/validator-gate/scripts
+        env:
+          MYPYPATH: .claude/skills/validator-gate
+
+  core-isolation:
+    name: core isolation (CLAUDE.md §4)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ env.PYTHON_DEFAULT }}
+          enable-cache: true
+      - name: Run structural isolation check
+        run: uv run python tools/check_core_isolation.py src/evalglass/core
+
+  security-static:
+    name: security (bandit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ env.PYTHON_DEFAULT }}
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run bandit -c pyproject.toml -r src tools .claude/skills
+
+  tests:
+    name: tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Sonar wants full history when this job is the source of coverage
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: Run pytest with coverage
+        # Required tier is hermetic: EVALGLASS_LIVE_LANES is unset and live_lane
+        # tests are excluded by marker (alignment AT0, EG-AT0-2). No live egress.
+        run: |
+          uv run pytest \
+            --cov \
+            --cov-report=xml:coverage.xml \
+            --cov-report=term \
+            --junitxml=junit.xml \
+            -m "not live_lane" \
+            -ra
+      - name: Upload coverage artifact
+        if: matrix.python-version == env.PYTHON_DEFAULT
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: |
+            coverage.xml
+            junit.xml
+          retention-days: 7
+
+  docs-consistency:
+    # A named required check so a positioning / ontology / status / public-surface
+    # drift fails *visibly and separately* from a code regression (alignment AT0,
+    # EG-AT0-2). Lives under tests/ — CI runs it (no .claude/** exclusion). Hermetic.
+    name: docs consistency (ontology / status / public surface)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ env.PYTHON_DEFAULT }}
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: docs/ontology/status/public-surface checks
+        run: uv run pytest -m "ontology or public_surface" -ra
+
+  live-lanes:
+    # Opt-in only: manual dispatch, never a required PR gate, the only place real
+    # egress can happen. Double-guarded by marker + EVALGLASS_LIVE_LANES (AT0).
+    name: live lanes (opt-in, manual)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ env.PYTHON_DEFAULT }}
+          enable-cache: true
+      # Install the optional connector extras so a dispatched run can exercise a real pull. The
+      # required PR/push tier never installs these (it runs `uv sync --frozen` without extras).
+      - run: uv sync --frozen --extra langfuse-trace --extra phoenix-trace --extra langsmith-trace
+      - name: live-lane integration tier
+        # Provider credentials/endpoints come from optional GitHub secrets (EG-R0-6; ADR 0033).
+        # Absent secrets → the provider's live test skips; present → a real pull is exercised.
+        # These are NEVER required for ordinary CI and appear only in this manual-dispatch job.
+        env:
+          EVALGLASS_LIVE_LANES: "1"
+          # Langfuse (ADR 0034)
+          LANGFUSE_HOST: ${{ secrets.LANGFUSE_HOST }}
+          LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+          LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+          # Phoenix — arize-phoenix-client (ADR 0035)
+          PHOENIX_COLLECTOR_ENDPOINT: ${{ secrets.PHOENIX_COLLECTOR_ENDPOINT }}
+          PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
+          # LangSmith (ADR 0036)
+          LANGSMITH_ENDPOINT: ${{ secrets.LANGSMITH_ENDPOINT }}
+          LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+          # Per-connector real-pull skip-guard: a connector's live test runs only when its
+          # EVALGLASS_<VENDOR>_ENDPOINT is set, so without these a dispatch would silently SKIP
+          # every connector and go green without exercising one. Mapped from the endpoint secrets.
+          EVALGLASS_LANGFUSE_ENDPOINT: ${{ secrets.LANGFUSE_HOST }}
+          EVALGLASS_PHOENIX_ENDPOINT: ${{ secrets.PHOENIX_COLLECTOR_ENDPOINT }}
+          EVALGLASS_LANGSMITH_ENDPOINT: ${{ secrets.LANGSMITH_ENDPOINT }}
+        run: uv run pytest -m live_lane -ra
+      - name: post-live guard rearm (hermetic boundary still intact)
+        # Re-run the hermetic guards after the live tier so a live run that somehow perturbed the
+        # dependency budget or leaked a provider SDK onto a required import path is caught.
+        if: always()
+        run: >-
+          uv run pytest -q
+          tests/test_dependency_budget.py
+          tests/core_isolation/test_connector_import_boundary.py
+
+  skill-tests:
+    name: skill tests (.claude/skills)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: ${{ env.PYTHON_DEFAULT }}
+          enable-cache: true
+      - run: uv sync --frozen
+      # Each skill suite runs as its own invocation (separate pytest.ini + `scripts`
+      # package) so the two meta-system suites never collide.
+      - name: scan-gate suite
+        run: uv run python -m pytest -c .claude/skills/scan-gate/pytest.ini .claude/skills/scan-gate/tests
+      - name: validator-gate suite
+        run: >-
+          uv run python -m pytest
+          -c .claude/skills/validator-gate/pytest.ini
+          .claude/skills/validator-gate/tests
+
+  sonar:
+    name: SonarCloud scan
+    needs: tests
+    runs-on: ubuntu-latest
+    # Skip on PRs from forks (they can't access secrets).
+    if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write # for PR decoration
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Guard — SONAR_TOKEN must be configured
+        if: env.SONAR_TOKEN == ''
+        run: |
+          echo "::warning::SONAR_TOKEN secret not configured; skipping SonarCloud scan. See CONTRIBUTING.md."
+      - uses: actions/checkout@v4
+        if: env.SONAR_TOKEN != ''
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        if: env.SONAR_TOKEN != ''
+        with:
+          name: coverage-3.12
+          path: .
+      - name: SonarCloud scan
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarqube-scan-action@689fb39b34b9aa95ebc5f8f119343ddd51542402 # v4
+
+  all-checks-passed:
+    name: all required checks
+    if: always()
+    needs: [lint, typecheck, core-isolation, security-static, tests, docs-consistency, skill-tests, sonar]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any required job failed
+        env:
+          R_LINT: ${{ needs.lint.result }}
+          R_TYPE: ${{ needs.typecheck.result }}
+          R_CORE: ${{ needs.core-isolation.result }}
+          R_SEC: ${{ needs.security-static.result }}
+          R_TESTS: ${{ needs.tests.result }}
+          R_DOCS: ${{ needs.docs-consistency.result }}
+          R_SKILLS: ${{ needs.skill-tests.result }}
+          R_SONAR: ${{ needs.sonar.result }}
+        run: |
+          echo "lint=$R_LINT typecheck=$R_TYPE core-isolation=$R_CORE security=$R_SEC tests=$R_TESTS docs-consistency=$R_DOCS skill-tests=$R_SKILLS sonar=$R_SONAR"
+          fail=0
+          for r in "$R_LINT" "$R_TYPE" "$R_CORE" "$R_SEC" "$R_TESTS" "$R_DOCS" "$R_SKILLS"; do
+            if [ "$r" != "success" ]; then fail=1; fi
+          done
+          # sonar may be 'skipped' if SONAR_TOKEN is not yet configured.
+          if [ "$R_SONAR" = "failure" ] || [ "$R_SONAR" = "cancelled" ]; then fail=1; fi
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::One or more required checks did not pass"
+            exit 1
+          fi
+          echo "All required checks passed."

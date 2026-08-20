@@ -1,0 +1,35 @@
+name: pip-audit
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "29 5 * * 1" # Mondays 05:29 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pip-audit-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  audit:
+    name: pip-audit (declared deps)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - name: Export resolved requirements
+        run: uv export --format requirements-txt --no-hashes --no-emit-project > requirements.frozen.txt
+      - name: Audit
+        # pip-audit is run via uvx so we don't need pip inside the uv-managed
+        # venv. The action `pypa/gh-action-pip-audit` requires pip in the venv,
+        # which uv doesn't ship by default.
+        run: uv tool run pip-audit --requirement requirements.frozen.txt --strict --progress-spinner=off

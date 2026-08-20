@@ -1,0 +1,67 @@
+name: Bug report
+description: Report a defect in EvalGlass
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. If this report is about a *measurement integrity*
+        issue (e.g., a gate fired when it shouldn't, a verdict was wrong, a baseline
+        was treated as comparable when it wasn't), please mention that explicitly —
+        those bugs get priority per CLAUDE.md §5.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened, in one or two sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands, config snippets, or a minimal repo.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: EvalGlass version
+      placeholder: e.g. 0.1.2 or commit SHA
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: e.g. 3.12.5
+    validations:
+      required: true
+  - type: dropdown
+    id: trust_impact
+    attributes:
+      label: Trust-model impact
+      description: Does this bug affect the truthfulness of a verdict or scorecard?
+      options:
+        - "No — cosmetic / DX / unrelated"
+        - "Maybe — needs triage"
+        - "Yes — a verdict, gate, or authority claim was wrong"
+    validations:
+      required: true

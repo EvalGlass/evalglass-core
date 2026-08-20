@@ -1,0 +1,209 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "evalglass"
+version = "0.1.0"
+description = "Open-source, vendored evaluation framework for small-to-medium agentic AI projects."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+authors = [{ name = "EvalGlass" }]
+keywords = ["llm", "evaluation", "agents", "ai-quality", "ci"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
+
+# CLAUDE.md §8: "Every dependency is vendored cost." The Evaluation Core has
+# no runtime dependencies. Runtime Harness dependencies are added per-milestone
+# with an ADR. M1 adds PyYAML for the config boundary only (ADR 0005), used via
+# yaml.safe_load; the core never imports it.
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+# ----- Optional extension lanes (EG-M5-1; ADR 0017) -----------------------
+# Each optional lane that needs a real third-party dependency declares it as a
+# PINNED, ISOLATED extra here — NEVER in `dependencies` above. No required import
+# path (core / harness orchestration / required adapters) may import a lane, so
+# omitting an extra can never break the required tier (proven by
+# tests/core_isolation/test_lane_boundary.py and `egts verify-deletion`).
+#
+# Policy: prefer stdlib + stubbed backends (the ADR 0016 `urllib`/stub precedent).
+# The M5a lanes (open-convention conformance, trace-backend stub, ScoreSink export)
+# and the live-judge lane are stdlib-only, so their extras carry no third-party
+# pin yet — they exist to document the lane→extra mapping and reserve the key. A
+# future real-vendor lane adds its pinned SDK to its own extra (and only then a
+# `uv.lock` entry), never to the required set.
+[project.optional-dependencies]
+live-judge = []            # adapters/judge_live.py — stdlib urllib (https), no SDK
+trace-backend = []         # M5a S3 stub backend — stdlib only
+score-sink-export = []     # M5a S4 export sink — stdlib urllib (https)
+# Live trace-connector extras (EG-R0; ADR 0033/0034/0035/0036). Each pins ONE provider SDK,
+# imported lazily inside the lane path only — never on a required import path. Opt-in and
+# deletable: omitting the extra leaves the required, hermetic tier green. Phoenix uses the
+# lightweight `arize-phoenix-client` (the span-reading API), NOT the full `arize-phoenix`
+# server (which transitively pulls openai/anthropic/fastapi); the budget guard bans the server.
+langfuse-trace = ["langfuse>=4,<5"]              # adapters/trace_langfuse.py (EG-R1)
+phoenix-trace = ["arize-phoenix-client>=2,<3"]   # adapters/trace_phoenix.py (EG-R2)
+langsmith-trace = ["langsmith>=0.8.18,<1"]       # adapters/trace_langsmith.py (EG-R3); floor is GHSA-f4xh-w4cj-qxq8 fix
+
+[project.scripts]
+evalglass = "evalglass.harness.cli:main"
+# Integration-time only (ADR 0010); never a runtime dependency of the vendored host.
+evalglass-install = "evalglass.installer.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/EvalGlass/evalglass-core"
+Repository = "https://github.com/EvalGlass/evalglass-core"
+Issues = "https://github.com/EvalGlass/evalglass-core/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/evalglass"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=5.0",
+    "ruff>=0.7",
+    "mypy>=1.13",
+    "bandit[toml]>=1.7",
+    "pre-commit>=4.0",
+    "licensecheck>=2024.3",
+    "pyyaml>=6.0",
+]
+
+# ----- Ruff ---------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "tools", ".claude/skills/scan-gate", ".claude/skills/validator-gate"]
+
+[tool.ruff.lint]
+# Strict-ish baseline. We can dial individual rules down via per-file-ignores
+# rather than disabling whole categories — visibility over silence.
+select = [
+    "E", "F", "W",   # pycodestyle / pyflakes
+    "I",             # isort
+    "B",             # flake8-bugbear
+    "UP",            # pyupgrade
+    "SIM",           # flake8-simplify
+    "TID",           # tidy-imports
+    "C4",            # comprehensions
+    "PT",            # pytest style
+    "RUF",           # ruff-native
+    "S",             # bandit-via-ruff
+    "PLE", "PLW",    # pylint errors/warnings
+    "ARG",           # unused arguments
+    "RET",           # return statements
+    "TRY",           # exception handling
+    "ANN",           # annotations
+]
+ignore = [
+    "ANN401",   # Any used intentionally at boundaries
+    "TRY003",   # long exception messages — we want diagnostic messages
+    "PLR2004",  # magic values — noisy for thresholds; revisit per ADR
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "ANN", "D", "ARG"]
+"tools/**" = ["S603", "S607"]
+"src/evalglass/__init__.py" = ["F401"]
+"src/evalglass/*/__init__.py" = ["F401"]
+# Gate-skill tooling under .claude/skills is now first-class CI-scanned code.
+# Test suites get the same relaxations as tests/** (plus subprocess, like tools/**,
+# since they drive the CLI via subprocess). The diff/scan scripts shell out to git.
+".claude/skills/**/tests/**" = ["S101", "ANN", "D", "ARG", "S603", "S607"]
+".claude/skills/**/scripts/**" = ["S603", "S607"]
+# Status enums use the explicit `(str, Enum)` form (stable `.value` JSON + str repr);
+# their "PASS"/… members are status tokens, not secrets (S105), and the form is a
+# deliberate choice over StrEnum (UP042).
+".claude/skills/**/scripts/contracts.py" = ["S603", "S607", "S105", "UP042"]
+# The detector registry maps a uniform (diff, policy, root) signature onto detectors
+# with differing arities; the adapter lambdas are intentional, not redundant.
+".claude/skills/scan-gate/scripts/runner.py" = ["S603", "S607", "PLW0108", "ARG005"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+# ----- Mypy ---------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src", "tests", "tools"]
+mypy_path = "src"
+warn_unreachable = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_untyped_decorators = true
+no_implicit_reexport = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_decorators = false
+
+# ----- Pytest -------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra --strict-markers --strict-config --tb=short"
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "core_isolation: structural checks that the effect-free Evaluation Core has no I/O / vendor / clock / randomness dependencies",
+    "verdict_matrix: covers every authority-state -> verdict mapping",
+    "public_surface: snapshot of CLI / report / schema contracts",
+    "adapter_conformance: port/adapter contract tests",
+    "fixture_e2e: local-runner end-to-end on fixtures",
+    "slow: tests that exceed 1s and may be excluded from the fast suite",
+    "live_lane: opt-in optional-lane integration that may use real egress; excluded from the required tier and skipped unless EVALGLASS_LIVE_LANES=1 (alignment AT0, EG-AT0-1)",
+    "ontology: companion-ontology drift guard over docs/design ontology data; independently selectable so a docs-data check is separable from CLI/schema snapshots (alignment AT0, EG-AT0-1)",
+]
+filterwarnings = ["error"]
+
+# ----- Coverage -----------------------------------------------------------
+# Per CLAUDE.md §5: coverage thresholds require *approved* authority. Until a
+# calibrated threshold is recorded in calibration/, coverage is INFORMATIONAL.
+# Do not silently gate.
+[tool.coverage.run]
+source = ["src/evalglass"]
+branch = true
+relative_files = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@overload",
+]
+fail_under = 0   # INFORMATIONAL — see CLAUDE.md §5; not a silent gate.
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+# ----- Bandit -------------------------------------------------------------
+[tool.bandit]
+# B101: asserts are fine in tests/tools (covered by per-file-ignores in ruff).
+# B105: status tokens ("PASS"/"FAIL"/…) and rank tables read as "hardcoded passwords";
+#       real secrets are caught by ruff S105/S106/S107 and the TruffleHog CI scan.
+skips = ["B101", "B105"]
+exclude_dirs = ["tests", "docs", ".venv", "build"]
+
+# ----- Licensecheck -------------------------------------------------------
+[tool.licensecheck]
+using = "PEP631"
+zero = false
+format = "ansi"

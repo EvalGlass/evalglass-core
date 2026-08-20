@@ -1,0 +1,62 @@
+name: Trivy filesystem scan
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 5 * * 1" # Mondays 05:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trivy-fs-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  scan:
+    name: Trivy fs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # SARIF upload to the Security tab requires GitHub Advanced Security on
+      # private repos. While GHAS is not enabled, we render Trivy's table report
+      # to the PR summary and fail the job on HIGH/CRITICAL findings. When GHAS
+      # is enabled, switch to the SARIF flow (commented below).
+      - name: Trivy fs scan (table report)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          output: trivy-report.txt
+
+      - name: Publish Trivy report to PR summary
+        if: always()
+        run: |
+          {
+            echo "## Trivy filesystem scan"
+            echo ""
+            if [ -s trivy-report.txt ]; then
+              echo '```'
+              cat trivy-report.txt
+              echo '```'
+            else
+              echo "No HIGH/CRITICAL findings."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # When GHAS is enabled, replace the table flow above with:
+      #   - format: sarif
+      #     output: trivy-results.sarif
+      #     exit-code: "0"
+      # then:
+      #   - uses: github/codeql-action/upload-sarif@v3
+      #     with: { sarif_file: trivy-results.sarif, category: trivy }
