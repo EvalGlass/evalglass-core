@@ -24,4 +24,4 @@ fi
 
 echo
 echo "Structural validation passed. Interactive probes (invocation token, NL trigger, SessionStart"
-echo "binding, no-arg dashboard) are manual — see docs/plugin/P0-acceptance-runbook.md."
+echo "binding, no-arg dashboard) are manual — maintainer acceptance probes."

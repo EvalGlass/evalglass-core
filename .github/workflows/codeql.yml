@@ -1,0 +1,77 @@
+name: CodeQL
+
+# Static analysis (SARIF -> GitHub code scanning). Uploading results requires
+# the repository to be public, or private with GitHub Advanced Security. While
+# this repo is private the `analyze` job is skipped by the visibility guard
+# below, so the workflow stays green; it activates automatically the moment the
+# repo is made public — no follow-up edit needed. Pairs with the pinned CI
+# security tier (TruffleHog, Trivy fs, pip-audit, licensecheck); see SECURITY.md.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "35 5 * * 1" # Mondays 05:35 UTC — after the other weekly scans
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  # Code scanning is unavailable on a private repo without GitHub Advanced
+  # Security, so gate analysis on public visibility. This holds for every event
+  # type (including `schedule`, whose payload carries no repository object) by
+  # querying the API directly rather than reading github.event.repository.
+  visibility:
+    name: check repository visibility
+    runs-on: ubuntu-latest
+    outputs:
+      public: ${{ steps.check.outputs.public }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          vis=$(gh api "repos/${{ github.repository }}" --jq .visibility)
+          echo "repository visibility: $vis"
+          if [ "$vis" = "public" ]; then
+            echo "public=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "public=false — skipping CodeQL analysis (needs a public repo or GHAS)" >&2
+            echo "public=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  analyze:
+    name: CodeQL analyze (${{ matrix.language }})
+    needs: visibility
+    if: needs.visibility.outputs.public == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+
+      # No build step: Python is interpreted, so CodeQL analyzes the source
+      # directly without autobuild.
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

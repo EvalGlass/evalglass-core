@@ -21,7 +21,7 @@ def audited_prose_files() -> list[Path]:
     paths += sorted((_REPO / ".claude-plugin").glob("*.json"))
     paths += sorted((_REPO / ".codex-plugin").glob("*.json"))
     paths += sorted((_REPO / "skills").glob("*/SKILL.md"))
-    for sub in ("plugin-docs", "docs/plugin", "examples", "assets", "bin"):
+    for sub in ("plugin-docs", "examples", "assets", "bin"):
         paths += sorted((_REPO / sub).rglob("*.md"))
     return [p for p in paths if p.is_file()]
 

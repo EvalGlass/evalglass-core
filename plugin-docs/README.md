@@ -15,15 +15,12 @@ reference point here rather than restating (so nothing drifts):
 
 - **Vocabulary & concepts** — [`vocabulary.md`](./vocabulary.md) (the one-page term index).
 - **Design tenets** — [`../docs/design_principles.md`](../docs/design_principles.md).
-- **Architecture** — [`../docs/architecture.md`](../docs/architecture.md) and the
-  [build contract](../docs/architecture_build_contract.md).
+- **Architecture** — [`../docs/architecture.md`](../docs/architecture.md).
 - **Decisions** — [`../adrs/`](../adrs/) (plugin packaging is ADR 0022; Codex second runtime is ADR 0023).
 
 ## Status & ownership
 
-The detailed page-by-page reference currently lives in the separate `evalglass-site` repo
-(`public/reference`). It migrates into this directory **incrementally**, page by page, with the
-site switching to rendering/linking these files as each page lands (ADR 0022). This index
-and [`vocabulary.md`](./vocabulary.md) are the first canonical pages here; the remaining reference
-pages are tracked and not yet claimed as re-homed. Until a page is here, treat the in-repo concept
-sources above as authoritative.
+The full page-by-page reference lives at [evalglass.com/docs](https://evalglass.com/docs) and is
+being re-homed into this directory **incrementally**, page by page (ADR 0022). This index and
+[`vocabulary.md`](./vocabulary.md) are the first canonical pages here; until a page is present here,
+treat the in-repo concept sources above as authoritative.

@@ -7,7 +7,7 @@ Thanks for being here. Before submitting a PR, please read [`CLAUDE.md`](./CLAUD
 ```bash
 # 1. Clone
 git clone git@github.com:EvalGlass/evalglass-core.git
-cd evalglass
+cd evalglass-core
 
 # 2. Install uv (https://docs.astral.sh/uv/)
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -101,4 +101,4 @@ No other third-party secrets are required — the framework is local-first and t
 
 ## Releases
 
-Pre-release (`v0.2.0`, pre-alpha). The plugin release gates — version alignment, strict manifest validation, the honesty audit, and the deletion-invariant — are tracked in [`docs/plugin/RELEASE_CHECKLIST.md`](./docs/plugin/RELEASE_CHECKLIST.md). Tagging and any PyPI/marketplace publishing are deliberate maintainer steps, not automated yet.
+Pre-release (`v0.2.0`, pre-alpha). The plugin release gates — version alignment, strict manifest validation, the honesty audit, and the deletion-invariant — are enforced by the `tests/plugin/` suite and checked before tagging. Tagging and any PyPI / marketplace publishing are deliberate maintainer steps, not automated yet.

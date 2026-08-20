@@ -16,7 +16,7 @@ ADR 0023). Three structural invariants are proven here:
   umbrella skill and the build guide, and asserts no quality/capability claim.
 
 These are the hermetic structural floor. The *live* Codex trigger is a maintainer acceptance
-probe (``docs/plugin``), proven by transcript — never assumed from a green unit test (plan §8.6).
+probe, proven by transcript — never assumed from a green unit test.
 """
 
 from __future__ import annotations
