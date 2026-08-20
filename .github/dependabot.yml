@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 10
+    labels:
+      - "deps"
+      - "dependabot"
+    groups:
+      dev-deps:
+        dependency-type: "development"
+        update-types: ["minor", "patch"]
+      runtime-deps:
+        dependency-type: "production"
+        update-types: ["minor", "patch"]
+    # Per CLAUDE.md §8 — every dependency is vendored cost. Surface majors
+    # individually so we can ADR them.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 10
+    labels:
+      - "deps"
+      - "ci"
+      - "dependabot"
+    groups:
+      actions:
+        update-types: ["minor", "patch"]
