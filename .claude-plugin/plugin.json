@@ -1,7 +1,7 @@
 {
   "name": "evalglass-core",
   "displayName": "EvalGlass",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An AI quality-control tool for agentic apps. Tell your agent to evaluate your app: EvalGlass discovers your LLM call sites, vendors a stdlib-only runtime into your repo, scaffolds project-specific checks over host-owned gold/rubrics/thresholds, and wires CI on a single Verdict Engine that blocks only after you approve a gate — reporting only what the evidence honestly supports.",
   "author": {
     "name": "EvalGlass",

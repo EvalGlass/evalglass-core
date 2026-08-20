@@ -5,6 +5,38 @@ All notable changes to EvalGlass are recorded here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Pre-1.0, the public API and
 plugin surface may still change.
 
+## [0.2.1] - 2026-08-20 (pre-alpha)
+
+Public-launch preparation — the final pre-public cut. No runtime, public-contract, authority, or
+verdict-behaviour change: the vendored runtime and all typed artifacts are behaviourally identical to
+`0.2.0`.
+
+### Added
+
+- **CodeQL static analysis (SAST).** A visibility-gated `codeql.yml` closes the one gap in the
+  security tier (TruffleHog, Trivy, pip-audit, and licensecheck are not SAST): while the repository
+  is private the analysis job is skipped and the workflow stays green; it activates automatically the
+  moment the repository is made public.
+- **Contributor Covenant 2.1 Code of Conduct** — standard community-health hygiene for a public
+  project.
+
+### Removed
+
+- **The internal `docs/plugin/` folder.** It held development and QA process material — the
+  per-milestone acceptance runbooks, an implementation-lessons log, marketplace-submission notes, and
+  the plugin release checklist — none of it external documentation. The release gates it described are
+  enforced by the `tests/plugin/` suite and summarised in `CONTRIBUTING.md`.
+
+### Fixed
+
+- Scrubbed a local absolute path and internal tool versions from the docs; corrected broken links (a
+  non-existent architecture build-contract link, a stale ADR link, and the clone-directory snippet)
+  and replaced a reference to a separate private repository with the public docs site.
+
+### Security
+
+- Enabled repository secret scanning with push protection and Dependabot alerts / security updates.
+
 ## [0.2.0] - 2026-08-20 (pre-alpha)
 
 Refines the packaging and the product positioning on top of the complete `0.1.0` core; the runtime,
@@ -243,5 +275,6 @@ separate [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discover
   ships no generator by design (governance-only).
 - Tagging and any PyPI / marketplace publishing are deliberate maintainer steps, not automated.
 
+[0.2.1]: https://github.com/EvalGlass/evalglass-core/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/EvalGlass/evalglass-core/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/EvalGlass/evalglass-core/releases/tag/v0.1.0
