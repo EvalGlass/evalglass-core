@@ -251,6 +251,20 @@ authorized to gate* — not that quality was verified. Specifically, a green/inf
 A metric that is `blocked`, `non_evaluable`, or `skipped` carries **no value** — it is never shown
 as `0.0`. The explicit gap is the point.
 
+## Core executes — what it is, and what it isn't
+
+EvalGlass Core is the open, host-directed evaluation runtime: **you tell it what to evaluate, and it
+executes honestly.** It gives your team a rigorous system to *define, run, compare, and retain*
+evaluations — metrics, judges, datasets, traces, CI, reports, baselines, and longitudinal evidence —
+over checks **you** own. It never inspects your application to decide, on its own, what you ought to
+test.
+
+That boundary is deliberate. Deriving *what* to measure from an application — reading its traces,
+prompts, and schemas to propose a bespoke suite — is **metric discovery**, and it lives in the
+separate [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discovery) repo, not here. In
+short: **Core executes · Discovery finds · Intelligence explains.** Core is the substrate the others
+build on; nothing in it decides your evaluation agenda for you.
+
 ## Compared to other eval tools
 
 EvalGlass optimizes a different axis than promptfoo, DeepEval, Ragas, or MLflow: **local-first, a

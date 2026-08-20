@@ -36,6 +36,14 @@ It measures host behavior from supplied evidence and reports what can honestly
 be claimed. It does not improve the host application, approve domain truth, or
 become a hosted platform.
 
+**Positioning — Core executes; Discovery finds; Intelligence explains.** Core is
+the open, host-directed evaluation runtime: you tell it what to evaluate and it
+executes honestly, giving a rigorous system to *define, run, compare, and retain*
+evaluations. It never inspects an application to decide, on its own, what should
+be tested. Deriving *what* to measure from an application (metric discovery) is a
+separate concern that lives in the `evalglass-discovery` repo; explaining *why* a
+failure happens is another. This document specifies Core only.
+
 **Primary rule:** a green or non-failing EvalGlass result must never imply more
 evidence, authority, calibration, comparability, or validity than the run
 actually has.
