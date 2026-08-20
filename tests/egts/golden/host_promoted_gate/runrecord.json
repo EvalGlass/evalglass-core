@@ -10,7 +10,7 @@
         "evaluator": "e652e3f36cde4365b0f13a279c532f8fafd4763abdadaf2f656e2197a830888f",
         "evidence": "ee11406f6d3bff89894dac922bf2f0ca395b8d245328ff5e65304fe71b7cfee9",
         "example": "fa070a6976d18f3cdeb4998ead648b8ad85175d9c3ca47abdbfb2283aa376496",
-        "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+        "framework": "1076b7dc3a73a64cde273d1e7deaf9c529a221e97d0a51cb51adff0ac405f739",
         "metric_spec": "73e7073792d5255805f6e722b26e53aa4576a51a562265e425ba684c2a65fa2a",
         "policy": "331892c697ad548a7f6eb7f166cc4e456c1bf505c8aa66bca1c6090d1ec752f1"
       }
@@ -43,7 +43,7 @@
       "evaluator": "e652e3f36cde4365b0f13a279c532f8fafd4763abdadaf2f656e2197a830888f",
       "evidence": "ee11406f6d3bff89894dac922bf2f0ca395b8d245328ff5e65304fe71b7cfee9",
       "example": "fa070a6976d18f3cdeb4998ead648b8ad85175d9c3ca47abdbfb2283aa376496",
-      "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+      "framework": "1076b7dc3a73a64cde273d1e7deaf9c529a221e97d0a51cb51adff0ac405f739",
       "metric_spec": "73e7073792d5255805f6e722b26e53aa4576a51a562265e425ba684c2a65fa2a",
       "policy": "331892c697ad548a7f6eb7f166cc4e456c1bf505c8aa66bca1c6090d1ec752f1"
     }
