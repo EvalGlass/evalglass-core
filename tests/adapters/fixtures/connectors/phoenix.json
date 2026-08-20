@@ -1,0 +1,94 @@
+{
+  "_description": "Phoenix (arize-phoenix-client) OpenInference-span payload (EG-R0-7; ADR 0035). Native fields map to TraceEnvelope per MAPPING.md. Used by the hermetic Phoenix connector proof (EG-R2-5); no SDK or socket.",
+  "vendor_wrapper_keys": [
+    "project",
+    "_phoenix_cursor",
+    "_phoenix_internal"
+  ],
+  "good": {
+    "spans": [
+      {
+        "context": {
+          "trace_id": "t1",
+          "span_id": "s1"
+        },
+        "name": "llm",
+        "start_time": "2026-01-01T00:00:00Z",
+        "end_time": "2026-01-01T00:00:01Z",
+        "attributes": {
+          "input.value": "q",
+          "output.value": "a",
+          "llm.model_name": "m"
+        }
+      }
+    ]
+  },
+  "vendor_wrapper": {
+    "spans": [
+      {
+        "context": {
+          "trace_id": "t1",
+          "span_id": "s1"
+        },
+        "name": "llm",
+        "start_time": "2026-01-01T00:00:00Z",
+        "end_time": "2026-01-01T00:00:01Z",
+        "_phoenix_internal": {
+          "exporter": "otlp"
+        },
+        "attributes": {
+          "input.value": "q",
+          "output.value": "a",
+          "llm.model_name": "m"
+        }
+      }
+    ],
+    "project": {
+      "id": "proj-1",
+      "name": "default"
+    },
+    "_phoenix_cursor": "opaque-cursor"
+  },
+  "malformed": "<<not-json>>",
+  "missing_field": {
+    "spans": [
+      {
+        "context": {
+          "trace_id": "t2",
+          "span_id": "s2"
+        },
+        "name": "llm",
+        "attributes": {
+          "input.value": "q"
+        }
+      }
+    ]
+  },
+  "empty": {
+    "spans": [],
+    "project": {
+      "id": "proj-1"
+    }
+  },
+  "expected": [
+    {
+      "unit": {
+        "unit_id": "s1",
+        "kind": "call",
+        "trace_id": "t1"
+      },
+      "behavior": {
+        "output": "a",
+        "input": "q",
+        "model": "m",
+        "timing": {
+          "start_time": "2026-01-01T00:00:00Z",
+          "end_time": "2026-01-01T00:00:01Z"
+        }
+      },
+      "metadata": {
+        "trace_name": "llm"
+      }
+    }
+  ]
+}
