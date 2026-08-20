@@ -1,0 +1,132 @@
+[
+  {
+    "boundary": "Reads a recorded file only; it never runs/orchestrates the host. Async metadata is recorded fact, not an orchestration handle; the core sees only the normalized TraceEnvelope.",
+    "deletion_rule": "Deleting adapters/async_observation.py leaves the local JSONL trace route intact (the required tier imports no async lane).",
+    "factory": "AsyncObservationTraceSource",
+    "maturity": "experimental",
+    "module": "evalglass.adapters.async_observation",
+    "name": "async-observation",
+    "optional_dependencies": [],
+    "port": "trace_source",
+    "prerequisites": [
+      "a recorded async trace file"
+    ],
+    "purpose": "Observe recorded async (interleaved) behavior and normalize it to TraceEnvelope \u2014 observation only, never orchestration."
+  },
+  {
+    "boundary": "The sink consumes the Scorecard read-only and checks data policy before any egress; it cannot mutate the verdict, authority, or CI exit \u2014 a forbidden policy or failed publish is a diagnostic, never a changed verdict.",
+    "deletion_rule": "Deleting adapters/score_sink_dashboard.py leaves the local JSON + Markdown reports intact (the required tier imports no dashboard lane).",
+    "factory": "DashboardScoreSink",
+    "maturity": "next",
+    "module": "evalglass.adapters.score_sink_dashboard",
+    "name": "hosted-dashboard",
+    "optional_dependencies": [],
+    "port": "score_sink",
+    "prerequisites": [
+      "a configured hosted-dashboard endpoint"
+    ],
+    "purpose": "Publish an immutable Scorecard to a hosted dashboard endpoint as a one-way export (dependency-injected transport; stdlib urllib by default)."
+  },
+  {
+    "boundary": "Langfuse traces are normalized to TraceEnvelope at the lane boundary; no Langfuse object reaches the core, evaluators, RunRecord, or Scorecard, and the SDK is imported lazily inside the lane (never on a required import path).",
+    "deletion_rule": "Deleting adapters/trace_langfuse.py leaves the required, hermetic tier and the local JSONL trace route intact (the required tier imports no connector).",
+    "factory": "LangfuseTraceSource",
+    "maturity": "planned",
+    "module": "evalglass.adapters.trace_langfuse",
+    "name": "langfuse-trace",
+    "optional_dependencies": [
+      "langfuse-trace"
+    ],
+    "port": "trace_source",
+    "prerequisites": [
+      "a configured Langfuse host/endpoint and API credentials"
+    ],
+    "purpose": "Import recorded traces from a Langfuse instance and normalize them to TraceEnvelope (opt-in connector; the SDK is imported lazily inside the lane)."
+  },
+  {
+    "boundary": "LangSmith runs are normalized to TraceEnvelope at the lane boundary; no LangSmith object reaches the core, evaluators, RunRecord, or Scorecard, and the SDK (langsmith, never LangChain) is imported lazily inside the lane.",
+    "deletion_rule": "Deleting adapters/trace_langsmith.py leaves the required, hermetic tier and the local JSONL trace route intact (the required tier imports no connector).",
+    "factory": "LangSmithTraceSource",
+    "maturity": "planned",
+    "module": "evalglass.adapters.trace_langsmith",
+    "name": "langsmith-trace",
+    "optional_dependencies": [
+      "langsmith-trace"
+    ],
+    "port": "trace_source",
+    "prerequisites": [
+      "a configured LangSmith API endpoint and API credentials"
+    ],
+    "purpose": "Import recorded runs from a LangSmith instance and normalize them to TraceEnvelope (opt-in connector; the SDK is imported lazily inside the lane)."
+  },
+  {
+    "boundary": "Judge calls occur only in this lane; the required tier uses the fake adapter and stays hermetic (no network, no provider SDK).",
+    "deletion_rule": "Deleting adapters/judge_live.py leaves the required judge suite green (the fake adapter is the only required-tier judge).",
+    "factory": "LiveJudgeModel",
+    "maturity": "experimental",
+    "module": "evalglass.adapters.judge_live",
+    "name": "live-judge",
+    "optional_dependencies": [],
+    "port": "judge_model",
+    "prerequisites": [
+      "a host-configured HTTPS judge endpoint"
+    ],
+    "purpose": "Call a host HTTPS judge endpoint to collect judge evidence."
+  },
+  {
+    "boundary": "The handoff consumes the Scorecard read-only, echoes the verdict verbatim, and writes only under reports/optimizer/; it never writes back into datasets, evaluators, rubrics, config, baselines, or authority, and recomputes no meaning.",
+    "deletion_rule": "Deleting adapters/optimizer_handoff.py leaves the local JSON + Markdown reports intact (the required tier imports no handoff lane).",
+    "factory": "OptimizerHandoffSink",
+    "maturity": "next",
+    "module": "evalglass.adapters.optimizer_handoff",
+    "name": "optimizer-handoff",
+    "optional_dependencies": [],
+    "port": "score_sink",
+    "prerequisites": [],
+    "purpose": "Write a one-way, Scorecard-derived findings artifact under reports/optimizer/ for an external prompt optimizer (write-only; no return path)."
+  },
+  {
+    "boundary": "Phoenix spans are normalized to TraceEnvelope at the lane boundary; no Phoenix object reaches the core, evaluators, RunRecord, or Scorecard, and the SDK (arize-phoenix-client) is imported lazily inside the lane.",
+    "deletion_rule": "Deleting adapters/trace_phoenix.py leaves the required, hermetic tier and the local JSONL trace route intact (the required tier imports no connector).",
+    "factory": "PhoenixTraceSource",
+    "maturity": "planned",
+    "module": "evalglass.adapters.trace_phoenix",
+    "name": "phoenix-trace",
+    "optional_dependencies": [
+      "phoenix-trace"
+    ],
+    "port": "trace_source",
+    "prerequisites": [
+      "a configured Phoenix collector endpoint and API credentials"
+    ],
+    "purpose": "Import recorded spans from an Arize Phoenix instance and normalize them to TraceEnvelope (opt-in connector; the SDK is imported lazily inside the lane)."
+  },
+  {
+    "boundary": "The sink consumes the Scorecard read-only; it cannot mutate the verdict, authority, or CI exit \u2014 a failed publish is a diagnostic, not a changed verdict.",
+    "deletion_rule": "Deleting adapters/score_sink_export.py leaves the local JSON + Markdown reports intact (the required tier imports no export lane).",
+    "factory": "FileScorecardExportSink",
+    "maturity": "experimental",
+    "module": "evalglass.adapters.score_sink_export",
+    "name": "score-sink-export",
+    "optional_dependencies": [],
+    "port": "score_sink",
+    "prerequisites": [
+      "a configured export destination"
+    ],
+    "purpose": "Publish an immutable Scorecard to an external destination (stub: a local export dir; a real backend uploader replaces the write)."
+  },
+  {
+    "boundary": "Vendor spans are normalized to TraceEnvelope at the lane boundary; no vendor object reaches the core, evaluators, RunRecord, or Scorecard.",
+    "deletion_rule": "Deleting adapters/trace_backend_stub.py leaves the local JSONL trace route intact (the required tier imports no backend lane).",
+    "factory": "StubBackendTraceSource",
+    "maturity": "experimental",
+    "module": "evalglass.adapters.trace_backend_stub",
+    "name": "trace-backend",
+    "optional_dependencies": [],
+    "port": "trace_source",
+    "prerequisites": [
+      "a configured trace backend (query/endpoint)"
+    ],
+    "purpose": "Read recorded spans from a tracing backend and normalize them to TraceEnvelope (stub backend; a real SDK adapter replaces the read)."
+  }
+]

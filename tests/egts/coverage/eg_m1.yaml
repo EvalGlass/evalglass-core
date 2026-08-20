@@ -1,0 +1,66 @@
+# EGTS coverage registry — EG-M1 (Local Runtime Harness).
+#
+# Every obligation is `covered` only because a real EGTS-M1 scenario drives the
+# product's public surface (tests/egts/suites/test_m1_*). A row may never be
+# `covered` without a real scenario id — that is an integrity violation
+# (tests/CLAUDE.md §14).
+rows:
+  - product_ticket: EG-M1-1
+    public_contract: "CLI + typed config boundary; authority-safe defaults; setup diagnostics"
+    architecture_section: "architecture_build_contract.md §8 (cli.py, config.py, loader.py)"
+    status: covered
+    scenario_ids: [m1.cli.run_end_to_end, m1.artifact.round_trip]
+    checker_families: [scorecard, report, exit]
+    required_command: egts test-runtime
+    negative_control: "Malformed config / missing file exits 2 with a diagnostic, never a verdict."
+
+  - product_ticket: EG-M1-2
+    public_contract: "Local JSONL DatasetStore (Example, dataset status/version, diagnostics)"
+    architecture_section: "architecture_build_contract.md §8 (adapters/dataset_jsonl.py)"
+    status: covered
+    scenario_ids:
+      - m1.dataset.proposed_informational
+      - m1.dataset.validated_gates
+      - m1.dataset.malformed_diagnostic
+    checker_families: [scorecard, authority, runrecord]
+    required_command: egts test-runtime
+    negative_control: "A malformed record becomes a diagnostic; a wrong authority declaration fails."
+
+  - product_ticket: EG-M1-3
+    public_contract: "TraceSource + open-convention mapping → TraceEnvelope → EvalUnit"
+    architecture_section: "architecture_build_contract.md §6 (trace_jsonl, trace_open_convention)"
+    status: covered
+    scenario_ids:
+      - m1.trace.open_convention_no_leak
+      - m1.trace.mapping_incomplete
+      - m1.trace.hermetic_no_sdk
+    checker_families: [trace, scorecard]
+    negative_control: "A vendor-shaped value reaching the evaluator fails the route-fidelity probe."
+    required_command: egts test-runtime
+
+  - product_ticket: EG-M1-4
+    public_contract: "Route convergence: dataset/trace/mixed → Example + EvidenceBundle"
+    architecture_section: "architecture_build_contract.md §5 (prepare.py, runner.py)"
+    status: covered
+    scenario_ids: [m1.route.mixed_converges, m1.route.fidelity_probe]
+    checker_families: [trace, runrecord, scorecard]
+    required_command: egts test-runtime
+    negative_control: "An adapter/raw object reaching an evaluator-visible field fails."
+
+  - product_ticket: EG-M1-5
+    public_contract: "ResultStore + report sinks (RunRecord/Scorecard primary, report renders)"
+    architecture_section: "architecture_build_contract.md §9 (result_store_fs.py, report.py)"
+    status: covered
+    scenario_ids: [m1.artifact.round_trip, m1.report.no_overclaim]
+    checker_families: [runrecord, scorecard, report]
+    required_command: egts test-runtime
+    negative_control: "A report claiming pass while the Scorecard is informational fails."
+
+  - product_ticket: EG-M1-6
+    public_contract: "Quickstart sample assets + first-run docs (informational by default)"
+    architecture_section: "architecture_build_contract.md §13 (examples/quickstart)"
+    status: covered
+    scenario_ids: [m1.quickstart.informational]
+    checker_families: [scorecard]
+    required_command: egts test-runtime
+    negative_control: "Sample metrics are informational; the sample cannot imply validated truth."

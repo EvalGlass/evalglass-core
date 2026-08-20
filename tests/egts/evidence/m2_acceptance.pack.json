@@ -1,0 +1,39 @@
+{
+  "schema_version": "validator.evidence.v1",
+  "checkpoint": "EG-M2.acceptance",
+  "source_boundary": {
+    "product": ["m2-sc-blocked", "m2-sc-info", "m2-sc-comparable", "m2-baseline"],
+    "external_contracts": ["m2-rep-blocked", "m2-rep-info"]
+  },
+  "claims": [
+    {
+      "id": "blocked-run-does-not-overclaim",
+      "text": "A blocked run's report claims no pass (no fabricated quality claim).",
+      "risk_surfaces": ["verdict", "public_report"],
+      "expected_families": ["authority_verdict"],
+      "required_artifacts": ["m2-sc-blocked", "m2-rep-blocked"]
+    },
+    {
+      "id": "good-score-without-authority-informational",
+      "text": "A good score without gating authority stays informational and does not fail CI.",
+      "risk_surfaces": ["verdict", "authority"],
+      "expected_families": ["authority_verdict"],
+      "required_artifacts": ["m2-sc-info", "m2-rep-info"]
+    },
+    {
+      "id": "regression-backed-by-comparable-baseline",
+      "text": "The required-baseline gate that passed is backed by a comparable baseline fingerprint.",
+      "risk_surfaces": ["baseline"],
+      "expected_families": ["evidence_provenance"],
+      "required_artifacts": ["m2-sc-comparable", "m2-baseline"]
+    }
+  ],
+  "artifacts": [
+    {"id": "m2-sc-blocked", "kind": "scorecard", "authority": "product", "content": {"verdict": "blocked", "ci_should_fail": true}},
+    {"id": "m2-rep-blocked", "kind": "report", "authority": "external", "content": {"claimed_status": "blocked"}},
+    {"id": "m2-sc-info", "kind": "scorecard", "authority": "product", "content": {"verdict": "informational", "ci_should_fail": false}},
+    {"id": "m2-rep-info", "kind": "report", "authority": "external", "content": {"claimed_status": "informational"}},
+    {"id": "m2-sc-comparable", "kind": "scorecard", "authority": "product", "content": {"verdict": "pass", "ci_should_fail": false}},
+    {"id": "m2-baseline", "kind": "baseline", "authority": "product", "content": {"state": "comparable"}}
+  ]
+}

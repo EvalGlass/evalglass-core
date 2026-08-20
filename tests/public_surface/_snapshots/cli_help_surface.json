@@ -1,0 +1,388 @@
+{
+  "commands": {
+    "assemble": {
+      "commands": {},
+      "description": "Run a declarative evidence_pipeline: join local dataset/trace exports (and opt-in argv snapshot commands) by declared keys and cardinality, project fields preserving behavior layers, and write an Example JSONL plus a lineage/digest manifest beside it. The output routes through the ordinary dataset contract \u2014 there is no second scoring engine, and nothing here grants authority. Deterministic: unchanged inputs and config reproduce a byte-identical output and digest.",
+      "help": "Assemble evaluation examples from declared sources and joins (host-owned dataset).",
+      "options": {
+        "--config": {
+          "choices": null,
+          "default": null,
+          "dest": "config",
+          "flags": [
+            "--config"
+          ],
+          "help": "Path to the evidence_pipeline config.",
+          "required": true
+        },
+        "--out": {
+          "choices": null,
+          "default": null,
+          "dest": "out",
+          "flags": [
+            "--out"
+          ],
+          "help": "Output Example JSONL path to write.",
+          "required": true
+        }
+      },
+      "prog": "evalglass assemble"
+    },
+    "baseline": {
+      "commands": {
+        "update": {
+          "commands": {},
+          "description": null,
+          "help": "Promote a run record as a baseline.",
+          "options": {
+            "--from": {
+              "choices": null,
+              "default": null,
+              "dest": "from_path",
+              "flags": [
+                "--from"
+              ],
+              "help": "Path to a runrecord.json.",
+              "required": true
+            },
+            "--to": {
+              "choices": null,
+              "default": null,
+              "dest": "to_path",
+              "flags": [
+                "--to"
+              ],
+              "help": "Baseline file path to write.",
+              "required": true
+            }
+          },
+          "prog": "evalglass baseline update"
+        }
+      },
+      "description": null,
+      "help": "Manage host-owned baselines.",
+      "options": {},
+      "prog": "evalglass baseline"
+    },
+    "connect": {
+      "commands": {},
+      "description": "Bring recorded behavior into a run, two ways. `--from <export>` imports a LOCAL exported trace file as a first-class traces: route \u2014 no credentials and no provider SDK; the export is validated before the config is touched, so a malformed or empty file writes nothing. `--live <platform>` enables a shipped, opt-in, deletable trace connector lane (Langfuse / Phoenix / LangSmith): it writes config only \u2014 no provider SDK is imported and no live call is made here; the following `run` pulls the traces, and needs the '<platform>-trace' extra installed plus env-var creds. Credentials are passed as environment-variable NAMES (references), never literal secrets. A connector's data policy defaults to 'unknown' so egress is refused until you consciously set it to 'permitted'. Either way the traces are PROPOSED evidence: a connected run stays informational and cannot gate. All relative paths resolve against the --config directory. A missing config is refused unless you pass --init (which writes a conservative informational config). Deleting a connector leaves the required tier unchanged.",
+      "help": "Import a local trace export, or scaffold an opt-in live connector, into the config.",
+      "options": {
+        "--config": {
+          "choices": null,
+          "default": "evalglass.yaml",
+          "dest": "config",
+          "flags": [
+            "--config"
+          ],
+          "help": "Path to the evalglass.yaml to edit.",
+          "required": false
+        },
+        "--credentials": {
+          "choices": null,
+          "default": null,
+          "dest": "credentials",
+          "flags": [
+            "--credentials"
+          ],
+          "help": "Credential ENV-VAR NAME refs, e.g. public_key=LANGFUSE_PUBLIC_KEY (not a secret).",
+          "required": false
+        },
+        "--data-policy": {
+          "choices": null,
+          "default": "unknown",
+          "dest": "data_policy",
+          "flags": [
+            "--data-policy"
+          ],
+          "help": "Pull data policy; defaults to 'unknown' (fail-closed \u2014 set 'permitted' to pull).",
+          "required": false
+        },
+        "--endpoint": {
+          "choices": null,
+          "default": null,
+          "dest": "endpoint",
+          "flags": [
+            "--endpoint"
+          ],
+          "help": "Provider host/endpoint URL (not a secret).",
+          "required": false
+        },
+        "--format": {
+          "choices": [
+            "local",
+            "openinference",
+            "opentelemetry"
+          ],
+          "default": "local",
+          "dest": "import_format",
+          "flags": [
+            "--format"
+          ],
+          "help": "Shape of the --from export (default: local).",
+          "required": false
+        },
+        "--from": {
+          "choices": null,
+          "default": null,
+          "dest": "from_path",
+          "flags": [
+            "--from"
+          ],
+          "help": "Path to a local exported trace file to import as a traces: route.",
+          "required": false
+        },
+        "--init": {
+          "choices": null,
+          "default": false,
+          "dest": "init",
+          "flags": [
+            "--init"
+          ],
+          "help": "Create a conservative informational config if --config does not exist.",
+          "required": false
+        },
+        "--limit": {
+          "choices": null,
+          "default": null,
+          "dest": "limit",
+          "flags": [
+            "--limit"
+          ],
+          "help": "Optional cap on the number of traces pulled.",
+          "required": false
+        },
+        "--live": {
+          "choices": null,
+          "default": null,
+          "dest": "live",
+          "flags": [
+            "--live"
+          ],
+          "help": "Scaffold a live tracing connector lane: langfuse, phoenix, or langsmith.",
+          "required": false
+        },
+        "--project": {
+          "choices": null,
+          "default": null,
+          "dest": "project",
+          "flags": [
+            "--project"
+          ],
+          "help": "Optional provider project/name.",
+          "required": false
+        }
+      },
+      "prog": "evalglass connect"
+    },
+    "preflight": {
+      "commands": {},
+      "description": "Resolve the evaluation plan a `run` would execute and report, per metric, the selector-matched/eligible population, planned judge and replay request counts, the egress decision, and whether a gate would be authorized if measured. Performs NO provider call, judge call, task replay, baseline promotion, or authority mutation. Missing credentials are named by environment variable only; cost is an upper-bound estimate, never an invoice. Writes the same data to run-plan.json.",
+      "help": "Preflight a config: population, planned requests, and gate readiness (no effects).",
+      "options": {
+        "--config": {
+          "choices": null,
+          "default": null,
+          "dest": "config",
+          "flags": [
+            "--config"
+          ],
+          "help": "Path to evalglass.yaml.",
+          "required": true
+        },
+        "--format": {
+          "choices": [
+            "json",
+            "text"
+          ],
+          "default": "text",
+          "dest": "format",
+          "flags": [
+            "--format"
+          ],
+          "help": "Stdout rendering: 'text' summary (default) or 'json' (the run-plan projection).",
+          "required": false
+        },
+        "--out": {
+          "choices": null,
+          "default": null,
+          "dest": "out",
+          "flags": [
+            "--out"
+          ],
+          "help": "Output directory for run-plan.json (overrides config).",
+          "required": false
+        }
+      },
+      "prog": "evalglass preflight"
+    },
+    "run": {
+      "commands": {},
+      "description": null,
+      "help": "Run an evaluation from a local config.",
+      "options": {
+        "--config": {
+          "choices": null,
+          "default": null,
+          "dest": "config",
+          "flags": [
+            "--config"
+          ],
+          "help": "Path to evalglass.yaml.",
+          "required": true
+        },
+        "--debug": {
+          "choices": null,
+          "default": false,
+          "dest": "debug",
+          "flags": [
+            "--debug"
+          ],
+          "help": "On a setup/infra error, also print the original traceback (off by default).",
+          "required": false
+        },
+        "--dry-run": {
+          "choices": null,
+          "default": false,
+          "dest": "dry_run",
+          "flags": [
+            "--dry-run"
+          ],
+          "help": "Resolve and write the evaluation plan (run-plan.json) without running any effect.",
+          "required": false
+        },
+        "--format": {
+          "choices": [
+            "ci",
+            "terminal"
+          ],
+          "default": "terminal",
+          "dest": "format",
+          "flags": [
+            "--format"
+          ],
+          "help": "Stdout rendering: 'terminal' summary (default) or 'ci' GitHub annotations.",
+          "required": false
+        },
+        "--out": {
+          "choices": null,
+          "default": null,
+          "dest": "out",
+          "flags": [
+            "--out"
+          ],
+          "help": "Output directory for artifacts (overrides config).",
+          "required": false
+        }
+      },
+      "prog": "evalglass run"
+    },
+    "series": {
+      "commands": {
+        "list": {
+          "commands": {},
+          "description": null,
+          "help": "List the run-series index entries.",
+          "options": {
+            "--out": {
+              "choices": null,
+              "default": null,
+              "dest": "out",
+              "flags": [
+                "--out"
+              ],
+              "help": "The reports directory that holds the .series index.",
+              "required": true
+            }
+          },
+          "prog": "evalglass series list"
+        },
+        "repair": {
+          "commands": {},
+          "description": null,
+          "help": "Rebuild the series index from the run snapshots on disk.",
+          "options": {
+            "--out": {
+              "choices": null,
+              "default": null,
+              "dest": "out",
+              "flags": [
+                "--out"
+              ],
+              "help": "The reports directory that holds the .series index.",
+              "required": true
+            }
+          },
+          "prog": "evalglass series repair"
+        }
+      },
+      "description": null,
+      "help": "Inspect or repair the run-series index (immutable history).",
+      "options": {},
+      "prog": "evalglass series"
+    },
+    "view": {
+      "commands": {},
+      "description": null,
+      "help": "Inspect a run's metrics from its typed artifact (read-only).",
+      "options": {
+        "--format": {
+          "choices": [
+            "json",
+            "text"
+          ],
+          "default": "text",
+          "dest": "format",
+          "flags": [
+            "--format"
+          ],
+          "help": "Stdout rendering: 'text' table (default) or 'json' explorer view.",
+          "required": false
+        },
+        "--record": {
+          "choices": null,
+          "default": null,
+          "dest": "record",
+          "flags": [
+            "--record"
+          ],
+          "help": "Path to a runrecord.json.",
+          "required": true
+        }
+      },
+      "prog": "evalglass view"
+    },
+    "watch": {
+      "commands": {},
+      "description": "Run ONE evaluation, compare it to the configured baseline, and record drift, then exit. Not a resident daemon: 'continuous' means scheduled re-invocation (a nightly cron or CI job). Drift is explanatory evidence, not a verdict: a regression is reported only when the runs are comparable and the paired interval clears zero; a delta inside the interval is within-noise; not-comparable runs are said plainly, never 'no regression'. Drift adds NO exit class (the exit code still derives only from the run's verdict) and the watcher NEVER promotes the baseline.",
+      "help": "Run one drift check (run \u2192 compare to baseline \u2192 record), then exit (cron).",
+      "options": {
+        "--config": {
+          "choices": null,
+          "default": null,
+          "dest": "config",
+          "flags": [
+            "--config"
+          ],
+          "help": "Path to evalglass.yaml.",
+          "required": true
+        },
+        "--out": {
+          "choices": null,
+          "default": null,
+          "dest": "out",
+          "flags": [
+            "--out"
+          ],
+          "help": "Output directory for artifacts (overrides config).",
+          "required": false
+        }
+      },
+      "prog": "evalglass watch"
+    }
+  },
+  "description": "EvalGlass local evaluation runner.",
+  "options": {},
+  "prog": "evalglass"
+}

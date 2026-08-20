@@ -1,0 +1,158 @@
+{
+  "comparable": {
+    "changed_dimensions": [],
+    "current": {
+      "dimensions": {
+        "authority": "7ba179d0a4427c39c31fe890d06a38a4ebea8f30515c6619d32705c33070b660",
+        "baseline": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "config": "944668d82c03e9b82cf59fe5b1c80ba0f0a007a5d2f061a419758a8b14c8a7c7",
+        "dataset": "83241f9d38a6c6eba8e486073940f4464ba38923f397114a724489cb13443d3c",
+        "evaluator": "e652e3f36cde4365b0f13a279c532f8fafd4763abdadaf2f656e2197a830888f",
+        "evidence": "ee11406f6d3bff89894dac922bf2f0ca395b8d245328ff5e65304fe71b7cfee9",
+        "example": "fa070a6976d18f3cdeb4998ead648b8ad85175d9c3ca47abdbfb2283aa376496",
+        "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+        "metric_spec": "73e7073792d5255805f6e722b26e53aa4576a51a562265e425ba684c2a65fa2a",
+        "policy": "331892c697ad548a7f6eb7f166cc4e456c1bf505c8aa66bca1c6090d1ec752f1"
+      }
+    },
+    "gating_dimensions": [
+      "framework",
+      "metric_spec",
+      "evaluator",
+      "dataset",
+      "config",
+      "policy"
+    ],
+    "requested": false,
+    "state": "comparison_not_requested"
+  },
+  "plan": {
+    "deviated": 0,
+    "deviations": [],
+    "fingerprint": "sha256:036e6959d21de9f21739c6db42afa004d0c6fd3fc05e04232288052320630e8a",
+    "handled": 0,
+    "planned": 0,
+    "schema": "evalglass.evaluation-plan/1"
+  },
+  "provenance": {
+    "dimensions": {
+      "authority": "7ba179d0a4427c39c31fe890d06a38a4ebea8f30515c6619d32705c33070b660",
+      "baseline": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "config": "944668d82c03e9b82cf59fe5b1c80ba0f0a007a5d2f061a419758a8b14c8a7c7",
+      "dataset": "83241f9d38a6c6eba8e486073940f4464ba38923f397114a724489cb13443d3c",
+      "evaluator": "e652e3f36cde4365b0f13a279c532f8fafd4763abdadaf2f656e2197a830888f",
+      "evidence": "ee11406f6d3bff89894dac922bf2f0ca395b8d245328ff5e65304fe71b7cfee9",
+      "example": "fa070a6976d18f3cdeb4998ead648b8ad85175d9c3ca47abdbfb2283aa376496",
+      "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+      "metric_spec": "73e7073792d5255805f6e722b26e53aa4576a51a562265e425ba684c2a65fa2a",
+      "policy": "331892c697ad548a7f6eb7f166cc4e456c1bf505c8aa66bca1c6090d1ec752f1"
+    }
+  },
+  "run_id": "host_promoted_gate",
+  "scorecard": {
+    "authority": {
+      "exact_match": {
+        "blocked": false,
+        "can_gate": true,
+        "level": "gating",
+        "reasons": []
+      }
+    },
+    "baseline_state": "comparison_not_requested",
+    "estimates": [
+      {
+        "diagnostics": [
+          {
+            "code": "rule_of_three",
+            "details": {
+              "failure_rate_95pct_upper_bound": 1.0
+            },
+            "message": "all 1 eligible observations were the same outcome; the empirical band is zero-width, so the 95% upper bound on the unobserved failure rate is reported instead.",
+            "severity": "info"
+          }
+        ],
+        "interval": {
+          "level": 0.95,
+          "lower": 0.206549314377,
+          "method": "wilson",
+          "upper": 1.0
+        },
+        "metric": "exact_match",
+        "n_effective": 1,
+        "point": 1.0
+      }
+    ],
+    "metrics": [
+      {
+        "aggregation": "mean",
+        "included_count": 1,
+        "metric": "exact_match",
+        "status_counts": {
+          "scored": 1
+        },
+        "value": 1.0
+      }
+    ],
+    "populations": [
+      {
+        "available": 1,
+        "blocked": 0,
+        "eligible": 1,
+        "error": 0,
+        "metric": "exact_match",
+        "non_evaluable": 0,
+        "prerequisite_excluded": 0,
+        "scored_valid": 1,
+        "selector_excluded": 0,
+        "selector_matched": 1,
+        "skipped": 0
+      }
+    ],
+    "verdict": {
+      "blocked_gates": [],
+      "ci_should_fail": false,
+      "failing_gates": [],
+      "informational_metrics": [],
+      "passing_gates": [
+        "exact_match"
+      ],
+      "reasons": {},
+      "verdict": "pass"
+    }
+  },
+  "scores": [
+    {
+      "evaluator_version": "exact_match@1",
+      "example_id": "datasets/at0.jsonl#1",
+      "metric": "exact_match",
+      "status": "scored",
+      "unit_id": "datasets/at0.jsonl#1",
+      "validity": "valid",
+      "value": 1.0
+    }
+  ],
+  "source_manifests": [
+    {
+      "adapter": "local_jsonl",
+      "availability": {
+        "application_output": true,
+        "input": true,
+        "reference": true,
+        "stable_ids": true
+      },
+      "completeness": "complete_within_declared_scope",
+      "data_policy": "permitted",
+      "duplicated": 0,
+      "kind": "dataset",
+      "provenance": {
+        "status": "validated",
+        "version": "0"
+      },
+      "records_seen": 1,
+      "rejected": 0,
+      "source": "datasets/at0.jsonl",
+      "trace_level_fallback": 0,
+      "units_emitted": 1
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+# EGTS coverage registry — EG-M5b (Optional Extensions: richer units + governance).
+#
+# M5b is built in slices; rows flip to `covered` as each lands (EG-M5-5 → S1a/S1b/S1c,
+# EG-M5-6 → S2). `egts coverage --require-complete` is green only at acceptance gate B (S3),
+# once every row is `covered` by a real scenario and `egts verify-deletion` covers all lanes.
+# A row may never be `covered` without a real scenario id (tests/CLAUDE.md §14).
+rows:
+  - product_ticket: EG-M5-5
+    public_contract: "Richer EvalUnit (step/trajectory/session + members) + aggregate built-in + harness selector + async-observation lane; call-level unchanged; raw shapes isolated; async observes, never orchestrates"
+    architecture_section: "design_principles P5; build contract §6/§9; ADR 0020 + 0017"
+    status: covered
+    scenario_ids:
+      - m5b.richer_units.async_to_trajectory_to_score
+      - m5b.richer_units.call_level_compatible
+      - m5b.richer_units.async_observation_only
+      - m5b.richer_units.async_lane_deletable
+    checker_families: [trace, optional_lane, hermetic_import]
+    required_command: egts test-lane richer-units
+    negative_control: "An async lane that orchestrates the host fails the observation-only checker; a required module importing the lane fails the import-isolation checker."
+
+  - product_ticket: EG-M5-6
+    public_contract: "Generated-evidence governance: synthetic data stays proposed; annotation needs a validation record; benchmark is threshold evidence, never approval"
+    architecture_section: "build contract §2/§10/§12; ADR 0021"
+    status: covered
+    scenario_ids:
+      - m5b.governance.synthetic_is_proposed
+      - m5b.governance.annotation_needs_validation
+      - m5b.governance.benchmark_evidence_not_approval
+    checker_families: [authority, provenance]
+    required_command: egts test-lane evidence-workflows
+    negative_control: "Synthetic data self-declaring validated stays proposed; benchmark evidence approving a threshold raises GovernanceError."

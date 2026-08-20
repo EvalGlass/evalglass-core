@@ -1,0 +1,28 @@
+{
+  "schema_version": "validator.evidence.v1",
+  "checkpoint": "EG-M1.acceptance",
+  "source_boundary": {
+    "product": ["m1-scorecard"],
+    "external_contracts": ["m1-report"]
+  },
+  "claims": [
+    {
+      "id": "report-matches-verdict",
+      "text": "The M1 report status equals the product verdict (the report does not overclaim).",
+      "risk_surfaces": ["verdict", "public_report"],
+      "expected_families": ["authority_verdict"],
+      "required_artifacts": ["m1-scorecard", "m1-report"]
+    },
+    {
+      "id": "informational-does-not-gate",
+      "text": "An informational M1 run does not assert a passing gate and does not fail CI.",
+      "risk_surfaces": ["verdict", "authority"],
+      "expected_families": ["authority_verdict"],
+      "required_artifacts": ["m1-scorecard"]
+    }
+  ],
+  "artifacts": [
+    {"id": "m1-scorecard", "kind": "scorecard", "authority": "product", "content": {"verdict": "informational", "ci_should_fail": false}},
+    {"id": "m1-report", "kind": "report", "authority": "external", "content": {"claimed_status": "informational"}}
+  ]
+}

@@ -1,0 +1,79 @@
+# EGTS coverage registry — EG-M5C (v2 alignment: re-admitted lanes/sinks + runner seam).
+#
+# This registry is the HOME the v2 work fills, shipped empty-but-honest at AT1. Every
+# row is `not_started` with a non-blank `not_exercised_reason`, so each deferred v2
+# capability reads as "NOT EXERCISED — <reason>", never a silent gap (tests/CLAUDE.md
+# §14). A row becomes `covered` only when a later slice drives a REAL m5c.* scenario:
+# resolve the lane through its port + a universal lane-contract check + a negative
+# control + `egts verify-deletion`. No row may be `covered` without a scenario id.
+rows:
+  - product_ticket: EG-M5C-1
+    public_contract: "Runner-attach seam: built_in_lanes() wired into runner.py so a configured lane runs in a run"
+    architecture_section: "PRODUCT_ARCHITECTURE_TEST_PLAN.md §C.0 / §4.1 FS-DEL-3; ADR 0031"
+    status: covered
+    scenario_ids: [m5c.runner_attach_seam]
+    checker_families: [verdict, runrecord]
+    required_command: egts test-required
+    negative_control: "A configured lane that changes verdict/authority/ci/aggregates must fail the byte-identity check."
+
+  - product_ticket: EG-M5C-2
+    public_contract: "Hosted-dashboard ScoreSink (one-way export to a hosted dashboard)"
+    architecture_section: "architecture: scope evolution D5 (next-status sink)"
+    status: covered
+    scenario_ids: [m5c.dashboard.capture_export, m5c.dashboard.egress_before_effects, m5c.dashboard.deletion_invariant]
+    checker_families: [sink]
+    required_command: egts test-required
+    negative_control: "A sink that approves/gates/edits host truth, or connects before the data-policy check, must fail."
+
+  - product_ticket: EG-M5C-3
+    public_contract: "Prompt-optimizer handoff (one-way export of findings; never edits prompts/datasets/rubrics/code)"
+    architecture_section: "architecture: scope evolution D5 (next-status handoff)"
+    status: covered
+    scenario_ids: [m5c.optimizer.write_only_handoff, m5c.optimizer.no_write_back, m5c.optimizer.no_recompute]
+    checker_families: [sink]
+    required_command: egts test-required
+    negative_control: "A handoff that mutates prompts/datasets/rubrics/config must fail."
+
+  - product_ticket: EG-M5C-4
+    public_contract: "Annotation workflow foundation (host-owned labels feed evidence, never authority; UI stays experimental)"
+    architecture_section: "architecture: scope evolution D5 (experimental)"
+    status: covered
+    scenario_ids: [m5c.annotation.no_record_no_authority, m5c.annotation.typed_validation_record, m5c.annotation.no_self_approval]
+    checker_families: [authority]
+    required_command: egts test-required
+    negative_control: "Annotation data granting gating authority without host validation must fail."
+
+  - product_ticket: EG-M5C-5
+    public_contract: "Synthetic-data generation (generated examples stay proposed)"
+    architecture_section: "architecture: scope evolution D5 (planned)"
+    status: covered
+    scenario_ids: [m5c.synthetic.forced_proposed, m5c.synthetic.bypass_cannot_gate, m5c.synthetic.host_validated_specificity]
+    checker_families: [authority]
+    required_command: egts test-required
+    negative_control: "A synthetic-origin dataset resolving can_gate true must fail."
+
+  - product_ticket: EG-M5C-6
+    public_contract: "Live tracing connectors (Langfuse / Phoenix / LangSmith) as opt-in, deletable lanes"
+    architecture_section: "architecture: scope evolution D5 (planned)"
+    status: covered
+    scenario_ids: [m5c.trace.langfuse_normalization, m5c.trace.phoenix_normalization, m5c.trace.langsmith_normalization]
+    checker_families: [trace]
+    required_command: egts test-required
+    negative_control: "A live connector imported on a required path, or one that changes RunRecord/Scorecard, must fail."
+
+  - product_ticket: EG-M5C-7
+    public_contract: "Per-source-function score view (read-only grouping over example_id/unit_id)"
+    architecture_section: "architecture: scope evolution D5 (planned)"
+    status: not_started
+    not_exercised_reason: "NEVER-BUILD in M6 (ADR 0037): per-source-function attribution needs explicit trace-to-call-site correlation EvalGlass does not have; the honest ceiling is by-call/by-subject grouping over (example_id, unit_id) — the metrics explorer (EG-M5C-8). Reconsider only behind a new ADR once host-declared call-site identity exists."
+    checker_families: [report]
+    negative_control: "A view that recomputes meaning or groups by score order instead of explicit identity must fail."
+
+  - product_ticket: EG-M5C-8
+    public_contract: "Metrics explorer (read-only view derived from RunRecord/Scorecard, grouped by subject identity)"
+    architecture_section: "architecture: scope evolution D5 (planned)"
+    status: covered
+    scenario_ids: [m5c.metrics_explorer.typed_only, m5c.metrics_explorer.group_by_identity, m5c.metrics_explorer.old_artifact_refuses_guess]
+    checker_families: [report]
+    required_command: egts test-required
+    negative_control: "An explorer that recomputes a verdict or groups by score list order instead of explicit example_id/unit_id must fail."

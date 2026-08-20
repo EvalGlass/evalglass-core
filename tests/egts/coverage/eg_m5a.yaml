@@ -1,0 +1,63 @@
+# EGTS coverage registry — EG-M5a (Optional Extensions: integration lanes).
+#
+# M5a is built in slices; rows flip to `covered` as each lane's product adapter + its EGTS
+# `test-lane` proof land (EG-M5-1 → S1, EG-M5-2 → S2, EG-M5-3 → S3, EG-M5-4 → S4). The deletion
+# row (EGTS-M5-7, M5a scope) lands at the S5 acceptance gate. `egts coverage --require-complete`
+# is green only at gate A, once every row is `covered` by a real scenario; an interim slice leaves
+# later rows `not_started` (an honest gap, not an integrity violation). A row may never be
+# `covered` without a real scenario id (tests/CLAUDE.md §14).
+rows:
+  - product_ticket: EG-M5-1
+    public_contract: "ExtensionLane framework: metadata-only registry (no concrete lane imported), lane grants no authority, required tier imports no lane, missing prereq skips"
+    architecture_section: "CLAUDE.md §14/§19; build contract §6/§8; ADR 0017"
+    status: covered
+    scenario_ids:
+      - m5a.lane_framework.metadata_declared
+      - m5a.lane_framework.registry_lists_without_importing
+      - m5a.lane_framework.result_grants_no_authority
+      - m5a.lane_framework.required_tier_import_isolated
+      - m5a.lane_framework.missing_prerequisite_skips
+      - m5a.deletion.required_tier_imports_no_lane
+      - m5a.deletion.required_imports_with_lanes_removed
+      - m5a.deletion.lane_failure_cannot_mask
+    checker_families: [optional_lane, hermetic_import, deletion]
+    required_command: egts test-lane lane-framework; egts verify-deletion
+    negative_control: "An under-declared lane fails the metadata checker; a lane result carrying a verdict fails the no-authority checker; a required module importing a lane fails the hermetic-import/deletion checker."
+
+  - product_ticket: EG-M5-2
+    public_contract: "Open-convention (OTel/OpenInference) trace conformance lane: messages/tools/model/timing/metadata/policy/provenance → TraceEnvelope; core never branches on convention types; malformed → diagnostics"
+    architecture_section: "build contract §6; architecture.md §4; ADR 0006 (extended) + 0017"
+    status: covered
+    scenario_ids:
+      - m5a.conformance.rich_span_normalizes
+      - m5a.conformance.malformed_yields_diagnostic
+      - m5a.conformance.core_has_no_convention_branch
+    checker_families: [trace, hermetic_import]
+    required_command: egts test-lane open-convention-traces
+    negative_control: "A core file referencing an OTel/OpenInference convention token fails the no-branching checker."
+
+  - product_ticket: EG-M5-3
+    public_contract: "First trace backend adapter (stub) through TraceSource; no vendor object past the boundary; backend failure diagnosed apart from score; deletable"
+    architecture_section: "build contract §6/§8; ADR 0018"
+    status: covered
+    scenario_ids:
+      - m5a.trace_backend.no_vendor_object_past_boundary
+      - m5a.trace_backend.unavailable_is_diagnostic
+      - m5a.trace_backend.malformed_is_diagnostic
+      - m5a.trace_backend.declared_and_deletable
+    checker_families: [trace, optional_lane, hermetic_import]
+    required_command: egts test-lane trace-backend
+    negative_control: "A vendor object reaching an envelope fails the no-vendor-leak checker."
+
+  - product_ticket: EG-M5-4
+    public_contract: "ScoreSink export lanes consume an immutable Scorecard; cannot mutate verdict/authority/exit; failure → Diagnostic; deletion leaves local JSON+MD intact"
+    architecture_section: "build contract §6/§8/§9; ADR 0008 + 0019"
+    status: covered
+    scenario_ids:
+      - m5a.score_sink.consumes_immutable_scorecard
+      - m5a.score_sink.failure_does_not_hide_verdict
+      - m5a.score_sink.deletion_leaves_local_reports
+      - m5a.score_sink.declared_and_deletable
+    checker_families: [optional_lane, scorecard, report, hermetic_import]
+    required_command: egts test-lane score-sink
+    negative_control: "A mutated Scorecard fails the immutability checker; a lane result carrying a verdict fails the no-authority checker."

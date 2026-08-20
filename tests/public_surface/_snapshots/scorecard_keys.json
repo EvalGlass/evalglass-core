@@ -1,0 +1,40 @@
+{
+  "authority_entry": [
+    "blocked",
+    "can_gate",
+    "level",
+    "reasons"
+  ],
+  "metric_entry_optional": [
+    "status_counts"
+  ],
+  "metric_entry_required": [
+    "aggregation",
+    "included_count",
+    "metric",
+    "value"
+  ],
+  "optional": [
+    "baseline_state",
+    "claim_specs",
+    "clusters",
+    "comparison",
+    "diagnostics",
+    "estimates",
+    "populations"
+  ],
+  "required": [
+    "authority",
+    "metrics",
+    "verdict"
+  ],
+  "verdict": [
+    "blocked_gates",
+    "ci_should_fail",
+    "failing_gates",
+    "informational_metrics",
+    "passing_gates",
+    "reasons",
+    "verdict"
+  ]
+}

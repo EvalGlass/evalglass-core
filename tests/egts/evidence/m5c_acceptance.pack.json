@@ -1,0 +1,140 @@
+{
+  "schema_version": "validator.evidence.v1",
+  "checkpoint": "EG-V2.acceptance",
+  "source_boundary": {
+    "product": [
+      "m5c-sc-fresh_informational",
+      "m5c-sc-host_promoted_gate",
+      "m5c-sc-host_gate_fail",
+      "m5c-sc-host_gate_blocked",
+      "m5c-lane-langsmith-trace"
+    ],
+    "external_contracts": []
+  },
+  "claims": [
+    {
+      "id": "fresh-install-is-informational",
+      "text": "A fresh install measures evidence but activates no gate: the verdict is informational and CI does not fail.",
+      "claimed_status": "informational",
+      "risk_surfaces": [
+        "verdict",
+        "authority"
+      ],
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "required_artifacts": [
+        "m5c-sc-fresh_informational"
+      ]
+    },
+    {
+      "id": "host-promoted-gate-passes",
+      "text": "A host-promoted gate (validated dataset + approved threshold + gating metric) passes through the single Verdict Engine and does not fail CI.",
+      "claimed_status": "pass",
+      "risk_surfaces": [
+        "verdict",
+        "authority"
+      ],
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "required_artifacts": [
+        "m5c-sc-host_promoted_gate"
+      ]
+    },
+    {
+      "id": "host-promoted-gate-fails-below-threshold",
+      "text": "A host-promoted gate whose measured value misses the approved threshold fails the run and fails CI (ci_should_fail true).",
+      "claimed_status": "fail",
+      "risk_surfaces": [
+        "verdict",
+        "authority"
+      ],
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "required_artifacts": [
+        "m5c-sc-host_gate_fail"
+      ]
+    },
+    {
+      "id": "active-gate-without-honest-measurement-blocks",
+      "text": "An active gate whose evidence cannot be honestly measured (non_evaluable) blocks the run and fails CI \u2014 it is never silently passed.",
+      "claimed_status": "blocked",
+      "risk_surfaces": [
+        "verdict",
+        "authority"
+      ],
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "required_artifacts": [
+        "m5c-sc-host_gate_blocked"
+      ]
+    },
+    {
+      "id": "connector-lane-is-evidence-not-authority",
+      "text": "An opt-in trace-connector lane (langsmith-trace) is recorded by the runner seam as a side-channel lane_result (here: skipped, no endpoint) that carries no authority and leaves the verdict byte-identical; it is optional and never required. Per-provider normalization for all three connectors is proven required-tier in test_m5c_connector_proof.py, not in this pack.",
+      "risk_surfaces": [
+        "lane"
+      ],
+      "expected_families": [
+        "integration_boundary"
+      ],
+      "required_artifacts": [
+        "m5c-lane-langsmith-trace"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "m5c-sc-fresh_informational",
+      "kind": "scorecard",
+      "authority": "product",
+      "content": {
+        "verdict": "informational",
+        "ci_should_fail": false
+      }
+    },
+    {
+      "id": "m5c-sc-host_promoted_gate",
+      "kind": "scorecard",
+      "authority": "product",
+      "content": {
+        "verdict": "pass",
+        "ci_should_fail": false
+      }
+    },
+    {
+      "id": "m5c-sc-host_gate_fail",
+      "kind": "scorecard",
+      "authority": "product",
+      "content": {
+        "verdict": "fail",
+        "ci_should_fail": true
+      }
+    },
+    {
+      "id": "m5c-sc-host_gate_blocked",
+      "kind": "scorecard",
+      "authority": "product",
+      "content": {
+        "verdict": "blocked",
+        "ci_should_fail": true
+      }
+    },
+    {
+      "id": "m5c-lane-langsmith-trace",
+      "kind": "provenance",
+      "authority": "product",
+      "content": {
+        "lane": "langsmith-trace",
+        "optional": true,
+        "treated_as_required": false,
+        "status": "skipped",
+        "carried_authority": false,
+        "verdict_unchanged": true
+      }
+    }
+  ]
+}

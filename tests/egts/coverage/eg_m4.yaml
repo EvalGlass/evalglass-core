@@ -1,0 +1,67 @@
+# EGTS coverage registry — EG-M4 (Judges And Calibration).
+#
+# Every obligation is `covered` only because a real EGTS-M4 scenario drives the
+# product's public judge surfaces (tests/egts/suites/test_m4_judge_proof.py + the
+# product-layer tests/{core,harness,adapters}/test_judge*/test_rubric/test_calibration
+# the required command runs) through the real harness `run_config` / `collect_judge_evidence`
+# and the effect-free `judge_score` evaluator. A row may never be `covered` without a real
+# scenario id — that is an integrity violation (tests/CLAUDE.md §14).
+rows:
+  - product_ticket: EG-M4-1
+    public_contract: "JudgeModel port + fake judge evidence; policy-aware no-call; hermetic required tier (no provider SDK)"
+    architecture_section: "architecture.md §7 (JudgeModel port); CLAUDE.md §14; ADR 0014"
+    status: covered
+    scenario_ids:
+      - m4.fake_judge.route_produces_a_score
+      - m4.no_sdk.required_tier_is_hermetic
+      - m4.ledger.skips_forbidden_egress
+    checker_families: [no_provider_sdk, judge_ledger, scorecard]
+    required_command: egts test-judges
+    negative_control: "A module importing a provider SDK fails the hermetic checker; a ledger expectation omitting a real call fails."
+
+  - product_ticket: EG-M4-2
+    public_contract: "Rubric provenance: a rubric/parser change breaks baseline comparability; a malformed response is error, never 0.0"
+    architecture_section: "design_principles P14; ADR 0015 (rubric provenance)"
+    status: covered
+    scenario_ids:
+      - m4.rubric.version_change_breaks_comparability
+      - m4.rubric.unrelated_change_stays_comparable
+      - m4.parser.malformed_is_error_not_zero
+    checker_families: [provenance, scorecard]
+    required_command: egts test-judges
+    negative_control: "An example-only change staying comparable proves the sensitivity is not blunt; a malformed score that became a 0.0 would fail the status check."
+
+  - product_ticket: EG-M4-3
+    public_contract: "Host-owned calibration + approved threshold: only a complete record gates; drifted blocks; uncalibrated is informational"
+    architecture_section: "architecture.md §6 (authority); design_principles P8/P15; ADR 0015"
+    status: covered
+    scenario_ids:
+      - m4.calibration.calibrated_approved_gates_and_passes
+      - m4.calibration.drifted_blocks
+      - m4.calibration.uncalibrated_is_informational
+      - m4.calibration.yaml_cannot_self_declare
+    checker_families: [authority, verdict, exit]
+    required_command: egts test-judges
+    negative_control: "A yaml self-declaring calibrated/approved without a record stays informational; an incomplete approved threshold is a setup error."
+
+  - product_ticket: EG-M4-4
+    public_contract: "Judge-assisted scores behave like normal metrics; the report states the verdict and claims no more"
+    architecture_section: "architecture.md §9 (Scorecard); CLAUDE.md §9 (score states)"
+    status: covered
+    scenario_ids:
+      - m4.scorecard.missing_evidence_blocks
+      - m4.report.states_verdict_no_overclaim
+    checker_families: [scorecard, report]
+    required_command: egts test-judges
+    negative_control: "A report headlining a stronger verdict than the Scorecard fails the report-overclaim checker."
+
+  - product_ticket: EG-M4-5
+    public_contract: "Optional live judge lane is opt-in, absent from the required tier, and deletable (deletion verification)"
+    architecture_section: "CLAUDE.md §14; ADR 0016 (optional lane)"
+    status: covered
+    scenario_ids:
+      - m4.live_lane.required_tier_does_not_import_the_lane
+      - m4.live_lane.missing_prerequisite_skips
+    checker_families: [no_provider_sdk, optional_lane]
+    required_command: egts test-judges
+    negative_control: "A required module importing the lane fails the import-boundary guard."
