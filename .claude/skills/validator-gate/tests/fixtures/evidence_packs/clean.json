@@ -1,0 +1,21 @@
+{
+  "schema_version": "validator.evidence.v1",
+  "checkpoint": "EG.example.authority",
+  "source_boundary": {
+    "product": ["scorecard-1"],
+    "external_contracts": ["report-1"]
+  },
+  "claims": [
+    {
+      "id": "report-matches-verdict",
+      "text": "The published report status equals the product verdict.",
+      "risk_surfaces": ["verdict", "public_report"],
+      "expected_families": ["authority_verdict"],
+      "required_artifacts": ["scorecard-1", "report-1"]
+    }
+  ],
+  "artifacts": [
+    {"id": "scorecard-1", "kind": "scorecard", "authority": "product", "content": {"verdict": "pass"}},
+    {"id": "report-1", "kind": "report", "authority": "external", "content": {"claimed_status": "pass"}}
+  ]
+}

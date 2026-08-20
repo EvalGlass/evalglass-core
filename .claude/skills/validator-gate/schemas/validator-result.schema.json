@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evalglass/validator-gate/validator-result.schema.json",
+  "title": "ValidatorResult",
+  "description": "Authoritative output of one validator-gate run. Additive evolution: unknown properties are tolerated by consumers.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["gate", "schema_version", "status", "checkpoint"],
+  "properties": {
+    "gate": { "const": "validator" },
+    "schema_version": { "const": "validator.result.v1" },
+    "status": { "enum": ["PASS", "PASS_WITH_WARNINGS", "BLOCKED", "FAIL"] },
+    "checkpoint": { "type": "string" },
+    "families_run": { "type": "array", "items": { "$ref": "#/$defs/familyId" } },
+    "claims_validated": { "type": "array", "items": { "type": "string" } },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/familyFinding" } },
+    "evidence_used": { "type": "array", "items": { "type": "string" } },
+    "blocked_on": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "risk_references_used": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "familyId": {
+      "enum": [
+        "contract_boundary",
+        "authority_verdict",
+        "evidence_provenance",
+        "scenario_checker",
+        "integration_boundary"
+      ]
+    },
+    "familyFinding": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["family_id", "claim_id", "status"],
+      "properties": {
+        "family_id": { "$ref": "#/$defs/familyId" },
+        "claim_id": { "type": "string" },
+        "status": { "enum": ["PASS", "PASS_WITH_WARNINGS", "BLOCKED", "FAIL"] },
+        "evidence_refs": { "type": "array", "items": { "type": "string" } },
+        "reason": { "type": "string" },
+        "remediation": { "type": "string" },
+        "risk_ref": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
