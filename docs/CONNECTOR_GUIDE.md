@@ -11,7 +11,11 @@ can never make a stronger Scorecard claim.
   opt-in and nothing loads them unless you enable a lane.
 - Existing `runrecord.json` without `lane_results` parses unchanged (`lane_results` defaults to `[]`).
 - To adopt a connector, add an opt-in lane and install its extra (e.g. `pip install
-  'evalglass[langsmith-trace]'`):
+  'evalglass[langsmith-trace]'`). **Lean by default, complete by composition:** the granular
+  extras (`langfuse-trace`, `phoenix-trace`, `langsmith-trace`) install exactly one connector each;
+  the grouped `traces` extra (`pip install 'evalglass[traces]'`) pulls all three, and `evalglass[all]`
+  the full optional surface. The grouped extras compose the granular ones and pin no SDK of their
+  own, so the required tier stays SDK-free either way.
 
   ```yaml
   lanes:

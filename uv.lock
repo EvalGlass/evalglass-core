@@ -362,6 +362,11 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+all = [
+    { name = "arize-phoenix-client" },
+    { name = "langfuse" },
+    { name = "langsmith" },
+]
 langfuse-trace = [
     { name = "langfuse" },
 ]
@@ -370,6 +375,11 @@ langsmith-trace = [
 ]
 phoenix-trace = [
     { name = "arize-phoenix-client" },
+]
+traces = [
+    { name = "arize-phoenix-client" },
+    { name = "langfuse" },
+    { name = "langsmith" },
 ]
 
 [package.dev-dependencies]
@@ -387,11 +397,20 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "arize-phoenix-client", marker = "extra == 'phoenix-trace'", specifier = ">=2,<3" },
+    { name = "evalglass", extras = ["hosted"], marker = "extra == 'all'" },
+    { name = "evalglass", extras = ["langfuse-trace"], marker = "extra == 'traces'" },
+    { name = "evalglass", extras = ["langsmith-trace"], marker = "extra == 'traces'" },
+    { name = "evalglass", extras = ["live-judge"], marker = "extra == 'all'" },
+    { name = "evalglass", extras = ["openai"], marker = "extra == 'all'" },
+    { name = "evalglass", extras = ["phoenix-trace"], marker = "extra == 'traces'" },
+    { name = "evalglass", extras = ["score-sink-export"], marker = "extra == 'all'" },
+    { name = "evalglass", extras = ["trace-backend"], marker = "extra == 'all'" },
+    { name = "evalglass", extras = ["traces"], marker = "extra == 'all'" },
     { name = "langfuse", marker = "extra == 'langfuse-trace'", specifier = ">=4,<5" },
     { name = "langsmith", marker = "extra == 'langsmith-trace'", specifier = ">=0.8.18,<1" },
     { name = "pyyaml", specifier = ">=6.0" },
 ]
-provides-extras = ["live-judge", "trace-backend", "score-sink-export", "langfuse-trace", "phoenix-trace", "langsmith-trace"]
+provides-extras = ["live-judge", "trace-backend", "score-sink-export", "langfuse-trace", "phoenix-trace", "langsmith-trace", "openai", "hosted", "traces", "all"]
 
 [package.metadata.requires-dev]
 dev = [
