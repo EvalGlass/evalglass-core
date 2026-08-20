@@ -55,6 +55,24 @@ score-sink-export = []     # M5a S4 export sink — stdlib urllib (https)
 langfuse-trace = ["langfuse>=4,<5"]              # adapters/trace_langfuse.py (EG-R1)
 phoenix-trace = ["arize-phoenix-client>=2,<3"]   # adapters/trace_phoenix.py (EG-R2)
 langsmith-trace = ["langsmith>=0.8.18,<1"]       # adapters/trace_langsmith.py (EG-R3); floor is GHSA-f4xh-w4cj-qxq8 fix
+# ----- Grouped convenience extras: lean by default, complete by composition -----
+# These COMPOSE the granular extras above via self-reference (`evalglass[...]`); they pin
+# NO provider SDK directly, so the dependency budget stays exactly as tight (every provider
+# SDK still lives only in its own granular connector extra). `pip install 'evalglass[traces]'`
+# pulls all three trace connectors; `evalglass[all]` the full optional surface. `openai` and
+# `hosted` are stdlib-only markers (the OpenAI-compatible judge and the hosted/async sinks use
+# stdlib urllib — no SDK to install).
+openai = []                # adapters/judge_openai.py — OpenAI-compatible judge, stdlib urllib, no SDK
+hosted = []                # hosted / async score sinks — stdlib urllib, no SDK
+traces = ["evalglass[langfuse-trace]", "evalglass[phoenix-trace]", "evalglass[langsmith-trace]"]
+all = [
+    "evalglass[traces]",
+    "evalglass[live-judge]",
+    "evalglass[trace-backend]",
+    "evalglass[score-sink-export]",
+    "evalglass[openai]",
+    "evalglass[hosted]",
+]
 
 [project.scripts]
 evalglass = "evalglass.harness.cli:main"
