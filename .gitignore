@@ -1,0 +1,133 @@
+# Office (Excel/Word) lock files — created beside an open workbook (e.g. the Jira tickets .xlsx)
+~$*
+
+# Planning artifacts kept locally but no longer committed (repo holds only the essentials).
+# Jira ticket workbooks (the tests/ fixture test_jira_tickets.xlsx stays tracked):
+/jira_tickets*.xlsx
+/docs/doc_jira_tickets.xlsx
+/docs/plugin_transformation_jira_tickets.xlsx
+/docs/scan_gate/jira_epics_tickets.xlsx
+/docs/validator_gate/jira_epics_tickets.xlsx
+# Superseded planning docs and presentation decks:
+/docs/DOCUMENTATION_IMPLEMENTATION_PLAN.md
+/docs/PRODUCT_IMPLEMENTATION_AUDIT.md
+/docs/EVALGLASS_ARCHITECTURE_DECK.html
+/docs/PRODUCT_ARCHITECTURE_TEST_PLAN_PRESENTATION.html
+/docs/PRODUCT_ARCHITECTURE_TEST_PLAN_SLIDES.html
+# Superseded milestone/product planning docs (kept locally, no longer committed):
+/docs/DOCUMENTATION_PLAN.md
+/docs/FINAL_PRODUCT_IMPLEMENTATION_PLAN.md
+/docs/IMPLEMENTATION_PLAN.md
+/docs/M6_TICKET_CORRECTIONS.md
+/docs/PLUGIN_TRANSFORMATION_PLAN.md
+/docs/PRODUCT_ARCHITECTURE_BUILD_CONTRACT.md
+/docs/PRODUCT_ARCHITECTURE_IMPLEMENTATION_PLAN.md
+/docs/PRODUCT_ARCHITECTURE_TEST_PLAN.md
+/docs/PRODUCT_IMPLEMENTATION_PLAN.md
+/docs/RELEASE_CHECKLIST_HERMETIC.md
+# Internal gate-tooling design docs (the scan-gate/validator-gate skills stay under .claude/skills):
+/docs/scan_gate/
+/docs/validator_gate/
+# Internal core-robustness epic/story notes (the ontology data under docs/design/ontology stays tracked):
+/docs/design/core-robustness/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# uv
+.uv-cache/
+
+# Testing / coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+htmlcov/
+junit.xml
+
+# mypy / ruff / tooling caches
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pyre/
+.pytype/
+
+# IDEs / editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local secrets / env
+.env
+.env.*
+!.env.example
+
+# Build artifacts that should never be committed
+*.log
+*.pid
+
+# SonarCloud scanner workdir
+.scannerwork/
+
+# EvalGlass-managed runtime in host repos (must not leak into the framework repo)
+# Hosts vendor _evalglass/ into their own repos; nothing of that shape should appear here.
+**/_evalglass/
+
+# scan-gate skill: generated evidence and pinned detector binaries
+.claude/skills/scan-gate/last-run/
+.claude/skills/scan-gate/.bin/
+
+# validator-gate skill: generated validator.result.json / summary.md
+.claude/skills/validator-gate/last-run/
+
+# Quickstart's run output is NOT a tested gallery (the e2e regenerates it in a tmp dir), so its
+# per-run report must not be committed as canonical. The groundedness/judge-calibration example
+# reports ARE a tested gallery (tests/plugin/test_examples_gallery.py) and stay tracked. (P3-B)
+examples/quickstart/evals/reports/*/
