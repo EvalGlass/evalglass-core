@@ -1,0 +1,39 @@
+{
+  "schema_version": "validator.evidence.v1",
+  "checkpoint": "EG-M3.acceptance",
+  "source_boundary": {
+    "product": ["m3-sc-firstrun", "m3-authority", "m3-manifest", "m3-lock", "m3-boundary"],
+    "external_contracts": ["m3-rep-firstrun"]
+  },
+  "claims": [
+    {
+      "id": "fresh-install-first-run-informational",
+      "text": "A freshly installed/scaffolded host's first run is informational and does not fail CI (no silent authority).",
+      "risk_surfaces": ["verdict", "authority"],
+      "expected_families": ["authority_verdict"],
+      "required_artifacts": ["m3-sc-firstrun", "m3-rep-firstrun"]
+    },
+    {
+      "id": "scaffolded-assets-non-authoritative",
+      "text": "Scaffolded gold/thresholds/judges grant no authority: the approval ledger is empty until the host validates.",
+      "risk_surfaces": ["authority"],
+      "expected_families": ["evidence_provenance"],
+      "required_artifacts": ["m3-authority", "m3-sc-firstrun"]
+    },
+    {
+      "id": "vendored-runtime-independent-and-bounded",
+      "text": "The vendored runtime is bounded to evals/_evalglass and runs after the skill is gone (the skill is not a runtime dependency).",
+      "risk_surfaces": ["integration"],
+      "expected_families": ["integration_boundary"],
+      "required_artifacts": ["m3-boundary", "m3-manifest", "m3-lock"]
+    }
+  ],
+  "artifacts": [
+    {"id": "m3-sc-firstrun", "kind": "scorecard", "authority": "product", "content": {"verdict": "informational", "ci_should_fail": false}},
+    {"id": "m3-rep-firstrun", "kind": "report", "authority": "external", "content": {"claimed_status": "informational"}},
+    {"id": "m3-authority", "kind": "authority_record", "authority": "product", "content": {"grants_authority": false}},
+    {"id": "m3-manifest", "kind": "provenance", "authority": "product", "content": {"managed_root": "evals/_evalglass", "all_under_managed_root": true}},
+    {"id": "m3-lock", "kind": "provenance", "authority": "product", "content": {"installed_features": ["core", "harness", "adapters"], "skill_vendored": false}},
+    {"id": "m3-boundary", "kind": "provenance", "authority": "product", "content": {"lane": "evalglass-install", "optional": true, "required": false, "treated_as_required": false}}
+  ]
+}

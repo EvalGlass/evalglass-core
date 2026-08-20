@@ -1,0 +1,4 @@
+::notice title=EvalGlass::verdict=pass ci=exit-zero
+::notice title=exact_match::gate=pass value=1 reasons=none authority=none
+
+artifacts: <HOST>/evals/reports/host_promoted_gate

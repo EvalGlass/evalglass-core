@@ -1,0 +1,62 @@
+# EGTS coverage registry — EG-M3 (EvalGlass Skill).
+#
+# Every obligation is `covered` only because a real EGTS-M3 scenario drives the
+# product's public skill surface (tests/egts/suites/test_m3_skill_proof.py + the
+# product-layer tests/skill/* the required command runs) through the real
+# `evalglass.installer` API and the vendored runtime. A row may never be `covered`
+# without a real scenario id — that is an integrity violation (tests/CLAUDE.md §14).
+rows:
+  - product_ticket: EG-M3-1
+    public_contract: "Conservative read-only host discovery + non-authoritative install plan"
+    architecture_section: "architecture.md §8; build_contract §3/§4 (HostDiscoveryReport, InstallPlan)"
+    status: covered
+    scenario_ids:
+      - m3.discover.read_only
+      - m3.discover.detects_call_sites
+      - m3.plan.separates_proposed_from_preserved
+    checker_families: [no_host_mutation, skill_boundary]
+    required_command: egts test-skill
+    negative_control: "The no-mutation checker fails when a step changes the host repo."
+
+  - product_ticket: EG-M3-2
+    public_contract: "Vendoring manifest + lock + managed/host-owned boundary; namespace rewrite"
+    architecture_section: "architecture.md §9/§10; ADR 0011/0012 (vendor-manifest.json, evalglass.lock)"
+    status: covered
+    scenario_ids:
+      - m3.install.records_managed_boundary_and_lock
+      - m3.install.preserves_host_owned_truth
+    checker_families: [manifest, lock, skill_boundary]
+    required_command: egts test-skill; egts verify-managed-boundary
+    negative_control: "A manifest claiming a host-owned path fails the managed-boundary checker; editing a managed file fails the checksum checker."
+
+  - product_ticket: EG-M3-3
+    public_contract: "Scaffolded host-owned assets are informational — no silent gating authority"
+    architecture_section: "architecture.md §8; build_contract §2 (safe scaffold defaults, AuthorityRecord)"
+    status: covered
+    scenario_ids:
+      - m3.firstrun.informational_via_vendored_runtime
+    checker_families: [no_silent_authority, scorecard]
+    required_command: egts test-skill
+    negative_control: "A scorecard with an active gate fails the no-silent-authority checker."
+
+  - product_ticket: EG-M3-4
+    public_contract: "Vendored runtime runs after the skill/agent are gone (runtime independence)"
+    architecture_section: "design_principles P13; ADR 0010 (runtime independence)"
+    status: covered
+    scenario_ids:
+      - m3.independence.vendored_runtime_runs_without_skill
+    checker_families: [runtime_independence, scorecard]
+    required_command: egts test-skill
+    negative_control: "A vendored `skill/` is detectable (importable) — proving the check would catch a leak."
+
+  - product_ticket: EG-M3-5
+    public_contract: "Safe re-vendor: dry-run is read-only; host patches are not clobbered; host truth preserved"
+    architecture_section: "architecture.md §8; ADR 0011/0012 (re-vendor, host-patch detection)"
+    status: covered
+    scenario_ids:
+      - m3.revendor.dry_run_read_only
+      - m3.revendor.refuses_host_patch_clobber
+      - m3.revendor.preserves_host_owned
+    checker_families: [no_host_mutation, skill_boundary]
+    required_command: egts test-skill
+    negative_control: "Re-vendor with confirm=True clobbers a host patch — proving the confirm guard is what protects it."

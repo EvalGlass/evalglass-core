@@ -1,0 +1,11 @@
+{
+  "has_ci_line": true,
+  "has_verdict_line": true,
+  "headline": "# EvalGlass Scorecard",
+  "sections": [
+    "## Metrics",
+    "## Evaluability",
+    "## Baseline",
+    "## Diagnostics"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "authority": {
+    "exact_match": {
+      "blocked": false,
+      "can_gate": false,
+      "level": "informational",
+      "reasons": [
+        "metric_status=informational",
+        "threshold_proposed",
+        "dataset_proposed"
+      ]
+    }
+  },
+  "baseline_state": "comparison_not_requested",
+  "estimates": [
+    {
+      "diagnostics": [
+        {
+          "code": "rule_of_three",
+          "details": {
+            "failure_rate_95pct_upper_bound": 1.0
+          },
+          "message": "all 1 eligible observations were the same outcome; the empirical band is zero-width, so the 95% upper bound on the unobserved failure rate is reported instead.",
+          "severity": "info"
+        }
+      ],
+      "interval": {
+        "level": 0.95,
+        "lower": 0.206549314377,
+        "method": "wilson",
+        "upper": 1.0
+      },
+      "metric": "exact_match",
+      "n_effective": 1,
+      "point": 1.0
+    }
+  ],
+  "metrics": [
+    {
+      "aggregation": "mean",
+      "included_count": 1,
+      "metric": "exact_match",
+      "status_counts": {
+        "scored": 1
+      },
+      "value": 1.0
+    }
+  ],
+  "populations": [
+    {
+      "available": 1,
+      "blocked": 0,
+      "eligible": 1,
+      "error": 0,
+      "metric": "exact_match",
+      "non_evaluable": 0,
+      "prerequisite_excluded": 0,
+      "scored_valid": 1,
+      "selector_excluded": 0,
+      "selector_matched": 1,
+      "skipped": 0
+    }
+  ],
+  "verdict": {
+    "blocked_gates": [],
+    "ci_should_fail": false,
+    "failing_gates": [],
+    "informational_metrics": [
+      "exact_match"
+    ],
+    "passing_gates": [],
+    "reasons": {},
+    "verdict": "informational"
+  }
+}

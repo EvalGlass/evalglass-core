@@ -1,0 +1,41 @@
+{
+  "optional": [
+    "comparable",
+    "evidence",
+    "lane_results",
+    "plan",
+    "source_manifests"
+  ],
+  "provenance_dimensions": [
+    "authority",
+    "baseline",
+    "config",
+    "dataset",
+    "evaluator",
+    "evidence",
+    "example",
+    "framework",
+    "metric_spec",
+    "policy"
+  ],
+  "required": [
+    "provenance",
+    "run_id",
+    "scorecard",
+    "scores"
+  ],
+  "score_entry_optional": [
+    "diagnostics",
+    "evidence_refs",
+    "example_id",
+    "provenance",
+    "unit_id"
+  ],
+  "score_entry_required": [
+    "evaluator_version",
+    "metric",
+    "status",
+    "validity",
+    "value"
+  ]
+}

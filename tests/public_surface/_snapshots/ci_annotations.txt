@@ -1,0 +1,2 @@
+::notice title=EvalGlass::verdict=informational ci=exit-zero
+::notice title=exact_match::gate=informational value=1 reasons=none authority=metric_status=informational, threshold_proposed

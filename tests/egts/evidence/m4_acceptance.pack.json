@@ -1,0 +1,178 @@
+{
+  "schema_version": "validator.evidence.v1",
+  "checkpoint": "EG-M4.acceptance",
+  "source_boundary": {
+    "product": [
+      "m4-sc-calibrated",
+      "m4-cal-record",
+      "m4-threshold",
+      "m4-judge-score",
+      "m4-sc-drifted",
+      "m4-sc-uncal",
+      "m4-hermetic",
+      "m4-lane"
+    ],
+    "external_contracts": []
+  },
+  "claims": [
+    {
+      "id": "calibrated-approved-judge-gates",
+      "text": "A calibrated judge with a complete host-owned approved threshold gates through the single Verdict Engine and passes because the judge score clears the approved threshold.",
+      "risk_surfaces": [
+        "verdict",
+        "authority"
+      ],
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "required_artifacts": [
+        "m4-sc-calibrated",
+        "m4-cal-record",
+        "m4-threshold",
+        "m4-judge-score"
+      ]
+    },
+    {
+      "id": "uncalibrated-judge-cannot-gate",
+      "text": "An uncalibrated judge metric cannot gate: it stays informational and does not fail CI.",
+      "risk_surfaces": [
+        "authority"
+      ],
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "required_artifacts": [
+        "m4-sc-uncal"
+      ]
+    },
+    {
+      "id": "drifted-judge-blocks-not-silent-pass",
+      "text": "A drifted judge metric does not silently pass: it blocks the run rather than scoring, surfacing the loss of calibration.",
+      "risk_surfaces": [
+        "authority"
+      ],
+      "expected_families": [
+        "authority_verdict"
+      ],
+      "required_artifacts": [
+        "m4-sc-drifted"
+      ]
+    },
+    {
+      "id": "required-tier-hermetic-and-lane-deletable",
+      "text": "The required tier (core + harness + adapters, excluding the optional judge_live lane) imports no provider SDK and reaches no hidden input; the live judge lane is opt-in, not a required dependency, and deletable.",
+      "risk_surfaces": [
+        "integration",
+        "hermetic"
+      ],
+      "expected_families": [
+        "integration_boundary"
+      ],
+      "required_artifacts": [
+        "m4-hermetic",
+        "m4-lane"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "m4-sc-calibrated",
+      "kind": "scorecard",
+      "authority": "product",
+      "content": {
+        "verdict": "pass",
+        "ci_should_fail": false
+      }
+    },
+    {
+      "id": "m4-cal-record",
+      "kind": "authority_record",
+      "authority": "product",
+      "content": {
+        "metric": "faithfulness",
+        "calibration_status": "calibrated",
+        "approver": "alice",
+        "rationale": "50 labels",
+        "variance_runs": 5,
+        "source": "host-owned calibration/faithfulness.json"
+      }
+    },
+    {
+      "id": "m4-threshold",
+      "kind": "authority_record",
+      "authority": "product",
+      "content": {
+        "metric": "faithfulness",
+        "threshold_value": 0.5,
+        "direction": "higher_is_better",
+        "approved": true,
+        "approver": "alice",
+        "version": "1",
+        "source": "host-owned approved threshold"
+      }
+    },
+    {
+      "id": "m4-judge-score",
+      "kind": "provenance",
+      "authority": "product",
+      "content": {
+        "metric": "faithfulness",
+        "status": "scored",
+        "value": 0.8,
+        "threshold": 0.5,
+        "direction": "higher_is_better",
+        "clears_threshold": true,
+        "evaluator": "judge_score@1"
+      }
+    },
+    {
+      "id": "m4-sc-drifted",
+      "kind": "scorecard",
+      "authority": "product",
+      "content": {
+        "verdict": "blocked",
+        "ci_should_fail": true
+      }
+    },
+    {
+      "id": "m4-sc-uncal",
+      "kind": "scorecard",
+      "authority": "product",
+      "content": {
+        "verdict": "informational",
+        "ci_should_fail": false
+      }
+    },
+    {
+      "id": "m4-hermetic",
+      "kind": "provenance",
+      "authority": "product",
+      "content": {
+        "required_tier": [
+          "core",
+          "harness",
+          "adapters"
+        ],
+        "optional_lane_excluded": "adapters/judge_live.py",
+        "provider_sdk_imports": 0,
+        "checker": "check_no_provider_sdk(core, harness, adapters; allow=adapters/judge_live.py)",
+        "hidden_input": false,
+        "hermetic": true
+      }
+    },
+    {
+      "id": "m4-lane",
+      "kind": "provenance",
+      "authority": "product",
+      "content": {
+        "lane": "judge-live",
+        "module": "adapters/judge_live.py",
+        "optional": true,
+        "required": false,
+        "treated_as_required": false,
+        "deletion_guard": "tests/core_isolation/test_judge_live_boundary.py",
+        "required_import_loads_lane": false
+      }
+    }
+  ]
+}
