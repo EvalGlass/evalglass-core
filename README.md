@@ -14,7 +14,7 @@ Honest, local-first scorecards you operate through your coding agent.
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-3776ab.svg)
 ![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange.svg)
 
-<sub>Pre-alpha `v0.2.1`</sub>
+<sub>Pre-alpha `v0.2.2`</sub>
 
 </div>
 

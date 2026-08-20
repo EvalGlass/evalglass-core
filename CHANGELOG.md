@@ -5,7 +5,10 @@ All notable changes to EvalGlass are recorded here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Pre-1.0, the public API and
 plugin surface may still change.
 
-## [Unreleased]
+## [0.2.2] - 2026-08-20 (pre-alpha)
+
+Plugin-storefront alignment — no runtime, public-contract, authority, or verdict-behaviour change:
+the vendored runtime and all typed artifacts are behaviourally identical to `0.2.1`.
 
 ### Changed
 
