@@ -1,0 +1,77 @@
+{
+  "authority": {
+    "field_presence": {
+      "blocked": false,
+      "can_gate": false,
+      "level": "informational",
+      "reasons": [
+        "metric_status=informational",
+        "threshold_proposed",
+        "dataset_proposed"
+      ]
+    },
+    "set_overlap": {
+      "blocked": false,
+      "can_gate": false,
+      "level": "informational",
+      "reasons": [
+        "metric_status=informational",
+        "threshold_proposed",
+        "dataset_proposed"
+      ]
+    },
+    "structural_shape": {
+      "blocked": false,
+      "can_gate": false,
+      "level": "informational",
+      "reasons": [
+        "metric_status=informational",
+        "threshold_proposed",
+        "dataset_proposed"
+      ]
+    }
+  },
+  "baseline_state": "comparison_not_requested",
+  "metrics": [
+    {
+      "aggregation": "mean",
+      "included_count": 3,
+      "metric": "set_overlap",
+      "status_counts": {
+        "scored": 3
+      },
+      "value": 0.3128205128205128
+    },
+    {
+      "aggregation": "mean",
+      "included_count": 3,
+      "metric": "field_presence",
+      "status_counts": {
+        "scored": 3
+      },
+      "value": 1.0
+    },
+    {
+      "aggregation": "mean",
+      "included_count": 3,
+      "metric": "structural_shape",
+      "status_counts": {
+        "scored": 3
+      },
+      "value": 1.0
+    }
+  ],
+  "verdict": {
+    "blocked_gates": [],
+    "ci_should_fail": false,
+    "failing_gates": [],
+    "informational_metrics": [
+      "set_overlap",
+      "field_presence",
+      "structural_shape"
+    ],
+    "passing_gates": [],
+    "reasons": {},
+    "verdict": "informational"
+  }
+}

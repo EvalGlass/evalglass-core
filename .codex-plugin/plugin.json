@@ -1,0 +1,48 @@
+{
+  "name": "evalglass-core",
+  "version": "0.1.0",
+  "description": "An AI quality-control tool for agentic apps. Tell your agent to evaluate your app: EvalGlass discovers your LLM call sites, vendors a stdlib-only runtime into your repo, scaffolds project-specific checks over host-owned gold/rubrics/thresholds, and wires CI on a single Verdict Engine that blocks only after you approve a gate — reporting only what the evidence honestly supports.",
+  "author": {
+    "name": "EvalGlass",
+    "email": "contact@evalglass.com",
+    "url": "https://github.com/EvalGlass"
+  },
+  "homepage": "https://evalglass.com/get-plugin",
+  "repository": "https://github.com/EvalGlass/evalglass-core",
+  "license": "Apache-2.0",
+  "keywords": [
+    "llm-evaluation",
+    "ai-safety",
+    "evals",
+    "ci-gating",
+    "scorecard",
+    "groundedness",
+    "calibration",
+    "baseline",
+    "trust",
+    "local-first",
+    "verdict",
+    "agentic"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "EvalGlass",
+    "shortDescription": "Honest, local-first AI quality control for agentic apps — no false green.",
+    "longDescription": "EvalGlass is an AI quality-control tool for agentic apps. Ask your agent to evaluate your app: it discovers candidate LLM call sites, vendors a stdlib-only runtime into your repo, scaffolds host-owned gold/rubrics/thresholds with safe informational defaults, and wires CI on a single Verdict Engine. A green or non-failing run never implies more evidence, authority, calibration, comparability, or safety than the run earned — the host validates and the runtime decides; the plugin only types commands and reads back typed artifacts.",
+    "developerName": "EvalGlass",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Evaluate my agentic app with EvalGlass.",
+      "Set up EvalGlass evaluation for this repo and run the quickstart."
+    ],
+    "websiteURL": "https://evalglass.com/get-plugin",
+    "brandColor": "#5B8DEF",
+    "composerIcon": "./assets/evalglass-icon.png",
+    "logo": "./assets/evalglass-icon.png"
+  }
+}

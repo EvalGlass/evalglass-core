@@ -1,0 +1,49 @@
+# EvalGlass quickstart configuration.
+#
+# Everything here is INFORMATIONAL by design: no metric carries gating authority.
+# A green/non-failing run of this sample is NOT proof of quality — the dataset is
+# `proposed` sample gold (not validated), no threshold is `approved`, and no judge
+# is calibrated. Gating is an explicit, host-supplied act (see README.md).
+
+run:
+  id: quickstart
+
+datasets:
+  # status defaults to `proposed` — sample gold, not validated domain truth.
+  - path: datasets/arithmetic.jsonl
+
+traces:
+  - path: traces/sample.jsonl
+    format: local
+
+metrics:
+  # Reference metric: did the output equal the gold answer? (runs on the dataset)
+  - name: exact_match
+    evaluator_ref: exact_match@1
+    lens: reference
+    score_type: binary
+    dataset: datasets/arithmetic.jsonl
+
+  # Non-reference structural floor: is the output a well-formed object?
+  - name: structural_shape
+    evaluator_ref: structural_shape@1
+    lens: non_reference
+    score_type: binary
+
+  # Non-reference field check (host params): is the `answer` field present?
+  - name: field_presence
+    evaluator_ref: field_presence@1
+    lens: non_reference
+    score_type: continuous
+    score_range: [0, 1]
+    params:
+      required_fields: ["answer"]
+
+  # A host-owned evaluator loaded from a local file (see evaluators/answer_nonempty.py).
+  - name: answer_nonempty
+    evaluator_ref: evaluators/answer_nonempty.py:evaluate
+    lens: non_reference
+    score_type: binary
+
+output:
+  dir: reports

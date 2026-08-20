@@ -1,0 +1,18 @@
+{
+  "name": "evalglass",
+  "owner": {
+    "name": "EvalGlass",
+    "email": "contact@evalglass.com",
+    "url": "https://github.com/EvalGlass"
+  },
+  "metadata": {
+    "description": "EvalGlass — AI quality-control for agentic apps. Local-first, no false green."
+  },
+  "plugins": [
+    {
+      "name": "evalglass-core",
+      "source": "./",
+      "description": "An AI quality-control tool; installs EvalGlass into a host repo and stops for human validation before anything can gate."
+    }
+  ]
+}

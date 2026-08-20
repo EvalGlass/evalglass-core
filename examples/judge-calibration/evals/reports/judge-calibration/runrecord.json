@@ -1,0 +1,179 @@
+{
+  "comparable": {
+    "changed_dimensions": [],
+    "current": {
+      "dimensions": {
+        "authority": "54a044f10d685e08a92b6670f2d96b11d286a78d64327eed669e305debf2811a",
+        "baseline": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "config": "3f7833991d5fb7862640cd2406b92a89caff8808ed8d2dc39d7470ccd4c151f8",
+        "dataset": "03aeb3927926535a7186cff449c1913df17b70c03dd0ebc7bcd57dfabb8329dd",
+        "evaluator": "290f698298dc98b1f0c2986d50bd0a4245fb1d9bc70bd46e97648c4a0f0f39a1",
+        "evidence": "203294751725e6661d9622beab31831b2c9ea49deba4a5af966e56074b954e07",
+        "example": "2bf4f79afe8462d4f183ea64ed7d5505eff5de447feb5819f62121f83043cb60",
+        "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+        "metric_spec": "d6b0184bbb46c3fc23413e0276e67d0f414463952e58d22947a9a86a34308d7a",
+        "policy": "331892c697ad548a7f6eb7f166cc4e456c1bf505c8aa66bca1c6090d1ec752f1"
+      }
+    },
+    "gating_dimensions": [
+      "framework",
+      "metric_spec",
+      "evaluator",
+      "dataset",
+      "config",
+      "policy"
+    ],
+    "requested": false,
+    "state": "comparison_not_requested"
+  },
+  "provenance": {
+    "dimensions": {
+      "authority": "54a044f10d685e08a92b6670f2d96b11d286a78d64327eed669e305debf2811a",
+      "baseline": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "config": "3f7833991d5fb7862640cd2406b92a89caff8808ed8d2dc39d7470ccd4c151f8",
+      "dataset": "03aeb3927926535a7186cff449c1913df17b70c03dd0ebc7bcd57dfabb8329dd",
+      "evaluator": "290f698298dc98b1f0c2986d50bd0a4245fb1d9bc70bd46e97648c4a0f0f39a1",
+      "evidence": "203294751725e6661d9622beab31831b2c9ea49deba4a5af966e56074b954e07",
+      "example": "2bf4f79afe8462d4f183ea64ed7d5505eff5de447feb5819f62121f83043cb60",
+      "framework": "1eee7e99177157de4cda6af0f4ea818e97b27d85107fdf5251438caa5a0e01e6",
+      "metric_spec": "d6b0184bbb46c3fc23413e0276e67d0f414463952e58d22947a9a86a34308d7a",
+      "policy": "331892c697ad548a7f6eb7f166cc4e456c1bf505c8aa66bca1c6090d1ec752f1"
+    }
+  },
+  "run_id": "judge-calibration",
+  "scorecard": {
+    "authority": {
+      "faithfulness": {
+        "blocked": false,
+        "can_gate": false,
+        "level": "informational",
+        "reasons": [
+          "threshold_proposed",
+          "judge_uncalibrated"
+        ]
+      },
+      "field_presence": {
+        "blocked": false,
+        "can_gate": false,
+        "level": "informational",
+        "reasons": [
+          "metric_status=informational",
+          "threshold_proposed"
+        ]
+      }
+    },
+    "baseline_state": "comparison_not_requested",
+    "metrics": [
+      {
+        "aggregation": "mean",
+        "included_count": 3,
+        "metric": "faithfulness",
+        "status_counts": {
+          "scored": 3
+        },
+        "value": 0.7333333333333334
+      },
+      {
+        "aggregation": "mean",
+        "included_count": 3,
+        "metric": "field_presence",
+        "status_counts": {
+          "scored": 3
+        },
+        "value": 1.0
+      }
+    ],
+    "verdict": {
+      "blocked_gates": [],
+      "ci_should_fail": false,
+      "failing_gates": [],
+      "informational_metrics": [
+        "faithfulness",
+        "field_presence"
+      ],
+      "passing_gates": [],
+      "reasons": {},
+      "verdict": "informational"
+    }
+  },
+  "scores": [
+    {
+      "evaluator_version": "judge_score@1",
+      "evidence_refs": [
+        "judge:q1:faithfulness"
+      ],
+      "example_id": "q1",
+      "metric": "faithfulness",
+      "provenance": {
+        "response_fingerprint": "sha256:1e486028e01985a0d45ac362d60c9b1798eec510840eed6dd1170c1378a875c1",
+        "rubric_ref": "rubrics/faithfulness.md",
+        "rubric_version": "1"
+      },
+      "status": "scored",
+      "unit_id": "datasets/answers.jsonl#1",
+      "validity": "valid",
+      "value": 0.9
+    },
+    {
+      "evaluator_version": "judge_score@1",
+      "evidence_refs": [
+        "judge:q2:faithfulness"
+      ],
+      "example_id": "q2",
+      "metric": "faithfulness",
+      "provenance": {
+        "response_fingerprint": "sha256:96881f402b6be372f1b88c48f1200d72a357fab93fa94ee3b94c0ec994030d96",
+        "rubric_ref": "rubrics/faithfulness.md",
+        "rubric_version": "1"
+      },
+      "status": "scored",
+      "unit_id": "datasets/answers.jsonl#2",
+      "validity": "valid",
+      "value": 0.7
+    },
+    {
+      "evaluator_version": "judge_score@1",
+      "evidence_refs": [
+        "judge:q3:faithfulness"
+      ],
+      "example_id": "q3",
+      "metric": "faithfulness",
+      "provenance": {
+        "response_fingerprint": "sha256:a5bdf11229cd23a080b171b5d0567d5cb60ace4631533fea3a22af323bb3fcb3",
+        "rubric_ref": "rubrics/faithfulness.md",
+        "rubric_version": "1"
+      },
+      "status": "scored",
+      "unit_id": "datasets/answers.jsonl#3",
+      "validity": "valid",
+      "value": 0.6
+    },
+    {
+      "evaluator_version": "field_presence@1",
+      "example_id": "q1",
+      "metric": "field_presence",
+      "status": "scored",
+      "unit_id": "datasets/answers.jsonl#1",
+      "validity": "valid",
+      "value": 1.0
+    },
+    {
+      "evaluator_version": "field_presence@1",
+      "example_id": "q2",
+      "metric": "field_presence",
+      "status": "scored",
+      "unit_id": "datasets/answers.jsonl#2",
+      "validity": "valid",
+      "value": 1.0
+    },
+    {
+      "evaluator_version": "field_presence@1",
+      "example_id": "q3",
+      "metric": "field_presence",
+      "status": "scored",
+      "unit_id": "datasets/answers.jsonl#3",
+      "validity": "valid",
+      "value": 1.0
+    }
+  ]
+}

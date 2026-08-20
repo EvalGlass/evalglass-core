@@ -1,0 +1,42 @@
+# EvalGlass gallery example: groundedness (a REFERENCE metric + non-reference floor).
+#
+# INFORMATIONAL BY DESIGN. This demonstrates the reference-metric prerequisite honestly:
+# `set_overlap` is a reference metric (it compares the answer to a grounding reference), but the
+# dataset here is `proposed` sample gold — NOT validated domain truth — so the reference metric
+# CANNOT gate. It stays informational until a host validates the gold and approves a threshold.
+# The non-reference checks (field_presence, structural_shape) give real signal with no gold.
+
+run:
+  id: groundedness
+
+datasets:
+  # status defaults to `proposed` — sample gold, not validated grounding truth.
+  - path: datasets/grounded.jsonl
+
+metrics:
+  # Reference metric (groundedness-flavoured): Jaccard token overlap of the answer with the
+  # grounding reference. Reference => needs validated host gold before it can gate.
+  - name: set_overlap
+    evaluator_ref: set_overlap@1
+    lens: reference
+    score_type: continuous
+    score_range: [0, 1]
+    dataset: datasets/grounded.jsonl
+
+  # Non-reference floor: is the required `answer` field present? (real signal, no gold needed)
+  - name: field_presence
+    evaluator_ref: field_presence@1
+    lens: non_reference
+    score_type: continuous
+    score_range: [0, 1]
+    params:
+      required_fields: ["answer"]
+
+  # Non-reference floor: is the output a well-formed object?
+  - name: structural_shape
+    evaluator_ref: structural_shape@1
+    lens: non_reference
+    score_type: binary
+
+output:
+  dir: reports

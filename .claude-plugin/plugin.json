@@ -1,0 +1,28 @@
+{
+  "name": "evalglass-core",
+  "displayName": "EvalGlass",
+  "version": "0.1.0",
+  "description": "An AI quality-control tool for agentic apps. Tell your agent to evaluate your app: EvalGlass discovers your LLM call sites, vendors a stdlib-only runtime into your repo, scaffolds project-specific checks over host-owned gold/rubrics/thresholds, and wires CI on a single Verdict Engine that blocks only after you approve a gate — reporting only what the evidence honestly supports.",
+  "author": {
+    "name": "EvalGlass",
+    "email": "contact@evalglass.com",
+    "url": "https://github.com/EvalGlass"
+  },
+  "homepage": "https://evalglass.com/get-plugin",
+  "repository": "https://github.com/EvalGlass/evalglass-core",
+  "license": "Apache-2.0",
+  "keywords": [
+    "llm-evaluation",
+    "ai-safety",
+    "evals",
+    "ci-gating",
+    "scorecard",
+    "groundedness",
+    "calibration",
+    "baseline",
+    "trust",
+    "local-first",
+    "verdict",
+    "agentic"
+  ]
+}
