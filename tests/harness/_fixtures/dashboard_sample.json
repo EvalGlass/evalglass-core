@@ -1,0 +1,432 @@
+{
+  "schema": "evalglass.dashboard/1",
+  "run": {
+    "id": "agent-quality-2026-07-26",
+    "generated_at": "2026-07-26T12:03:14Z",
+    "application": "Example agent",
+    "source_label": "proposed local evaluation set"
+  },
+  "verdict": {
+    "state": "informational",
+    "description": "No metric has active gating authority. These measurements are evidence for review, not a quality pass.",
+    "ci_should_fail": false
+  },
+  "authority": {
+    "dataset": "proposed",
+    "thresholds": "proposed",
+    "judges": "uncalibrated",
+    "active_gates": 0
+  },
+  "comparison": {
+    "state": "comparable",
+    "baseline_run_id": "agent-quality-2026-07-19",
+    "shared_examples": 21,
+    "changed_dimensions": []
+  },
+  "summary": {
+    "metrics_total": 7,
+    "metrics_scored": 6,
+    "examples": 24,
+    "call_scores": 86,
+    "diagnostics": 3
+  },
+  "history": [
+    {
+      "run_id": "agent-quality-2026-07-05",
+      "generated_at": "2026-07-05T12:00:00Z",
+      "evaluability": 0.71,
+      "examples": 14
+    },
+    {
+      "run_id": "agent-quality-2026-07-12",
+      "generated_at": "2026-07-12T12:00:00Z",
+      "evaluability": 0.86,
+      "examples": 19
+    },
+    {
+      "run_id": "agent-quality-2026-07-19",
+      "generated_at": "2026-07-19T12:00:00Z",
+      "evaluability": 0.86,
+      "examples": 21
+    },
+    {
+      "run_id": "agent-quality-2026-07-26",
+      "generated_at": "2026-07-26T12:03:14Z",
+      "evaluability": 0.8571428571,
+      "examples": 24
+    }
+  ],
+  "metrics": [
+    {
+      "name": "agent.ingest.schema_validity",
+      "label": "Schema validity",
+      "description": "Share of eligible outputs that satisfy the declared response contract.",
+      "workflow": "Ingest",
+      "tier": "runtime",
+      "direction": "higher_is_better",
+      "status": "scored",
+      "validity": "valid",
+      "value": 0.92,
+      "aggregation": "rate",
+      "n": 24,
+      "interval": {
+        "lower": 0.74,
+        "upper": 0.98,
+        "level": 0.95,
+        "method": "wilson"
+      },
+      "population": {
+        "available": 24,
+        "selector_matched": 24,
+        "eligible": 24,
+        "scored": 24
+      },
+      "authority": {
+        "level": "informational",
+        "can_gate": false,
+        "reasons": ["metric_status=informational", "threshold_proposed", "dataset_proposed"]
+      },
+      "gate": {
+        "state": "informational",
+        "threshold": null,
+        "decision_statistic": null
+      },
+      "comparison": {
+        "state": "comparable",
+        "delta": 0.04,
+        "direction_adjusted_delta": 0.04,
+        "interval": {
+          "lower": 0.01,
+          "upper": 0.08
+        },
+        "outcome": "improvement",
+        "shared_examples": 21
+      },
+      "diagnostics": [],
+      "calls": [
+        {"example_id": "example-001", "status": "scored", "value": 1.0},
+        {"example_id": "example-002", "status": "scored", "value": 0.0}
+      ]
+    },
+    {
+      "name": "agent.ingest.provenance_completeness",
+      "label": "Provenance completeness",
+      "description": "Coverage of required source identifiers on externally checkable claims.",
+      "workflow": "Ingest",
+      "tier": "runtime",
+      "direction": "higher_is_better",
+      "status": "scored",
+      "validity": "valid",
+      "value": 0.78,
+      "aggregation": "mean",
+      "n": 24,
+      "interval": {
+        "lower": 0.7,
+        "upper": 0.85,
+        "level": 0.95,
+        "method": "student_t"
+      },
+      "population": {
+        "available": 24,
+        "selector_matched": 24,
+        "eligible": 24,
+        "scored": 24
+      },
+      "authority": {
+        "level": "informational",
+        "can_gate": false,
+        "reasons": ["metric_status=informational", "threshold_proposed", "dataset_proposed"]
+      },
+      "gate": {
+        "state": "informational",
+        "threshold": null,
+        "decision_statistic": null
+      },
+      "comparison": {
+        "state": "comparable",
+        "delta": -0.05,
+        "direction_adjusted_delta": -0.05,
+        "interval": {
+          "lower": -0.09,
+          "upper": -0.02
+        },
+        "outcome": "regression",
+        "shared_examples": 21
+      },
+      "diagnostics": [
+        {
+          "code": "provenance.missing_source",
+          "severity": "warning",
+          "message": "Five claims did not retain a resolvable source identifier.",
+          "count": 5
+        }
+      ],
+      "calls": [
+        {"example_id": "example-007", "status": "scored", "value": 0.5},
+        {"example_id": "example-012", "status": "scored", "value": 0.66}
+      ]
+    },
+    {
+      "name": "agent.reason.groundedness",
+      "label": "Groundedness",
+      "description": "Support for externally checkable output claims within the supplied evidence.",
+      "workflow": "Reason",
+      "tier": "judge",
+      "direction": "higher_is_better",
+      "status": "scored",
+      "validity": "valid",
+      "value": 0.74,
+      "aggregation": "mean",
+      "n": 12,
+      "interval": {
+        "lower": 0.64,
+        "upper": 0.82,
+        "level": 0.95,
+        "method": "student_t"
+      },
+      "population": {
+        "available": 24,
+        "selector_matched": 12,
+        "eligible": 12,
+        "scored": 12
+      },
+      "authority": {
+        "level": "informational",
+        "can_gate": false,
+        "reasons": ["metric_status=informational", "dataset_proposed", "judge_uncalibrated"]
+      },
+      "gate": {
+        "state": "informational",
+        "threshold": null,
+        "decision_statistic": null
+      },
+      "comparison": {
+        "state": "comparable",
+        "delta": -0.03,
+        "direction_adjusted_delta": -0.03,
+        "interval": {
+          "lower": -0.06,
+          "upper": -0.01
+        },
+        "outcome": "regression",
+        "shared_examples": 11
+      },
+      "diagnostics": [],
+      "calls": [
+        {"example_id": "example-017", "status": "scored", "value": 0.45},
+        {"example_id": "example-022", "status": "scored", "value": 0.8}
+      ],
+      "judge": {
+        "calibration": "uncalibrated",
+        "model_ref": "provider/example-model",
+        "rubric_ref": "rubrics/groundedness.md",
+        "rubric_version": "3",
+        "prompt_ref": "judges/trace_judge.py",
+        "parser_version": "json-v2",
+        "reviews": [
+          {
+            "example_id": "example-017",
+            "score": 0.45,
+            "rationale": "Several claims are plausible but not supported by the supplied evidence.",
+            "violations": ["Unsupported specificity in the final explanation."],
+            "facets": {"support": 0.4, "completeness": 0.6},
+            "cache": "miss",
+            "latency_ms": 1320
+          }
+        ]
+      }
+    },
+    {
+      "name": "agent.reason.tool_selection",
+      "label": "Tool selection",
+      "description": "Agreement between the requested operation and the selected tool.",
+      "workflow": "Reason",
+      "tier": "reference",
+      "direction": "higher_is_better",
+      "status": "scored",
+      "validity": "valid",
+      "value": 0.88,
+      "aggregation": "rate",
+      "n": 16,
+      "interval": {
+        "lower": 0.64,
+        "upper": 0.97,
+        "level": 0.95,
+        "method": "wilson"
+      },
+      "population": {
+        "available": 24,
+        "selector_matched": 16,
+        "eligible": 16,
+        "scored": 16
+      },
+      "authority": {
+        "level": "informational",
+        "can_gate": false,
+        "reasons": ["metric_status=informational", "threshold_proposed", "dataset_proposed"]
+      },
+      "gate": {
+        "state": "informational",
+        "threshold": null,
+        "decision_statistic": null
+      },
+      "comparison": {
+        "state": "comparable",
+        "delta": 0.0,
+        "direction_adjusted_delta": 0.0,
+        "interval": {
+          "lower": -0.03,
+          "upper": 0.04
+        },
+        "outcome": "within_noise",
+        "shared_examples": 15
+      },
+      "diagnostics": [],
+      "calls": []
+    },
+    {
+      "name": "agent.respond.task_completion",
+      "label": "Task completion",
+      "description": "Reference-based completion of the requested user-visible task.",
+      "workflow": "Respond",
+      "tier": "reference",
+      "direction": "higher_is_better",
+      "status": "scored",
+      "validity": "valid",
+      "value": 0.83,
+      "aggregation": "mean",
+      "n": 18,
+      "interval": {
+        "lower": 0.75,
+        "upper": 0.9,
+        "level": 0.95,
+        "method": "student_t"
+      },
+      "population": {
+        "available": 24,
+        "selector_matched": 18,
+        "eligible": 18,
+        "scored": 18
+      },
+      "authority": {
+        "level": "informational",
+        "can_gate": false,
+        "reasons": ["metric_status=informational", "threshold_proposed", "dataset_proposed"]
+      },
+      "gate": {
+        "state": "informational",
+        "threshold": null,
+        "decision_statistic": null
+      },
+      "comparison": {
+        "state": "comparable",
+        "delta": 0.02,
+        "direction_adjusted_delta": 0.02,
+        "interval": {
+          "lower": -0.01,
+          "upper": 0.05
+        },
+        "outcome": "within_noise",
+        "shared_examples": 17
+      },
+      "diagnostics": [],
+      "calls": []
+    },
+    {
+      "name": "agent.respond.latency",
+      "label": "Response latency",
+      "description": "End-to-end response duration for eligible requests.",
+      "workflow": "Respond",
+      "tier": "runtime",
+      "direction": "lower_is_better",
+      "status": "scored",
+      "validity": "valid",
+      "value": 0.68,
+      "aggregation": "mean",
+      "n": 24,
+      "interval": {
+        "lower": 0.6,
+        "upper": 0.76,
+        "level": 0.95,
+        "method": "student_t"
+      },
+      "population": {
+        "available": 24,
+        "selector_matched": 24,
+        "eligible": 24,
+        "scored": 24
+      },
+      "authority": {
+        "level": "informational",
+        "can_gate": false,
+        "reasons": ["metric_status=informational", "threshold_proposed", "dataset_proposed"]
+      },
+      "gate": {
+        "state": "informational",
+        "threshold": null,
+        "decision_statistic": null
+      },
+      "comparison": {
+        "state": "comparable",
+        "delta": -0.04,
+        "direction_adjusted_delta": 0.04,
+        "interval": {
+          "lower": 0.01,
+          "upper": 0.07
+        },
+        "outcome": "improvement",
+        "shared_examples": 21
+      },
+      "diagnostics": [],
+      "calls": []
+    },
+    {
+      "name": "agent.respond.preference_alignment",
+      "label": "Preference alignment",
+      "description": "Alignment with the declared response preferences.",
+      "workflow": "Respond",
+      "tier": "judge",
+      "direction": "higher_is_better",
+      "status": "non_evaluable",
+      "validity": "invalid",
+      "value": null,
+      "aggregation": "mean",
+      "n": 0,
+      "interval": null,
+      "population": {
+        "available": 24,
+        "selector_matched": 8,
+        "eligible": 0,
+        "scored": 0
+      },
+      "authority": {
+        "level": "informational",
+        "can_gate": false,
+        "reasons": ["metric_status=informational", "judge_uncalibrated", "missing_preference_context"]
+      },
+      "gate": {
+        "state": "informational",
+        "threshold": null,
+        "decision_statistic": null
+      },
+      "comparison": {
+        "state": "comparable",
+        "delta": null,
+        "direction_adjusted_delta": null,
+        "interval": null,
+        "outcome": "not_evaluable",
+        "shared_examples": 0
+      },
+      "diagnostics": [
+        {
+          "code": "reference.missing_context",
+          "severity": "warning",
+          "message": "Eligible examples did not include the preference context required by this construct.",
+          "count": 8
+        }
+      ],
+      "calls": []
+    }
+  ]
+}
+
