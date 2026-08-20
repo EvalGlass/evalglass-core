@@ -36,13 +36,13 @@ It measures host behavior from supplied evidence and reports what can honestly
 be claimed. It does not improve the host application, approve domain truth, or
 become a hosted platform.
 
-**Positioning — Core executes; Discovery finds; Intelligence explains.** Core is
-the open, host-directed evaluation runtime: you tell it what to evaluate and it
-executes honestly, giving a rigorous system to *define, run, compare, and retain*
-evaluations. It never inspects an application to decide, on its own, what should
-be tested. Deriving *what* to measure from an application (metric discovery) is a
-separate concern that lives in the `evalglass-discovery` repo; explaining *why* a
-failure happens is another. This document specifies Core only.
+**Positioning — Core executes.** Core is the open, host-directed evaluation
+runtime: you tell it what to evaluate and it executes honestly, giving a rigorous
+system to *define, run, compare, and retain* evaluations. It never inspects an
+application to decide, on its own, what should be tested. Deriving *what* to
+measure from an application (metric discovery) is deliberately **out of scope**:
+EvalGlass runs the checks the host authors and derives none on its own. This
+document specifies Core only.
 
 **Primary rule:** a green or non-failing EvalGlass result must never imply more
 evidence, authority, calibration, comparability, or validity than the run
@@ -400,9 +400,9 @@ contract to enforce, an output rule — into a `MetricSpec` in
 honesty invariants hold: (1) every scaffolded asset lands **`proposed` /
 `uncalibrated`** — informational until the host validates, approves a threshold,
 and (for judges) calibrates; and (2) the framework **derives no metrics on its
-own** — automated metric discovery is deliberately out of scope for the core and
-lives in the separate `evalglass-discovery` repo. The host decides; the agent
-scaffolds; the host validates.
+own** — automated metric discovery is deliberately out of scope for the core;
+EvalGlass runs the checks the host authors and infers no metrics itself. The host
+decides; the agent scaffolds; the host validates.
 
 ## 9. Artifacts And Host Truth
 
