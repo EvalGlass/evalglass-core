@@ -1,0 +1,1873 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EvalGlass Product Architecture Map</title>
+  <meta name="description" content="A docs-first product architecture map for EvalGlass: structure, runtime layers, authority model, data spine, scorecards, extension lanes, and product surface." />
+  <style>
+    :root {
+      --paper: #f1e9e7;
+      --paper-deep: #eadfdd;
+      --surface: #fffaf7;
+      --surface-2: #fff6f1;
+      --ink: #17140f;
+      --ink-soft: #312b27;
+      --muted: #6f625e;
+      --faint: #cfc0bc;
+      --line: rgba(23, 20, 15, 0.14);
+      --line-strong: rgba(23, 20, 15, 0.25);
+      --blue: #1264ff;
+      --blue-soft: #dfeaff;
+      --green: #dff6e6;
+      --green-ink: #1d6c3a;
+      --amber: #fff0d8;
+      --amber-ink: #8a5b00;
+      --rose: #ffe2ea;
+      --rose-ink: #a62c4b;
+      --black: #17140f;
+      --shadow: 0 18px 48px rgba(30, 24, 20, 0.12);
+      --shadow-soft: 0 10px 28px rgba(30, 24, 20, 0.08);
+      --radius: 18px;
+      --radius-sm: 10px;
+      --max: 1120px;
+      --serif: Georgia, "Times New Roman", Times, serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.58;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; }
+    code {
+      font-family: var(--mono);
+      font-size: 0.92em;
+      background: rgba(23, 20, 15, 0.06);
+      border: 1px solid rgba(23, 20, 15, 0.08);
+      border-radius: 6px;
+      padding: 0.08rem 0.32rem;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(20px);
+      background: rgba(241, 233, 231, 0.9);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .nav a {
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav a:hover { border-color: var(--ink); color: var(--ink); }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 88px 24px 52px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--serif);
+      letter-spacing: 0;
+      line-height: 1.04;
+    }
+
+    h1 {
+      font-size: clamp(48px, 8vw, 102px);
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: clamp(34px, 5vw, 62px);
+      margin-bottom: 18px;
+    }
+
+    h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+    }
+
+    .lead {
+      max-width: 790px;
+      margin: 28px auto 0;
+      font-family: var(--serif);
+      color: var(--muted);
+      font-size: 21px;
+      line-height: 1.48;
+    }
+
+    .hero-grid {
+      max-width: 940px;
+      margin: 38px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      text-align: left;
+    }
+
+    .source-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .source-card b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink);
+    }
+
+    .source-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.46;
+    }
+
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px 90px;
+    }
+
+    section {
+      padding: 54px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-kicker {
+      margin: 0 0 12px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 800;
+    }
+
+    .section-lead {
+      max-width: 800px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.52;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card.blue { border-left: 4px solid var(--blue); }
+    .card.green { border-left: 4px solid #33a35c; }
+    .card.amber { border-left: 4px solid #d8941b; }
+    .card.rose { border-left: 4px solid #d54d69; }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .card ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card li + li { margin-top: 6px; }
+
+    .mini-label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      margin-bottom: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 23px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status.now { background: var(--green); color: var(--green-ink); }
+    .status.next { background: var(--blue-soft); color: var(--blue); }
+    .status.planned { background: var(--amber); color: var(--amber-ink); }
+    .status.experimental { background: var(--rose); color: var(--rose-ink); }
+    .status.info { background: var(--blue-soft); color: var(--blue); }
+    .status.blocked { background: var(--rose); color: var(--rose-ink); }
+
+    .architecture-board {
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1.05fr 1.05fr 1.15fr 1.15fr 1.05fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .flow-card {
+      position: relative;
+      min-height: 146px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      background: var(--surface-2);
+    }
+
+    .flow-card::after {
+      content: ">";
+      position: absolute;
+      top: 50%;
+      right: -12px;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: white;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 800;
+      z-index: 3;
+    }
+
+    .flow-card:last-child::after { display: none; }
+
+    .flow-card h3 {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .flow-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .lane-band {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 250, 247, 0.64);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .stack {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .stack-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .stack-label {
+      border-radius: var(--radius-sm);
+      background: var(--ink);
+      color: white;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.35;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 800;
+    }
+
+    .stack-cell {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: 16px;
+    }
+
+    .stack-cell b {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .stack-cell span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .loop {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      counter-reset: loop;
+    }
+
+    .loop-step {
+      counter-increment: loop;
+      min-height: 160px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .loop-step::before {
+      content: counter(loop);
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 12px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: white;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .loop-step h3 {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .loop-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.44;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .pipe-column {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pipe-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pipe-item {
+      border: 1px solid rgba(23, 20, 15, 0.1);
+      border-radius: 8px;
+      background: var(--surface-2);
+      padding: 10px 12px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .pipe-item b {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--ink);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    th {
+      color: var(--ink);
+      background: var(--surface-2);
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    td { color: var(--muted); }
+    td strong { color: var(--ink); }
+
+    .callout {
+      margin: 26px 0 0;
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .callout p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.56;
+    }
+
+    .claim-box {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .claim-main {
+      padding: 24px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .claim-main h3 { color: white; }
+
+    .claim-main p {
+      margin: 12px 0 0;
+      color: rgba(255,255,255,0.76);
+      font-family: var(--serif);
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    .claim-side {
+      display: grid;
+      gap: 10px;
+    }
+
+    .claim-filter {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+    }
+
+    .claim-filter b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .claim-filter span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .repo-tree {
+      margin: 0;
+      padding: 18px;
+      border-radius: var(--radius-sm);
+      background: var(--ink);
+      color: #f6eee9;
+      overflow: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.55;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .do-dont .card ul { margin-top: 4px; }
+
+    .footer-note {
+      margin-top: 30px;
+      padding: 18px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .grid, .grid.two, .grid.four, .pipeline, .claim-box, .do-dont {
+        grid-template-columns: 1fr;
+      }
+      .flow {
+        grid-template-columns: 1fr;
+      }
+      .flow-card::after {
+        top: auto;
+        right: 18px;
+        bottom: -12px;
+        transform: rotate(90deg);
+      }
+      .loop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stack-row { grid-template-columns: 1fr; }
+      .nav { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding-top: 58px; }
+      h1 { font-size: 44px; }
+      h2 { font-size: 34px; }
+      .loop { grid-template-columns: 1fr; }
+      th, td { display: block; width: 100%; }
+      th { border-bottom: 0; }
+      tr { display: block; border-bottom: 1px solid var(--line); }
+      tr:last-child { border-bottom: 0; }
+      td { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">EvalGlass Architecture</div>
+      <nav class="nav" aria-label="Architecture sections">
+        <a href="#one-view">One View</a>
+        <a href="#layers">Layers</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#ontology-taxonomy">Ontology</a>
+        <a href="#authority">Authority</a>
+        <a href="#capabilities">Capabilities</a>
+        <a href="#surface">Surface</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <p class="eyebrow">Docs-first synthesis / current site state / 2026-06-04</p>
+    <h1>EvalGlass product architecture map</h1>
+    <p class="lead">
+      A stitched architecture of the product EvalGlass now presents in its documentation and site: how it is structured,
+      how it functions, what the components own, where authority lives, and how the scorecard loop turns AI behavior into
+      bounded quality-control evidence.
+    </p>
+
+    <div class="hero-grid" aria-label="Source basis">
+      <div class="source-card">
+        <b>Primary source</b>
+        <span>Documentation and reference contracts under <code>public/docs</code>, especially the Trust Model, Evaluation Core, Runtime Harness, Integrations, Vendoring, CLI, Vocabulary, Scorecard JSON, and RunRecord pages.</span>
+      </div>
+      <div class="source-card">
+        <b>Secondary source</b>
+        <span>Public site positioning under <code>public/</code>: Home, How it works, Use cases, Scorecards, Extensions, Trust, Local-first, Roadmap, and Get the plugin.</span>
+      </div>
+      <div class="source-card">
+        <b>Scope note</b>
+        <span>This is a product architecture as portrayed by the current site/docs. The site and docs intentionally lead parts of the code; status badges show what is now, next, planned, or experimental.</span>
+      </div>
+    </div>
+    <div class="callout" style="max-width: 940px; margin: 30px auto 0; text-align: left;">
+      <p>
+        <strong>Ground-truth floor:</strong> EvalGlass is v0.1.0 pre-alpha, untagged, Apache-2.0, local-first, and not on PyPI. It has no hosted platform, no required provider keys, no telemetry, an empty <code>authority.json</code> by default, and no <code>gate</code>, <code>approve</code>, or <code>certify</code> verb.
+      </p>
+    </div>
+  </div>
+
+  <main>
+    <section id="definition">
+      <p class="section-kicker">Canonical product definition</p>
+      <h2>The product is an AI quality-control loop operated through a coding agent.</h2>
+      <p class="section-lead">
+        EvalGlass is not primarily framed as a generic evaluation framework. It is a practical, repo-native way for AI product teams to ask a coding agent to evaluate an agentic app, turn real behavior into project-specific checks, run those checks locally, and get a scorecard that says what changed and what cannot yet be claimed.
+      </p>
+
+      <div class="grid three">
+        <article class="card blue">
+          <span class="mini-label">What users do</span>
+          <h3>Ask the coding agent.</h3>
+          <p>The entry point is a product question: model switch, prompt change, drift, new workflow, traces to interpret, a CI gate, or a stakeholder scorecard.</p>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">What EvalGlass does</span>
+          <h3>Builds and runs checks.</h3>
+          <p>The agent helps shape project-specific metrics, examples, rubrics, judge evidence, baselines, and scenarios. The vendored runtime evaluates supplied evidence locally.</p>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">What users get</span>
+          <h3>A bounded scorecard.</h3>
+          <p>The scorecard shows values, status counts, deltas, diagnostics, authority, and one verdict. It reports what was measured; it never certifies the AI application.</p>
+        </article>
+      </div>
+
+      <div class="callout">
+        <p>
+          The practical trust line is: <strong>runs locally, keeps project truth in the repo, and produces no false green.</strong>
+          Trust is not a separate compliance promise; it is the everyday boundary that keeps scorecards useful without overclaiming.
+        </p>
+      </div>
+    </section>
+
+    <section id="one-view">
+      <p class="section-kicker">Architecture in one view</p>
+      <h2>From product question to bounded verdict.</h2>
+      <p class="section-lead">
+        The architecture is a chain of responsibility. The coding agent can discover, scaffold, run, and explain. The host repo owns the truth. The Runtime Harness owns effects. The Evaluation Core owns meaning. The Scorecard and RunRecord are the outputs every consumer renders, never recomputes.
+      </p>
+
+      <div class="architecture-board">
+        <div class="flow">
+          <div class="flow-card">
+            <h3>1. Product question</h3>
+            <p>"Evaluate this app after the model switch." The user starts from a change or uncertainty in the AI application.</p>
+          </div>
+          <div class="flow-card">
+            <h3>2. Coding-agent surface</h3>
+            <p>The <code>/evalglass</code> umbrella routes setup, connect, run, view, explain, compare, baseline, ci, and authoring verbs.</p>
+          </div>
+          <div class="flow-card">
+            <h3>3. Host repo</h3>
+            <p>EvalGlass vendors managed runtime code into <code>evals/_evalglass/</code>. Everything that grants authority remains host-owned.</p>
+          </div>
+          <div class="flow-card">
+            <h3>4. Runtime Harness</h3>
+            <p>The effectful layer reads config and evidence, runs ports/adapters, converges inputs, persists outputs, and maps verdict to exit code.</p>
+          </div>
+          <div class="flow-card">
+            <h3>5. Evaluation Core</h3>
+            <p>The effect-free core computes Scores, aggregation, provenance, authority, comparability, and the single VerdictPayload.</p>
+          </div>
+        </div>
+        <div class="lane-band">
+          Optional lanes attach to existing ports without changing the required path: exported trace import is the shipped behavior-input path; live connectors are planned; local scorecard export is experimental; hosted dashboard and prompt-optimizer handoff are next; synthetic generation is planned but governance already forces generated evidence to proposed.
+        </div>
+      </div>
+    </section>
+
+    <section id="layers">
+      <p class="section-kicker">System boundary</p>
+      <h2>Four layers, one responsibility line.</h2>
+      <p class="section-lead">
+        Most EvalGlass trust properties come from this boundary: meaning never performs effects, effects never invent meaning, the installer never grants authority, and domain judgement never moves into the managed framework.
+      </p>
+
+      <div class="stack">
+        <div class="stack-row">
+          <div class="stack-label">Host-owned truth</div>
+          <div class="stack-cell">
+            <b>Owns</b>
+            <span>Datasets, references, exported traces, rubrics, calibration, approved thresholds, baselines, host evaluators, data policy decisions, and every domain judgement.</span>
+          </div>
+          <div class="stack-cell">
+            <b>Must not own</b>
+            <span>Managed framework internals. The host should not need to patch core meaning to make its domain truth visible.</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">EvalGlass Skill / plugin</div>
+          <div class="stack-cell">
+            <b>Owns</b>
+            <span>Discovery, planning, vendoring, manifest/lock, starter scaffolds, CI snippets, and guidance through <code>/evalglass</code> verbs.</span>
+          </div>
+          <div class="stack-cell">
+            <b>Must not own</b>
+            <span>Runtime execution, score meaning, metric authority, automatic gating, certification, or silent edits to host truth.</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">Runtime Harness</div>
+          <div class="stack-cell">
+            <b>Owns</b>
+            <span>CLI, config loading, ports/adapters, input convergence, replay, judge collection, evidence policy, persistence, reports, sinks, and exit mapping.</span>
+          </div>
+          <div class="stack-cell">
+            <b>Must not own</b>
+            <span>New score meanings, ad-hoc verdicts, hidden authority, or report prose that widens what the Scorecard says.</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">Evaluation Core</div>
+          <div class="stack-cell">
+            <b>Owns</b>
+            <span>Contracts, score semantics, MetricSpec validation, aggregation, provenance, authority resolution, baseline comparability, Scorecard, RunRecord, and the Verdict Engine.</span>
+          </div>
+          <div class="stack-cell">
+            <b>Must not own</b>
+            <span>Filesystem I/O, network, subprocesses, clocks, randomness, model calls, provider SDKs, or domain knowledge.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p>
+          The key architecture invariant: <strong>the Harness calls the Core, but the Core never calls back out.</strong>
+          This is what lets one and only one path decide a verdict.
+        </p>
+      </div>
+    </section>
+
+    <section id="loop">
+      <p class="section-kicker">Product workflow</p>
+      <h2>The six-step check loop.</h2>
+      <p class="section-lead">
+        The public site presents EvalGlass as an everyday habit for reviewing AI behavior. The docs then pin every step to a bounded runtime behavior.
+      </p>
+
+      <div class="loop">
+        <article class="loop-step">
+          <h3>Ask</h3>
+          <p>Use natural language or explicit verbs to ask the coding agent what changed, drifted, improved, regressed, or needs review.</p>
+        </article>
+        <article class="loop-step">
+          <h3>Observe</h3>
+          <p>Read repo context, prompts, model calls, examples, release changes, and exported traces. Live provider pulls are planned, not shipped.</p>
+        </article>
+        <article class="loop-step">
+          <h3>Shape</h3>
+          <p>Author project-specific checks: metrics, examples, rubrics, judges, baselines, annotations, and scenarios. Drafts land proposed.</p>
+        </article>
+        <article class="loop-step">
+          <h3>Run</h3>
+          <p>Run the vendored runtime locally. No platform, no provider keys, no telemetry, and no plugin dependency at host evaluation time.</p>
+        </article>
+        <article class="loop-step">
+          <h3>Read</h3>
+          <p>Read Scorecard and RunRecord fields: values, status, validity, diagnostics, authority, baseline state, and verdict.</p>
+        </article>
+        <article class="loop-step">
+          <h3>Improve</h3>
+          <p>Fix prompts, switch models, add examples, review labels, tune metrics, compare against a baseline, or wire CI on a host-approved gate.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="host-layout">
+      <p class="section-kicker">Physical structure</p>
+      <h2>Managed runtime vs host-owned truth.</h2>
+      <p class="section-lead">
+        The repo layout is the physical version of host ownership. Re-vendoring may replace the managed column; it must not overwrite the records that decide what a gate means.
+      </p>
+
+      <div class="grid two">
+        <div>
+          <pre class="repo-tree">&lt;host-repo&gt;/
+  evals/
+    _evalglass/              # managed runtime
+      core/
+      harness/
+      adapters/
+      vendor-manifest.json
+      evalglass.lock
+    evalglass.yaml           # host-owned config
+    datasets/*.jsonl         # host-owned examples/gold
+    traces/*.jsonl           # host-owned exported behavior
+    evaluators/*.py          # host-owned scorer code
+    rubrics/*.md             # host-owned judge rubrics
+    calibration/*.json       # host-owned calibration
+    baselines/*.json         # host-owned promoted runs
+    authority.json           # host-owned authority records
+    reports/                 # Scorecards, RunRecords, reports
+    tests/                   # host-owned eval tests</pre>
+        </div>
+        <div class="grid">
+          <article class="card green">
+            <span class="mini-label">Managed</span>
+            <h3><code>evals/_evalglass/</code></h3>
+            <p>Core, Harness, adapters, manifest, and lock. Replaced only by deliberate revendor. It grants no authority by itself.</p>
+          </article>
+          <article class="card blue">
+            <span class="mini-label">Host-owned</span>
+            <h3>Everything else under <code>evals/</code></h3>
+            <p>Examples, traces, metrics, rubrics, calibration, baselines, thresholds, approvals, and reports. These records define what can gate.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pipeline">
+      <p class="section-kicker">Evaluation pipeline</p>
+      <h2>Many evidence shapes converge to one typed run.</h2>
+      <p class="section-lead">
+        EvalGlass accepts different evidence routes, but evaluators do not see vendor objects or adapters. The Runtime Harness normalizes everything at the boundary, then the effect-free Core receives typed data only.
+      </p>
+
+      <div class="pipeline">
+        <div class="pipe-column">
+          <span class="mini-label">Inputs</span>
+          <h3>Host-supplied evidence</h3>
+          <div class="pipe-list">
+            <div class="pipe-item"><b>Datasets</b>JSONL examples with optional references and host-owned status.</div>
+            <div class="pipe-item"><b>Exported traces</b>Local JSONL, OpenTelemetry export, or OpenInference export. No SDK, no network.</div>
+            <div class="pipe-item"><b>Replay/task output</b>Subprocess replay with typed failures, not quality scores.</div>
+            <div class="pipe-item"><b>Judge evidence</b>Evidence collected under data policy; missing/failed judges are not low scores.</div>
+          </div>
+        </div>
+        <div class="pipe-column">
+          <span class="mini-label">Harness edge</span>
+          <h3>Input convergence</h3>
+          <div class="pipe-list">
+            <div class="pipe-item"><b>TraceEnvelope</b>Vendor-neutral behavior plus metadata, data policy, and provenance.</div>
+            <div class="pipe-item"><b>EvalUnit</b>The slice evaluated: call, step, trajectory, or session.</div>
+            <div class="pipe-item"><b>Example</b>The evaluator-ready item: input, output, optional reference, context, metadata, provenance.</div>
+            <div class="pipe-item"><b>EvidenceBundle</b>References, source material, judge evidence, verifier evidence, runtime errors, and trace fragments.</div>
+          </div>
+        </div>
+        <div class="pipe-column">
+          <span class="mini-label">Core output</span>
+          <h3>Meaning and verdict</h3>
+          <div class="pipe-list">
+            <div class="pipe-item"><b>Scores</b>Status + validity + value only when scored and valid.</div>
+            <div class="pipe-item"><b>Aggregation</b>Only scored + valid values reduce; excluded states remain counted.</div>
+            <div class="pipe-item"><b>Authority</b>Host-owned inputs resolve to informational, blocked, or can_gate.</div>
+            <div class="pipe-item"><b>Verdict</b>One VerdictPayload becomes Scorecard, RunRecord, report, CI exit, and sinks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p>
+          Malformed or incomplete input is never quietly dropped. It becomes a diagnostic, a non-evaluable score, an error score, or a blocked active gate, depending on where it occurs.
+        </p>
+      </div>
+
+      <div class="grid three" style="margin-top: 18px;">
+        <article class="card blue">
+          <span class="mini-label">Runtime trust property</span>
+          <h3>Incomplete cannot pass.</h3>
+          <p>A malformed record becomes visible evidence, not a smaller silent sample. An active gate blocks when required measurement is incomplete.</p>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">Runtime trust property</span>
+          <h3>Worst-source authority wins.</h3>
+          <p>Across sources, the weakest dataset status and least-permissive data policy carry forward, so a strong source cannot hide a weak one.</p>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">Runtime trust property</span>
+          <h3>Egress before effects.</h3>
+          <p>Data policy is checked before subprocess or judge effects. The allowed egress set is <code>permitted</code> or <code>redacted</code>; anything else fails closed.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="domain-model">
+      <p class="section-kicker">Domain model</p>
+      <h2>The core concepts that hold the product together.</h2>
+      <p class="section-lead">
+        The docs define a vocabulary that should remain canonical across site, documentation, code, reports, and future implementation work.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Role in the architecture</th>
+            <th>Claim or authority effect</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>MetricSpec</strong></td>
+            <td>Declares metric meaning: name, lens, score type, range, direction, evaluator ref, prerequisites, aggregation, threshold, authority, and data policy.</td>
+            <td>Prevents evaluators from quietly emitting scores the metric never declared.</td>
+          </tr>
+          <tr>
+            <td><strong>Score</strong></td>
+            <td>One metric result with value, status, validity, diagnostics, evidence refs, evaluator version, and optional subject identity.</td>
+            <td>A value exists only for scored + valid; missing or invalid measurement is never written as 0.0.</td>
+          </tr>
+          <tr>
+            <td><strong>Diagnostic</strong></td>
+            <td>Structured reason for a non-perfect state: code, severity, message, location, details, cause, evidence refs.</td>
+            <td>Keeps uncertainty visible and machine-readable instead of burying it in prose.</td>
+          </tr>
+          <tr>
+            <td><strong>Authority</strong></td>
+            <td>Typed answer to whether a metric may gate, resolved from host-owned records.</td>
+            <td>Separates a good measured value from permission to enforce CI.</td>
+          </tr>
+          <tr>
+            <td><strong>Provenance</strong></td>
+            <td>Run fingerprints across framework, metric spec, evaluator, dataset, example, evidence, config, policy, authority, and baseline.</td>
+            <td>Defines when a comparison or regression claim is supported.</td>
+          </tr>
+          <tr>
+            <td><strong>Baseline comparability</strong></td>
+            <td>State machine: comparable, not_comparable, missing_baseline, comparison_not_requested.</td>
+            <td>Blocks regression claims across mismatched runs.</td>
+          </tr>
+          <tr>
+            <td><strong>DataPolicy</strong></td>
+            <td>Per-source egress state: permitted, redacted, forbidden, missing, or unknown.</td>
+            <td>Only permitted or redacted evidence may cross an effect boundary; other values block an authorized gate.</td>
+          </tr>
+          <tr>
+            <td><strong>Scorecard</strong></td>
+            <td>Primary summary artifact: verdict, metrics, authority, baseline state, diagnostics.</td>
+            <td>Reports, CI annotations, and sinks render this; they do not recompute it.</td>
+          </tr>
+          <tr>
+            <td><strong>RunRecord</strong></td>
+            <td>Complete reproducible record: run_id, embedded scorecard, every Score, provenance, and comparability result.</td>
+            <td>Provides auditability and per-call grouping through explicit <code>example_id</code>/<code>unit_id</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>ExtensionLane / LaneResult</strong></td>
+            <td>Metadata-only optional capability declaration, plus ran/skipped/blocked result with diagnostics.</td>
+            <td>A lane can carry evidence or output; it cannot carry a score, authority, or verdict.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="ontology-taxonomy">
+      <p class="section-kicker">Ontology and taxonomy</p>
+      <h2>The ontology separates product nouns from runtime outcomes.</h2>
+      <p class="section-lead">
+        The companion ontology in <code>docs/design/ontology/</code> is the machine-checkable graph; this section is the human version. It keeps the product language stable by separating entity families, closed vocabularies, graph relations, and authority boundaries.
+      </p>
+
+      <div class="callout">
+        <p>
+          The current companion ontology tracks <strong>205 entities</strong> across <strong>15 classes</strong> and <strong>355 relations</strong>. Its purpose is not to invent a new product layer; it is to make the site, documentation, and later product-code alignment reconcile around the same nouns and predicates.
+        </p>
+      </div>
+
+      <div class="grid four" style="margin-top: 18px;">
+        <article class="card blue">
+          <span class="mini-label">Operating model</span>
+          <h3>Actors, verbs, and processes.</h3>
+          <p>Developer, host repo, coding agent, runtime, CI, and optional services act through explicit processes such as install, run, explain, compare, promote-a-gate, CI gating, and revendor safely.</p>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">Runtime structure</span>
+          <h3>Layers, components, ports, and lanes.</h3>
+          <p>The surface, vendored harness, evaluation core, host-owned authority, and extension lanes are distinct. Ports are the only effect seams; lanes attach to ports and remain deletable.</p>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">Data model</span>
+          <h3>Contracts, artifacts, enums, and values.</h3>
+          <p>Examples, EvidenceBundle, Score, Diagnostic, AggregatedMetric, ResolvedAuthority, VerdictPayload, Scorecard, and RunRecord are typed contracts or artifacts with closed enum vocabularies.</p>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">Trust model</span>
+          <h3>Concepts, invariants, and ADRs.</h3>
+          <p>Capability-not-authority, no-0.0, incomplete-cannot-gate, egress-before-effects, deletion invariance, provenance comparability, and no self-approval are the rules future code must satisfy.</p>
+        </article>
+      </div>
+
+      <table style="margin-top: 18px;">
+        <thead>
+          <tr>
+            <th>Taxonomy</th>
+            <th>Canonical values or members</th>
+            <th>Why it matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Claim status</strong></td>
+            <td><code>now</code>, <code>next</code>, <code>planned</code>, <code>experimental</code></td>
+            <td>Public-site capability status. It must not be confused with a runtime verdict or a score state.</td>
+          </tr>
+          <tr>
+            <td><strong>Verdict</strong></td>
+            <td><code>informational</code>, <code>pass</code>, <code>fail</code>, <code>blocked</code></td>
+            <td>The single run outcome, decided once by the Verdict Engine. <code>proposed</code> is not a verdict.</td>
+          </tr>
+          <tr>
+            <td><strong>Measurement state</strong></td>
+            <td>Status: <code>scored</code>, <code>non_evaluable</code>, <code>skipped</code>, <code>error</code>, <code>blocked</code>. Validity: <code>valid</code>, <code>invalid</code>, <code>not_measured</code>, <code>not_applicable</code>.</td>
+            <td>Only <code>scored</code> + <code>valid</code> enters aggregation; missing or untrusted measurement is <code>null</code>, never <code>0.0</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Authority resolution</strong></td>
+            <td><code>informational</code>, <code>blocked</code>, <code>can_gate</code></td>
+            <td>The three-stage ladder separates measured evidence from permission to enforce a threshold.</td>
+          </tr>
+          <tr>
+            <td><strong>Host asset state</strong></td>
+            <td>Dataset status, threshold approval, metric status, judge calibration, promoted baseline.</td>
+            <td>These are the records that can eventually grant authority. Fresh scaffolds stay proposed or informational until the host acts.</td>
+          </tr>
+          <tr>
+            <td><strong>Data policy</strong></td>
+            <td><code>permitted</code>, <code>redacted</code>, <code>forbidden</code>, <code>missing</code>, <code>unknown</code></td>
+            <td>Only <code>permitted</code> or <code>redacted</code> may cross an effect boundary; anything else blocks an otherwise-authorized gate.</td>
+          </tr>
+          <tr>
+            <td><strong>Baseline comparability</strong></td>
+            <td><code>comparable</code>, <code>not_comparable</code>, <code>missing_baseline</code>, <code>comparison_not_requested</code></td>
+            <td>A delta or regression claim exists only when provenance says the current and baseline runs are comparable.</td>
+          </tr>
+          <tr>
+            <td><strong>Lane outcome</strong></td>
+            <td><code>ran</code>, <code>skipped</code>, <code>blocked</code> with diagnostics and evidence refs.</td>
+            <td>A lane reports whether an optional capability executed; it does not emit a score, authority, or verdict.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pipeline" style="margin-top: 18px;">
+        <div class="pipe-column">
+          <h3>Structural predicates</h3>
+          <div class="pipe-list">
+            <div class="pipe-item"><b><code>partOf</code></b>Layer, process, and component containment.</div>
+            <div class="pipe-item"><b><code>typedBy</code></b>Contract or artifact is governed by a closed enum or schema.</div>
+            <div class="pipe-item"><b><code>hasValue</code></b>Enum owns its allowed values.</div>
+            <div class="pipe-item"><b><code>specifiedBy</code></b>Concept, invariant, component, or contract traces to an ADR.</div>
+          </div>
+        </div>
+        <div class="pipe-column">
+          <h3>Runtime predicates</h3>
+          <div class="pipe-list">
+            <div class="pipe-item"><b><code>dependsOn</code></b>Component, verb, extension, or process requires another unit.</div>
+            <div class="pipe-item"><b><code>invokes</code></b>A verb or process calls a component or narrower process.</div>
+            <div class="pipe-item"><b><code>consumes</code></b>Reads a contract, artifact, or enum as input.</div>
+            <div class="pipe-item"><b><code>produces</code></b>Emits a contract or artifact as output.</div>
+          </div>
+        </div>
+        <div class="pipe-column">
+          <h3>Boundary predicates</h3>
+          <div class="pipe-list">
+            <div class="pipe-item"><b><code>implements</code></b>A concrete adapter implements one of the six ports.</div>
+            <div class="pipe-item"><b><code>attachesVia</code></b>An extension lane plugs into a port without gaining authority.</div>
+            <div class="pipe-item"><b><code>enforces</code> / <code>governs</code></b>An invariant or concept constrains behavior.</div>
+            <div class="pipe-item"><b><code>performedBy</code> / <code>precedes</code></b>Process ownership and ordering.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid three" style="margin-top: 18px;">
+        <article class="card amber">
+          <span class="mini-label">Term separation</span>
+          <h3>Status is overloaded unless scoped.</h3>
+          <p>Always qualify which status is meant: public claim status, metric status, dataset status, score status, judge evidence status, baseline state, lane outcome, or verdict.</p>
+        </article>
+        <article class="card amber">
+          <span class="mini-label">Claim separation</span>
+          <h3>Scorecard is not RunRecord.</h3>
+          <p>The Scorecard is the bounded readable claim. The RunRecord is the complete reproducible record. Reports and sinks render them; they do not decide again.</p>
+        </article>
+        <article class="card amber">
+          <span class="mini-label">Capability separation</span>
+          <h3>Extension is not evaluator.</h3>
+          <p>An evaluator produces Scores from typed Examples and evidence. A lane can supply evidence, diagnostics, or output through a port, but remains outside the scoring and authority path.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="laws">
+      <p class="section-kicker">Architecture laws</p>
+      <h2>The laws that fall out of the ontology.</h2>
+      <p class="section-lead">
+        Cross-checking against the deeper architecture file makes the core laws clearer. These are the assertions that future implementation alignment should be able to prove or falsify.
+      </p>
+
+      <div class="grid four">
+        <article class="card blue"><h3>Verdict decides once.</h3><p>A run outcome is formed only by the Evaluation Core's Verdict Engine, from measurement and authority.</p></article>
+        <article class="card blue"><h3>Authority starts with the host.</h3><p>Capability never grants authority. Only host-owned records can make a metric enforceable.</p></article>
+        <article class="card blue"><h3>Scorecard bounds the claim.</h3><p>A scorecard licenses only what this run measured under supplied evidence, policy, baselines, and authority.</p></article>
+        <article class="card blue"><h3>Missing is not zero.</h3><p>A missing or untrusted measurement is null with status and diagnostics, never a silent 0.0.</p></article>
+        <article class="card blue"><h3>Deltas need comparability.</h3><p>A regression claim exists only when two runs are typed comparable by provenance.</p></article>
+        <article class="card blue"><h3>CI reads the payload.</h3><p>CI should act on typed verdict or exit mapping: pass/informational exit 0, fail/blocked exit 1, infrastructure exit 2.</p></article>
+        <article class="card blue"><h3>Lanes carry no authority.</h3><p>Optional lanes return evidence, diagnostics, or output only, and required paths stay valid when lanes are removed.</p></article>
+        <article class="card blue"><h3>Fresh install gates nothing.</h3><p>Starter assets are proposed, thresholds unapproved, judges uncalibrated, and authority records empty.</p></article>
+      </div>
+    </section>
+
+    <section id="authority">
+      <p class="section-kicker">Claim boundary and authority</p>
+      <h2>A green result is a bounded statement, not proof of correctness.</h2>
+      <p class="section-lead">
+        EvalGlass asks a precise question: given the supplied evidence, authority records, metrics, thresholds, calibration, baselines, and data policy, what Scorecard and verdict can it honestly emit?
+      </p>
+
+      <div class="claim-box">
+        <div class="claim-main">
+          <h3>The bounded product claim</h3>
+          <p>
+            EvalGlass can honestly emit this Scorecard and verdict from the supplied evidence and host-owned authority records. Anything beyond that, such as "the model is correct" or "the release is safe", remains a human and host inference.
+          </p>
+        </div>
+        <div class="claim-side">
+          <div class="claim-filter">
+            <b>Measurement filter</b>
+            <span>Only scored + valid values enter aggregation. Blocked, non_evaluable, skipped, error, invalid, and not_measured states are excluded but counted.</span>
+          </div>
+          <div class="claim-filter">
+            <b>Authority filter</b>
+            <span>Dataset status, threshold approval, metric status, judge calibration, data policy, and baseline state decide whether a metric can gate.</span>
+          </div>
+          <div class="claim-filter">
+            <b>Comparability filter</b>
+            <span>A delta is a regression claim only when baseline fingerprints match on the gating dimensions.</span>
+          </div>
+          <div class="claim-filter">
+            <b>Verdict filter</b>
+            <span>The Verdict Engine is the single path. Consumers render the VerdictPayload; they never decide again.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid three" style="margin-top: 18px;">
+        <article class="card blue">
+          <span class="status info">informational</span>
+          <h3>Evidence, no active gate.</h3>
+          <p>Common first-run state: proposed data, unapproved threshold, uncalibrated judge, or metric not set to gating. Useful, but not enforcement.</p>
+        </article>
+        <article class="card rose">
+          <span class="status blocked">blocked</span>
+          <h3>Gate active, claim unsound.</h3>
+          <p>The metric is configured to gate, but evidence, policy, comparability, calibration, or measurement completeness cannot support an honest claim.</p>
+        </article>
+        <article class="card green">
+          <span class="status now">can_gate</span>
+          <h3>Threshold enforced.</h3>
+          <p>The metric cleared host-owned authorization and evidence-soundness checks, so its value is compared to the approved threshold.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="verdicts">
+      <p class="section-kicker">Run outcomes</p>
+      <h2>One verdict, one CI signal.</h2>
+      <p class="section-lead">
+        The Scorecard resolves to exactly one verdict. CI should branch on the typed verdict or exit code, not report prose.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Verdict</th>
+            <th>Meaning</th>
+            <th>Exit code</th>
+            <th>Important reading rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>informational</strong></td>
+            <td>Measured evidence, but no active gate ran.</td>
+            <td>0</td>
+            <td>Exit 0 does not mean quality was enforced.</td>
+          </tr>
+          <tr>
+            <td><strong>pass</strong></td>
+            <td>Active gates met their approved thresholds.</td>
+            <td>0</td>
+            <td>Pass is bounded to the checks, evidence, and authority records of this run.</td>
+          </tr>
+          <tr>
+            <td><strong>fail</strong></td>
+            <td>An active gate was validly measured and missed its approved threshold.</td>
+            <td>1</td>
+            <td>Fail means "we know and it is short."</td>
+          </tr>
+          <tr>
+            <td><strong>blocked</strong></td>
+            <td>An active gate could not be claimed honestly.</td>
+            <td>1</td>
+            <td>Blocked means "we cannot say"; it still fails CI when a gate is active.</td>
+          </tr>
+          <tr>
+            <td><strong>infrastructure error</strong></td>
+            <td>The run itself could not complete.</td>
+            <td>2</td>
+            <td>Not a quality verdict; there is no trustworthy Scorecard verdict to enforce.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <p>
+          The VerdictPayload is not just a label. The reference docs state that it re-derives itself and fails closed on tampering, so a consumer cannot hand-set a friendlier verdict without contradicting the typed gate lists.
+        </p>
+      </div>
+    </section>
+
+    <section id="ports">
+      <p class="section-kicker">Ports and adapters</p>
+      <h2>Effects enter through six narrow seams.</h2>
+      <p class="section-lead">
+        Integrating a backend means implementing a port, not changing the core. Adapter outputs carry evidence or diagnostics; they never emit scores, authority, or verdicts.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Port</th>
+            <th>Purpose</th>
+            <th>Required adapter shape</th>
+            <th>Boundary rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DatasetStore</strong></td>
+            <td>Read examples, references, dataset status, and version.</td>
+            <td>Local JSONL examples and references.</td>
+            <td>Malformed records become diagnostics, not silent exclusions.</td>
+          </tr>
+          <tr>
+            <td><strong>TraceSource</strong></td>
+            <td>Yield recorded host behavior as TraceEnvelopes.</td>
+            <td>Local JSONL and open-convention trace export mapping.</td>
+            <td>Vendor objects are dropped at the edge.</td>
+          </tr>
+          <tr>
+            <td><strong>TaskRunner</strong></td>
+            <td>Replay host outputs when needed.</td>
+            <td>Subprocess JSON in/out.</td>
+            <td>Failures become typed diagnostics with missing output.</td>
+          </tr>
+          <tr>
+            <td><strong>JudgeModel</strong></td>
+            <td>Collect judge evidence when a metric declares it.</td>
+            <td>Deterministic fake judge in the required path; live judge is optional.</td>
+            <td>Judge evidence is not authority; calibration is host-owned.</td>
+          </tr>
+          <tr>
+            <td><strong>ResultStore</strong></td>
+            <td>Persist RunRecords, Scorecards, reports, and baselines.</td>
+            <td>Filesystem JSON/JSONL.</td>
+            <td>Persists results; never recomputes a verdict or promotes a baseline.</td>
+          </tr>
+          <tr>
+            <td><strong>ScoreSink</strong></td>
+            <td>Render immutable results outward.</td>
+            <td>Markdown, terminal, JSON, CI annotations, optional export sink.</td>
+            <td>Can render or publish; cannot mutate typed results.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="commands">
+      <p class="section-kicker">Command surface</p>
+      <h2>The coding-agent interface is useful but deliberately non-authoritative.</h2>
+      <p class="section-lead">
+        The absence of gate, approve, and certify verbs is part of the architecture. The plugin can scaffold, run, and explain; only host-owned records can grant authority.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Surface</th>
+            <th>What it does</th>
+            <th>Authority rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><code>/evalglass</code></strong></td>
+            <td>Honest status overview: integrated pieces, data/authority state, and next useful step. Runs nothing.</td>
+            <td>No authority effect.</td>
+          </tr>
+          <tr>
+            <td><strong><code>setup</code></strong></td>
+            <td>Discover candidate call sites, vendor runtime, scaffold proposed dataset/metrics/CI, or revendor managed code.</td>
+            <td>Discovery is candidate inventory, not proof of completeness; scaffolds are non-authoritative.</td>
+          </tr>
+          <tr>
+            <td><strong><code>connect</code></strong></td>
+            <td>Import exported OpenTelemetry, OpenInference, or local trace JSON; scaffold starter datasets.</td>
+            <td>Export import is now. Live pulls are planned and opt-in.</td>
+          </tr>
+          <tr>
+            <td><strong><code>run</code></strong></td>
+            <td>Runs the vendored runtime and reads back artifacts.</td>
+            <td>The plugin never computes the verdict.</td>
+          </tr>
+          <tr>
+            <td><strong><code>view</code> / <code>explain</code></strong></td>
+            <td>Render per-metric, per-call, and explanation views from Scorecard/RunRecord fields.</td>
+            <td>Explanation is bounded to typed authority and diagnostics.</td>
+          </tr>
+          <tr>
+            <td><strong><code>compare</code> / <code>baseline</code></strong></td>
+            <td>Compare runs only when comparable; promote a baseline deliberately.</td>
+            <td>Baseline promotion is explicit; ordinary runs never auto-promote.</td>
+          </tr>
+          <tr>
+            <td><strong><code>ci</code></strong></td>
+            <td>Copy a workflow that runs the vendored runtime with CI annotations.</td>
+            <td>CI consumes typed exit/verdict only; no prose parsing.</td>
+          </tr>
+          <tr>
+            <td><strong><code>add-metric</code> / <code>add-judge</code> / <code>calibrate</code></strong></td>
+            <td>Authoring tier for host-owned metrics, judges, and calibration evidence.</td>
+            <td>Scaffolds start proposed or uncalibrated; calibration evidence is supplied by the host.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="artifacts">
+      <p class="section-kicker">Artifacts</p>
+      <h2>Scorecard is the readable artifact; RunRecord is the full record.</h2>
+      <p class="section-lead">
+        Every external presentation should flow from these typed artifacts. Reports, terminal summaries, CI annotations, dashboard sinks, and optimizer handoffs should not decide anything.
+      </p>
+
+      <div class="grid two">
+        <article class="card blue">
+          <span class="mini-label">Primary summary</span>
+          <h3><code>scorecard.json</code></h3>
+          <p>Verdict, <code>ci_should_fail</code>, per-metric aggregated values, included counts, status counts, authority, baseline state, and run-level diagnostics.</p>
+          <ul>
+            <li>Human-readable enough for product conversations.</li>
+            <li>Typed enough for CI and reports.</li>
+            <li>Never claims more than authority allows.</li>
+          </ul>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">Complete record</span>
+          <h3><code>runrecord.json</code></h3>
+          <p>Run id, embedded Scorecard, every per-example Score, provenance fingerprints, and baseline comparability state.</p>
+          <ul>
+            <li>Reproducible audit trail.</li>
+            <li>Per-call grouping via explicit <code>example_id</code>/<code>unit_id</code>.</li>
+            <li>Malformed fields fail closed on parse.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="adoption-lifecycle">
+      <p class="section-kicker">Adoption lifecycle</p>
+      <h2>How a check moves from setup to enforcement.</h2>
+      <p class="section-lead">
+        The existing architecture made this sequence explicit, and it is useful enough to preserve in the product map because it is where users experience the boundary between useful evidence and real gates.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>What happens</th>
+            <th>Authority posture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Install / setup / vendor</strong></td>
+            <td>Plugin or direct CLI vendors the managed runtime, writes manifest/lock, and scaffolds starter host assets.</td>
+            <td>Scaffolds are proposed, informational, and non-authoritative.</td>
+          </tr>
+          <tr>
+            <td><strong>Connect</strong></td>
+            <td>Host supplies exported OpenTelemetry, OpenInference, or local JSON traces; live pulls remain planned.</td>
+            <td>Evidence is imported locally and normalized at the edge.</td>
+          </tr>
+          <tr>
+            <td><strong>Run first</strong></td>
+            <td>The vendored runtime produces Scorecard, RunRecord, and report.</td>
+            <td>First result is informational by design: no approved threshold, no validated starter gold, no calibrated judge.</td>
+          </tr>
+          <tr>
+            <td><strong>Shape and validate</strong></td>
+            <td>User reviews examples, metrics, rubrics, and judge evidence; agent can help type changes.</td>
+            <td>Validation, threshold approval, calibration, and baseline promotion remain host-owned acts.</td>
+          </tr>
+          <tr>
+            <td><strong>Promote a gate</strong></td>
+            <td>Host clears the preconditions: validated dataset, approved threshold, metric set to gating, calibrated judge if used.</td>
+            <td>A gate becomes enforceable only after these records exist.</td>
+          </tr>
+          <tr>
+            <td><strong>Wire CI</strong></td>
+            <td>Workflow runs the vendored runtime and branches on exit code or typed verdict.</td>
+            <td>CI fails only on fail or blocked, and only after an active gate exists.</td>
+          </tr>
+          <tr>
+            <td><strong>Compare and baseline</strong></td>
+            <td>Baseline updates are explicit; deltas show only when fingerprints are comparable.</td>
+            <td>A changed dataset, metric, evaluator, config, framework, or policy prevents a regression claim.</td>
+          </tr>
+          <tr>
+            <td><strong>Revendor safely</strong></td>
+            <td>Managed runtime updates through preview and confirmation.</td>
+            <td>Host truth is preserved, so upgrades cannot quietly change a gate.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="capabilities">
+      <p class="section-kicker">Capability status map</p>
+      <h2>Status is capability, not authority.</h2>
+      <p class="section-lead">
+        The current site/docs use four statuses. A capability being present does not mean any host evaluation gates on it; authority still requires deliberate host-owned approval.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Meaning</th>
+            <th>Capabilities portrayed in this status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="status now">now</span></td>
+            <td>Shipped and running at HEAD, shown executing only where real.</td>
+            <td>Claude Code plugin and <code>/evalglass</code> verbs; Evaluation Core; Runtime Harness; local JSONL datasets/traces; exported OTel/OpenInference/local trace import; replay; baselines; CI annotations; setup discovery and vendoring; authoring tier; judge metrics with calibration; <code>view --by-call</code>; optional lane framework.</td>
+          </tr>
+          <tr>
+            <td><span class="status next">next</span></td>
+            <td>Committed or short-horizon, not shipped yet.</td>
+            <td>0.1 tagged release; PyPI publishing; public Codex marketplace listing; hosted dashboard sink; prompt-optimizer handoff.</td>
+          </tr>
+          <tr>
+            <td><span class="status planned">planned</span></td>
+            <td>Intended, but not near-term.</td>
+            <td>Live tracing connectors for Langfuse, Phoenix, and LangSmith; per-source-function score view; synthetic-data generation; metrics explorer; more worked examples.</td>
+          </tr>
+          <tr>
+            <td><span class="status experimental">experimental</span></td>
+            <td>Exists as a stub, unstable path, or deletable lane; not core-reliable.</td>
+            <td>Annotation workflow UI; local dashboard/file scorecard export; live-judge lane and other optional lane implementations.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <p>
+          Codex is supported as a second runtime through the same canonical skills tree and portable direct CLI. The public Codex marketplace listing is a separate next-status publishing step.
+        </p>
+      </div>
+    </section>
+
+    <section id="extensions">
+      <p class="section-kicker">Extension architecture</p>
+      <h2>Extensions deepen the same loop; none decide scores.</h2>
+      <p class="section-lead">
+        The site groups extensions by user job: bring behavior in, turn behavior into checks, review and improve truth, and use results. Architecturally, every extension must attach through a port, return evidence/output, and remain removable.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>User job</th>
+            <th>Extension family</th>
+            <th>Status</th>
+            <th>Architecture boundary</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Bring behavior in</strong></td>
+            <td>Exported traces; future live provider pulls.</td>
+            <td><span class="status now">import now</span> <span class="status planned">live planned</span></td>
+            <td>TraceSource adapters normalize to TraceEnvelope and drop vendor objects at the edge.</td>
+          </tr>
+          <tr>
+            <td><strong>Turn behavior into checks</strong></td>
+            <td>Metric builder, judge scaffold, synthetic scenarios.</td>
+            <td><span class="status now">builder now</span> <span class="status planned">synthetic planned</span></td>
+            <td>Scaffolds land proposed/informational; generated data is forced to proposed.</td>
+          </tr>
+          <tr>
+            <td><strong>Review and improve truth</strong></td>
+            <td>Annotation workflow, judge calibration, baseline comparison.</td>
+            <td><span class="status experimental">annotation experimental</span> <span class="status now">calibration now</span></td>
+            <td>Human validation and calibration records are host-owned authority inputs.</td>
+          </tr>
+          <tr>
+            <td><strong>Use results</strong></td>
+            <td>CI, local scorecard export, hosted dashboard, prompt optimizer handoff.</td>
+            <td><span class="status now">CI now</span> <span class="status experimental">local export experimental</span> <span class="status next">hosted/optimizer next</span></td>
+            <td>ScoreSinks and handoffs render or export typed Scorecards; they never change verdicts or edit prompts.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="surface">
+      <p class="section-kicker">Site and documentation surface</p>
+      <h2>How the public IA maps onto the product architecture.</h2>
+      <p class="section-lead">
+        The site now leads with user moments and scorecards; the documentation then gives the precise operating and contract layers. The same architecture should remain visible across both.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Surface</th>
+            <th>Primary job</th>
+            <th>Architecture concept it should carry</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Home</strong></td>
+            <td>Establish the offer: ask your coding agent to evaluate your agentic app.</td>
+            <td>Six-step loop, local run, project-specific checks, scorecard, no platform/no keys/no false green.</td>
+          </tr>
+          <tr>
+            <td><strong>How it works</strong></td>
+            <td>Explain the loop in plain product language.</td>
+            <td>Ask -> Observe -> Shape -> Run -> Read -> Improve, plus the chain of authority.</td>
+          </tr>
+          <tr>
+            <td><strong>Use cases</strong></td>
+            <td>Map EvalGlass to trigger moments.</td>
+            <td>Model switching, prompt optimization, drift, feature testing, trace analysis, CI, stakeholder scorecards.</td>
+          </tr>
+          <tr>
+            <td><strong>Scorecards</strong></td>
+            <td>Make trust tangible and user-facing.</td>
+            <td>Verdict, metrics, status, validity, authority, baseline, diagnostics, bounded claims.</td>
+          </tr>
+          <tr>
+            <td><strong>Extensions</strong></td>
+            <td>Show growth without turning EvalGlass into a hosted suite.</td>
+            <td>Optional, removable lanes that bring evidence in or send Scorecards out without creating authority.</td>
+          </tr>
+          <tr>
+            <td><strong>Docs guides</strong></td>
+            <td>Teach operation.</td>
+            <td>Install, run, read, config, metrics, judges, calibration, datasets, traces, CI, gate promotion, local-first workflow.</td>
+          </tr>
+          <tr>
+            <td><strong>Reference docs</strong></td>
+            <td>Pin the contracts.</td>
+            <td>Trust Model, Evaluation Core, Runtime Harness, Integrations, Vendoring, CLI, Scorecard JSON, RunRecord, enums, vocabulary, ADRs.</td>
+          </tr>
+          <tr>
+            <td><strong>Footer trust pages</strong></td>
+            <td>Hold the honesty floor.</td>
+            <td>Claim boundary, no false green, local-first, security, threat model, governance, roadmap/status.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="end-to-end">
+      <p class="section-kicker">End-to-end behavior</p>
+      <h2>How EvalGlass should function as a coherent product.</h2>
+      <p class="section-lead">
+        This is the full operating story stitched from the current docs and site. It is the product behavior future implementation alignment should preserve.
+      </p>
+
+      <div class="grid two">
+        <article class="card blue">
+          <span class="mini-label">Integration-time</span>
+          <h3>Install without authority.</h3>
+          <ul>
+            <li>User installs the Claude Code plugin or uses the direct CLI.</li>
+            <li>Skill discovers candidate call sites read-only and produces a non-authoritative plan.</li>
+            <li>Installer vendors managed core/harness/adapters into <code>evals/_evalglass/</code>.</li>
+            <li>Starter host files are scaffolded as proposed, informational, uncalibrated, and empty-authority.</li>
+            <li>The first run is informational by design.</li>
+          </ul>
+        </article>
+        <article class="card blue">
+          <span class="mini-label">Run-time</span>
+          <h3>Measure without overclaiming.</h3>
+          <ul>
+            <li>Harness loads <code>evalglass.yaml</code> into typed, authority-safe config.</li>
+            <li>Ports read datasets, exported traces, replay outputs, judge evidence, and result destinations.</li>
+            <li>Runner converges inputs to Examples and EvidenceBundle, checking data policy before effects.</li>
+            <li>Core evaluates, aggregates, fingerprints, resolves authority, compares baseline state, and decides once.</li>
+            <li>Harness persists Scorecard/RunRecord/report and maps verdict to exit code.</li>
+          </ul>
+        </article>
+        <article class="card green">
+          <span class="mini-label">Review-time</span>
+          <h3>Improve with evidence.</h3>
+          <ul>
+            <li>User reads values, status counts, diagnostics, unknowns, and authority reasons.</li>
+            <li>Agent can explain results using typed authority and diagnostics only.</li>
+            <li>User adds examples, validates datasets, calibrates judges, revises metrics, or fixes the app.</li>
+            <li>Baseline comparisons are claimed only when provenance says comparable.</li>
+          </ul>
+        </article>
+        <article class="card amber">
+          <span class="mini-label">Enforcement-time</span>
+          <h3>Gate deliberately.</h3>
+          <ul>
+            <li>A metric gates only after host-owned preconditions are met.</li>
+            <li>Required preconditions: validated dataset, approved threshold, metric set to gating, and calibrated judge when relevant.</li>
+            <li>CI acts on the typed verdict/exit code.</li>
+            <li>There is no <code>gate</code>, <code>approve</code>, or <code>certify</code> command.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="non-goals">
+      <p class="section-kicker">Non-goals and guardrails</p>
+      <h2>The architecture is defined as much by what it refuses.</h2>
+      <p class="section-lead">
+        These refusals are not marketing caveats; they are product boundaries that keep the scorecard useful.
+      </p>
+
+      <div class="do-dont">
+        <article class="card green">
+          <span class="mini-label">EvalGlass should do</span>
+          <ul>
+            <li>Run locally and in CI from vendored source.</li>
+            <li>Keep project truth and authority in the host repo.</li>
+            <li>Separate value, validity, authority, and verdict.</li>
+            <li>Report missing measurement as missing, not as zero.</li>
+            <li>Require explicit host approval before a gate can enforce CI.</li>
+            <li>Mark future-facing capabilities as next, planned, or experimental.</li>
+          </ul>
+        </article>
+        <article class="card rose">
+          <span class="mini-label">EvalGlass should not do</span>
+          <ul>
+            <li>Behave like a hosted platform or telemetry product.</li>
+            <li>Ask for provider keys on the required path.</li>
+            <li>Let the plugin, agent, report, sink, benchmark, or generated data grant authority.</li>
+            <li>Recompute verdicts outside the Verdict Engine.</li>
+            <li>Auto-tune prompts, edit models, certify safety, or claim broad correctness.</li>
+            <li>Show unshipped capabilities executing as if they were available now.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="ahead-code">
+      <p class="section-kicker">Ahead-of-code seams</p>
+      <h2>The useful corrections from the cross-check.</h2>
+      <p class="section-lead">
+        The deeper architecture file usefully names the seams where docs, site, code, and future implementation can drift. Cross-checking it against current docs and the code reality suggests these are the important alignment notes.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Seam</th>
+            <th>Current resolved reading</th>
+            <th>Why it matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Extension Lane framework</strong></td>
+            <td>The framework surface is <span class="status now">now</span>: LaneRegistry, ExtensionLane metadata, LaneResult, and deletion-invariance proof exist. Individual conveniences keep their own statuses.</td>
+            <td>The existing architecture/ontology had this partly as <span class="status next">next</span>; current docs and code support <span class="status now">now</span>.</td>
+          </tr>
+          <tr>
+            <td><strong>Codex</strong></td>
+            <td>Codex runtime support is <span class="status now">now</span>; public marketplace listing is <span class="status next">next</span>.</td>
+            <td>Do not describe all Codex support as future, and do not imply the listing is published.</td>
+          </tr>
+          <tr>
+            <td><strong>Live connectors</strong></td>
+            <td>Exported trace import is <span class="status now">now</span>; live Langfuse/Phoenix/LangSmith pulls are <span class="status planned">planned</span>.</td>
+            <td>Prevents shipped export support from sounding like live provider SDK support.</td>
+          </tr>
+          <tr>
+            <td><strong>Governance before convenience</strong></td>
+            <td>Synthetic and annotation governance rules exist before the polished generator/UI exists.</td>
+            <td>Present-tense governance prose must not read as if synthetic generation or annotation UI is fully shipped.</td>
+          </tr>
+          <tr>
+            <td><strong>JSON contracts</strong></td>
+            <td>Scorecard and RunRecord are authoritative now, but the product remains pre-alpha and untagged.</td>
+            <td>Consumers can build against them, but should understand contract stability is still settling before a 0.1 tag.</td>
+          </tr>
+          <tr>
+            <td><strong>Consumer verdict handling</strong></td>
+            <td>Exit codes intentionally flatten informational/pass to 0 and fail/blocked to 1.</td>
+            <td>Consumers needing enforcement certainty or "we know" vs "we cannot say" must inspect the typed verdict, not just the numeric exit.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="implementation-alignment">
+      <p class="section-kicker">Implementation alignment lens</p>
+      <h2>What later product-code alignment should derive from this map.</h2>
+      <p class="section-lead">
+        Because the site and documentation intentionally lead the implementation in places, this file should be treated as a product architecture target map and consistency anchor for the next code-alignment phase.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Alignment area</th>
+            <th>Architecture requirement</th>
+            <th>Reason it matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Boundaries</strong></td>
+            <td>Core must stay effect-free; Harness must own effects; Skill/plugin must stay integration-time and non-authoritative.</td>
+            <td>Prevents hidden authority and multiple verdict paths.</td>
+          </tr>
+          <tr>
+            <td><strong>Artifacts</strong></td>
+            <td>Scorecard and RunRecord contracts must be the source for reports, CI, explanations, and sinks.</td>
+            <td>Prevents prose, dashboards, or annotations from widening claims.</td>
+          </tr>
+          <tr>
+            <td><strong>Evidence governance</strong></td>
+            <td>Synthetic, annotation, benchmark, and judge evidence must never self-approve authority.</td>
+            <td>Prevents generated or model-derived evidence from laundering confidence.</td>
+          </tr>
+          <tr>
+            <td><strong>Capability status</strong></td>
+            <td>Now/next/planned/experimental labels must align across docs, site, commands, examples, and implementation behavior.</td>
+            <td>Prevents stale or overconfident product claims.</td>
+          </tr>
+          <tr>
+            <td><strong>Vocabulary</strong></td>
+            <td>Use canonical terms: AI quality-control tool, coding agent, project-specific checks, scorecard, host-owned truth, authority, RunRecord, Extension Lane.</td>
+            <td>Prevents concept drift and duplicate terms for core elements.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer-note">
+        Built from the current EvalGlass site and documentation after the IA and brand iteration. Primary routes consulted include <code>/docs</code>, <code>/docs/reference</code>, <code>/docs/overview</code>, <code>/docs/run</code>, <code>/docs/scorecards</code>, <code>/docs/reference/vocabulary</code>, Trust Model pages, Evaluation Core pages, Runtime Harness pages, Vendoring pages, <code>/</code>, <code>/how-it-works</code>, <code>/scorecards</code>, <code>/extensions</code>, <code>/use-cases</code>, <code>/trust</code>, <code>/roadmap</code>, and <code>/get-plugin</code>.
+      </div>
+    </section>
+  </main>
+</body>
+</html>

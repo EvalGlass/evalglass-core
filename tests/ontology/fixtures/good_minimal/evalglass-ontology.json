@@ -1,0 +1,46 @@
+{
+  "ontology": "evalglass",
+  "version": "test-1",
+  "generated": "2026-01-01",
+  "about": "A minimal but structurally valid ontology fixture for loader tests.",
+  "meta": {
+    "classes": {
+      "Layer": { "prefix": "layer", "desc": "A runtime layer." },
+      "Enum": { "prefix": "enum", "desc": "A closed vocabulary." }
+    },
+    "predicates": {
+      "partOf": { "domain": ["Enum"], "range": ["Layer"], "desc": "Containment." }
+    },
+    "status": ["now", "next", "planned", "experimental"],
+    "verification": ["asserted", "conceptual"],
+    "idScheme": "prefix.suffix"
+  },
+  "stats": { "entities": 2, "relations": 1, "byClass": { "Layer": 1, "Enum": 1 } },
+  "entities": [
+    {
+      "id": "layer.core",
+      "class": "Layer",
+      "kind": null,
+      "label": "Evaluation Core",
+      "definition": "The effect-free runtime center for meaning.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core",
+      "evidence": ["/docs/core"],
+      "notes": null
+    },
+    {
+      "id": "enum.verdict",
+      "class": "Enum",
+      "kind": null,
+      "label": "Verdict",
+      "definition": "The single run-outcome vocabulary.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/verdict.py",
+      "evidence": ["/docs/reference/enums"],
+      "notes": null
+    }
+  ],
+  "relations": [{ "predicate": "partOf", "from": "enum.verdict", "to": "layer.core" }]
+}

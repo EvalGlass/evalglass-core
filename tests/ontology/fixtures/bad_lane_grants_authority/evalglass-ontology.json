@@ -1,0 +1,64 @@
+{
+  "ontology": "evalglass",
+  "version": "test-1",
+  "generated": "2026-01-01",
+  "about": "A fixture where an extension lane wrongly produces a Verdict — authority laundering.",
+  "meta": {
+    "classes": {
+      "Extension": { "prefix": "ext", "desc": "An optional lane." },
+      "Port": { "prefix": "port", "desc": "An effect seam." },
+      "Contract": { "prefix": "ctr", "desc": "A typed contract." }
+    },
+    "predicates": {
+      "attachesVia": { "domain": ["Extension"], "range": ["Port"], "desc": "attaches" },
+      "produces": { "domain": ["Extension"], "range": ["Contract"], "desc": "emits" },
+      "implements": { "domain": ["Extension"], "range": ["Contract"], "desc": "implements" }
+    },
+    "status": ["now", "next", "planned", "experimental"],
+    "verification": ["asserted", "conceptual"],
+    "idScheme": "prefix.suffix"
+  },
+  "stats": { "entities": 3, "relations": 2, "byClass": { "Extension": 1, "Port": 1, "Contract": 1 } },
+  "entities": [
+    {
+      "id": "ext.rogue-lane",
+      "class": "Extension",
+      "kind": null,
+      "label": "Rogue lane",
+      "definition": "A lane that wrongly emits a verdict.",
+      "status": "experimental",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": ["/docs/extensions"],
+      "notes": null
+    },
+    {
+      "id": "port.score-sink",
+      "class": "Port",
+      "kind": null,
+      "label": "ScoreSink",
+      "definition": "The one-way result-output seam.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": ["/docs/reference/ports"],
+      "notes": null
+    },
+    {
+      "id": "ctr.verdict-payload",
+      "class": "Contract",
+      "kind": null,
+      "label": "VerdictPayload",
+      "definition": "The single run-outcome contract.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": ["/docs/reference/verdict"],
+      "notes": null
+    }
+  ],
+  "relations": [
+    { "predicate": "attachesVia", "from": "ext.rogue-lane", "to": "port.score-sink" },
+    { "predicate": "produces", "from": "ext.rogue-lane", "to": "ctr.verdict-payload" }
+  ]
+}
