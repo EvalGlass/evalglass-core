@@ -22,7 +22,7 @@ jobs:
     name: lint (ruff)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           python-version: ${{ env.PYTHON_DEFAULT }}
@@ -35,7 +35,7 @@ jobs:
     name: typecheck (mypy strict)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           python-version: ${{ env.PYTHON_DEFAULT }}
@@ -57,7 +57,7 @@ jobs:
     name: core isolation (CLAUDE.md §4)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           python-version: ${{ env.PYTHON_DEFAULT }}
@@ -69,7 +69,7 @@ jobs:
     name: security (bandit)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           python-version: ${{ env.PYTHON_DEFAULT }}
@@ -85,7 +85,7 @@ jobs:
       matrix:
         python-version: ["3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Sonar wants full history when this job is the source of coverage
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
@@ -121,7 +121,7 @@ jobs:
     name: docs consistency (ontology / status / public surface)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           python-version: ${{ env.PYTHON_DEFAULT }}
@@ -137,7 +137,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           python-version: ${{ env.PYTHON_DEFAULT }}
@@ -181,7 +181,7 @@ jobs:
     name: skill tests (.claude/skills)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           python-version: ${{ env.PYTHON_DEFAULT }}
@@ -214,7 +214,7 @@ jobs:
         if: env.SONAR_TOKEN == ''
         run: |
           echo "::warning::SONAR_TOKEN secret not configured; skipping SonarCloud scan. See CONTRIBUTING.md."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: env.SONAR_TOKEN != ''
         with:
           fetch-depth: 0

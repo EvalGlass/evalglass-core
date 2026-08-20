@@ -21,7 +21,7 @@ jobs:
     name: Trivy fs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # SARIF upload to the Security tab requires GitHub Advanced Security on
       # private repos. While GHAS is not enabled, we render Trivy's table report
