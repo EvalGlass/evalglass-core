@@ -1,0 +1,4 @@
+{"lane_results": [
+  {"lane": "langfuse", "status": "skipped", "report": "no endpoint configured"},
+  {"lane": "local-jsonl", "status": "ran", "report": "wrote scorecard.json"}
+]}
