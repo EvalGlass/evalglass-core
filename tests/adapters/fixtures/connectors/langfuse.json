@@ -1,0 +1,181 @@
+{
+  "_description": "Langfuse fetch_traces-shaped payload (EG-R0-7; ADR 0034). Native fields map to TraceEnvelope per MAPPING.md. Used by the hermetic Langfuse connector proof (EG-R1-5); no SDK or socket.",
+  "vendor_wrapper_keys": [
+    "meta",
+    "_langfuse_client",
+    "_langfuse_internal"
+  ],
+  "good": {
+    "data": [
+      {
+        "id": "trace-1",
+        "name": "chat",
+        "observations": [
+          {
+            "id": "obs-1",
+            "type": "GENERATION",
+            "model": "gpt-x",
+            "input": [
+              {
+                "role": "user",
+                "content": "hello"
+              }
+            ],
+            "output": "hi there",
+            "startTime": "2026-01-01T00:00:00Z",
+            "endTime": "2026-01-01T00:00:01Z",
+            "usage": {
+              "input": 10,
+              "output": 5
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "vendor_wrapper": {
+    "data": [
+      {
+        "id": "trace-1",
+        "name": "chat",
+        "_langfuse_internal": {
+          "sdk_version": "4.7.1"
+        },
+        "observations": [
+          {
+            "id": "obs-1",
+            "type": "GENERATION",
+            "model": "gpt-x",
+            "input": [
+              {
+                "role": "user",
+                "content": "hello"
+              }
+            ],
+            "output": "hi there",
+            "startTime": "2026-01-01T00:00:00Z",
+            "endTime": "2026-01-01T00:00:01Z",
+            "usage": {
+              "input": 10,
+              "output": 5
+            }
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "page": 1,
+      "totalPages": 1
+    },
+    "_langfuse_client": "<client-object-placeholder>"
+  },
+  "malformed": "{ this is not valid json",
+  "missing_field": {
+    "data": [
+      {
+        "id": "trace-2",
+        "observations": [
+          {
+            "id": "obs-2",
+            "type": "GENERATION"
+          }
+        ]
+      }
+    ]
+  },
+  "empty": {
+    "data": [],
+    "meta": {
+      "page": 1,
+      "totalPages": 1
+    }
+  },
+  "expected": [
+    {
+      "unit": {
+        "unit_id": "obs-1",
+        "kind": "call",
+        "trace_id": "trace-1"
+      },
+      "behavior": {
+        "output": "hi there",
+        "input": [
+          {
+            "role": "user",
+            "content": "hello"
+          }
+        ],
+        "model": "gpt-x",
+        "timing": {
+          "start_time": "2026-01-01T00:00:00Z",
+          "end_time": "2026-01-01T00:00:01Z"
+        }
+      },
+      "metadata": {
+        "usage": {
+          "input": 10,
+          "output": 5
+        },
+        "trace_name": "chat"
+      }
+    }
+  ],
+  "trace_level": {
+    "data": [
+      {
+        "id": "trace-2",
+        "name": "entity-extraction",
+        "sessionId": "INC_x",
+        "observations": [
+          "obs-id-1",
+          "obs-id-2"
+        ],
+        "input": [
+          {
+            "role": "user",
+            "content": "evidence"
+          }
+        ],
+        "output": {
+          "entities": [
+            {
+              "classification": "class-a"
+            }
+          ]
+        },
+        "timestamp": "2026-02-02T00:00:00Z"
+      }
+    ]
+  },
+  "trace_level_expected": [
+    {
+      "unit": {
+        "unit_id": "trace-2",
+        "kind": "call",
+        "trace_id": "trace-2"
+      },
+      "behavior": {
+        "output": {
+          "entities": [
+            {
+              "classification": "class-a"
+            }
+          ]
+        },
+        "input": [
+          {
+            "role": "user",
+            "content": "evidence"
+          }
+        ],
+        "timing": {
+          "start_time": "2026-02-02T00:00:00Z"
+        }
+      },
+      "metadata": {
+        "trace_name": "entity-extraction",
+        "session_id": "INC_x"
+      }
+    }
+  ]
+}

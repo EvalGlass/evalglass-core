@@ -1,0 +1,107 @@
+{
+  "_description": "LangSmith list_runs-shaped payload (EG-R0-7; ADR 0036). Native fields map to TraceEnvelope per MAPPING.md. Used by the hermetic LangSmith connector proof (EG-R3-5); no SDK or socket.",
+  "vendor_wrapper_keys": [
+    "cursors",
+    "_ls_client_session",
+    "_langsmith_run"
+  ],
+  "good": {
+    "runs": [
+      {
+        "id": "run-1",
+        "trace_id": "tr-1",
+        "name": "chain",
+        "run_type": "llm",
+        "inputs": {
+          "input": "q"
+        },
+        "outputs": {
+          "output": "a"
+        },
+        "start_time": "2026-01-01T00:00:00Z",
+        "end_time": "2026-01-01T00:00:01Z",
+        "extra": {
+          "metadata": {
+            "ls_model_name": "m"
+          }
+        }
+      }
+    ]
+  },
+  "vendor_wrapper": {
+    "runs": [
+      {
+        "id": "run-1",
+        "trace_id": "tr-1",
+        "name": "chain",
+        "run_type": "llm",
+        "_langsmith_run": {
+          "dotted_order": "20260101..."
+        },
+        "inputs": {
+          "input": "q"
+        },
+        "outputs": {
+          "output": "a"
+        },
+        "start_time": "2026-01-01T00:00:00Z",
+        "end_time": "2026-01-01T00:00:01Z",
+        "extra": {
+          "metadata": {
+            "ls_model_name": "m"
+          }
+        }
+      }
+    ],
+    "cursors": {
+      "next": null
+    },
+    "_ls_client_session": "<session-object-placeholder>"
+  },
+  "malformed": "{\"runs\": [ truncated",
+  "missing_field": {
+    "runs": [
+      {
+        "id": "run-2",
+        "trace_id": "tr-2",
+        "name": "chain",
+        "run_type": "llm",
+        "inputs": {
+          "input": "q"
+        }
+      }
+    ]
+  },
+  "empty": {
+    "runs": [],
+    "cursors": {
+      "next": null
+    }
+  },
+  "expected": [
+    {
+      "unit": {
+        "unit_id": "run-1",
+        "kind": "call",
+        "trace_id": "tr-1"
+      },
+      "behavior": {
+        "output": {
+          "output": "a"
+        },
+        "input": {
+          "input": "q"
+        },
+        "model": "m",
+        "timing": {
+          "start_time": "2026-01-01T00:00:00Z",
+          "end_time": "2026-01-01T00:00:01Z"
+        }
+      },
+      "metadata": {
+        "run_type": "llm",
+        "trace_name": "chain"
+      }
+    }
+  ]
+}
