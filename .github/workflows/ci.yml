@@ -218,7 +218,7 @@ jobs:
         if: env.SONAR_TOKEN != ''
         with:
           fetch-depth: 0
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         if: env.SONAR_TOKEN != ''
         with:
           name: coverage-3.12
