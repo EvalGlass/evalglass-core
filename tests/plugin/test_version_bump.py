@@ -80,7 +80,7 @@ def test_audit_reports_all_surfaces_and_tag() -> None:
     assert result.returncode == 0, "--audit should exit 0" + _diag(result)
     for path in _EXPECTED_SOURCES:
         assert path in result.stdout, f"--audit output missing surface {path!r}"
-    assert "v0.2.0" in result.stdout, "--audit must report the expected git tag (v<version>)"
+    assert "v0.2.1" in result.stdout, "--audit must report the expected git tag (v<version>)"
 
 
 def test_check_detects_drift_negative_control(tmp_path: Path) -> None:
@@ -100,10 +100,10 @@ def test_check_detects_drift_negative_control(tmp_path: Path) -> None:
 
 
 def test_check_with_matching_expect_passes() -> None:
-    result = _run("--check", "--expect", "0.2.0")
-    assert result.returncode == 0, "--expect 0.2.0 should pass" + _diag(result)
+    result = _run("--check", "--expect", "0.2.1")
+    assert result.returncode == 0, "--expect 0.2.1 should pass" + _diag(result)
 
 
 def test_check_with_mismatched_expect_fails() -> None:
     result = _run("--check", "--expect", "9.9.9")
-    assert result.returncode != 0, "--expect 9.9.9 must fail against a 0.2.0 repo"
+    assert result.returncode != 0, "--expect 9.9.9 must fail against a 0.2.1 repo"
