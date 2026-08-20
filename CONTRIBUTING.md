@@ -57,11 +57,39 @@ The CI matrix maps to the test families CLAUDE.md §17 (Testing Expectations) re
 | `live_lane`             | Opt-in optional-lane smoke tests (excluded from required CI) |
 | `slow`                  | Tests > 1s (excluded from fast pre-push suite)          |
 
+## Continuous integration & required checks
+
+Every pull request to `main` runs the full quality gate. These checks are **required by branch protection** — `main` cannot be merged into until they pass, the branch is up to date, and review conversations are resolved. `main` is linear-history-only, with no direct pushes, force-pushes, or deletions; all changes land through a PR.
+
+**Static analysis & tests** ([`ci.yml`](./.github/workflows/ci.yml)), aggregated behind the single required **`all required checks`** status:
+
+| Check | Tool |
+|-------|------|
+| lint | Ruff (`ruff check` + `ruff format --check`) |
+| typecheck | mypy `--strict` (product **and** both gate skills) |
+| core isolation | `tools/check_core_isolation.py` — the effect-free-core guard |
+| security (static) | Bandit |
+| tests | pytest on **Python 3.12 and 3.13**, with coverage |
+| docs consistency | ontology / status / public-surface snapshots |
+| skill tests | the scan-gate and validator-gate suites |
+| SonarCloud | code-quality scan — **informational** ([ADR 0004](./adrs/0004-sonarcloud-informational.md)); skips cleanly until `SONAR_TOKEN` is configured |
+
+**Supply-chain & secret scanning** (standalone required workflows):
+
+| Check | Tool |
+|-------|------|
+| `TruffleHog (verified secrets only)` | [secret scan](./.github/workflows/secret-scan.yml) — verified-only; the false-positive-prone `lob` detector is excluded |
+| `Trivy fs` | filesystem vulnerability scan |
+| `pip-audit (declared deps)` | dependency CVE audit |
+| `licensecheck (declared deps)` | dependency-license policy |
+
+The **`live lanes`** job is opt-in (manual `workflow_dispatch` only) and never gates a PR. Code ownership is enforced through [`CODEOWNERS`](./.github/CODEOWNERS): the architectural seams (core, Verdict Engine, isolation gate, CI config) require `@EvalGlass/maintainers` review.
+
 ## Required secrets
 
 CI requires the following repository secrets to be set:
 
-- `SONAR_TOKEN` — SonarCloud project token (Settings → Secrets and variables → Actions). Without it, the `sonar` job is skipped (warning, not failure).
+- `SONAR_TOKEN` — SonarCloud project token (Settings → Secrets and variables → Actions). Without it, the `sonar` job is skipped (warning, not failure) and SonarCloud stays informational.
 
 No other third-party secrets are required — the framework is local-first and the required test tier makes no network calls.
 
