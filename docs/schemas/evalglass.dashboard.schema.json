@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evalglass.com/schemas/evalglass.dashboard/1",
+  "title": "EvalGlass dashboard projection",
+  "description": "A typed, score-neutral view model (evalglass.dashboard/1) projected from the primary Scorecard/RunRecord plus host display metadata (ADR 0060). The renderer copies these facts; it computes no score, verdict, authority, gate, or delta. Consumers ignore unknown additive fields.",
+  "type": "object",
+  "required": ["schema", "run", "verdict", "authority", "comparison", "summary", "metrics"],
+  "properties": {
+    "schema": {"const": "evalglass.dashboard/1"},
+    "run": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "generated_at": {"type": "string"},
+        "application": {"type": "string"},
+        "source_label": {"type": "string"}
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "required": ["state", "ci_should_fail"],
+      "properties": {
+        "state": {"enum": ["informational", "pass", "fail", "blocked"]},
+        "description": {"type": "string"},
+        "ci_should_fail": {"type": "boolean"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["active_gates"],
+      "properties": {
+        "dataset": {"type": "string"},
+        "thresholds": {"type": "string"},
+        "judges": {"type": "string"},
+        "active_gates": {"type": "integer", "minimum": 0}
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "required": ["state", "changed_dimensions"],
+      "properties": {
+        "state": {"enum": ["comparable", "not_comparable", "missing_baseline", "comparison_not_requested"]},
+        "baseline_run_id": {"type": "string"},
+        "shared_examples": {"type": "integer"},
+        "changed_dimensions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "metrics_total": {"type": "integer"},
+        "metrics_scored": {"type": "integer"},
+        "examples": {"type": "integer"},
+        "call_scores": {"type": "integer"},
+        "diagnostics": {"type": "integer"}
+      }
+    },
+    "history": {
+      "type": "array",
+      "description": "Descriptive coverage history only (never a regression claim).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "generated_at": {"type": "string"},
+          "evaluability": {"type": ["number", "null"]},
+          "examples": {"type": "integer"}
+        }
+      }
+    },
+    "composite": {"type": "object", "description": "A host-declared, versioned overall score (the only licensed mean)."},
+    "metrics": {"type": "array", "items": {"$ref": "#/$defs/metric"}}
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "required": ["name", "label", "workflow", "tier", "status", "value", "population", "authority", "gate", "comparison"],
+      "properties": {
+        "name": {"type": "string"},
+        "label": {"type": "string"},
+        "description": {"type": "string"},
+        "workflow": {"type": "string"},
+        "tier": {"type": "string"},
+        "direction": {"type": "string"},
+        "status": {"enum": ["scored", "blocked", "non_evaluable", "skipped", "error"]},
+        "validity": {"type": "string"},
+        "value": {
+          "type": ["number", "null"],
+          "description": "Present (numeric) only for a scored, valid metric; null otherwise — never a substituted 0."
+        },
+        "aggregation": {"type": "string"},
+        "n": {"type": "integer"},
+        "interval": {
+          "type": ["object", "null"],
+          "properties": {
+            "lower": {"type": "number"},
+            "upper": {"type": "number"},
+            "level": {"type": "number"},
+            "method": {"type": "string"}
+          }
+        },
+        "population": {"type": "object"},
+        "authority": {
+          "type": "object",
+          "required": ["level", "can_gate", "reasons"],
+          "properties": {
+            "level": {"type": "string"},
+            "can_gate": {"type": "boolean"},
+            "reasons": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "gate": {
+          "type": "object",
+          "required": ["state"],
+          "properties": {
+            "state": {"enum": ["informational", "pass", "fail", "blocked"]},
+            "threshold": {"type": ["number", "null"]},
+            "decision_statistic": {"type": ["string", "null"]}
+          }
+        },
+        "comparison": {
+          "type": "object",
+          "required": ["state", "delta", "direction_adjusted_delta", "outcome"],
+          "properties": {
+            "state": {"type": "string"},
+            "delta": {
+              "type": ["number", "null"],
+              "description": "Present only for a comparable paired comparison."
+            },
+            "direction_adjusted_delta": {"type": ["number", "null"]},
+            "interval": {"type": ["object", "null"]},
+            "outcome": {"type": "string"},
+            "shared_examples": {"type": "integer"}
+          }
+        },
+        "diagnostics": {"type": "array"},
+        "calls": {"type": "array"},
+        "calls_omitted": {"type": "integer"},
+        "judge": {"type": ["object", "null"]},
+        "attention": {"type": "object"},
+        "links": {"type": "object"},
+        "order": {"type": "integer"}
+      }
+    }
+  }
+}

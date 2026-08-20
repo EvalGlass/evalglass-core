@@ -1,0 +1,5550 @@
+{
+  "ontology": "evalglass",
+  "version": "0.1.0",
+  "generated": "see git history",
+  "about": "Formal taxonomy/ontology of EvalGlass as portrayed by its website + documentation, built for later cross-checking and reconciliation against the EvalGlass/evalglass-core framework repo. Every entity is verification:asserted|conceptual — NOT yet verified against code.",
+  "meta": {
+    "classes": {
+      "Layer": {
+        "prefix": "layer",
+        "desc": "A top-level architectural layer of the product."
+      },
+      "Actor": {
+        "prefix": "actor",
+        "desc": "A human or machine role that participates in the system."
+      },
+      "Port": {
+        "prefix": "port",
+        "desc": "A typed effect-seam (typing.Protocol). Exactly six; the lane contract."
+      },
+      "Component": {
+        "prefix": "comp",
+        "desc": "A code/runtime unit. kind ∈ {engine-fn, protocol, harness-unit, adapter, surface, service, evaluator}."
+      },
+      "Contract": {
+        "prefix": "ctr",
+        "desc": "A typed in-memory data structure (dataclass / schema) passed between components."
+      },
+      "Artifact": {
+        "prefix": "art",
+        "desc": "An on-disk file or persisted output the system reads or writes."
+      },
+      "Enum": {
+        "prefix": "enum",
+        "desc": "A closed enumeration the engine speaks."
+      },
+      "EnumValue": {
+        "prefix": "enumval",
+        "desc": "A single member of a closed enumeration."
+      },
+      "Verb": {
+        "prefix": "verb",
+        "desc": "An operator-surface command (a /evalglass verb)."
+      },
+      "Concept": {
+        "prefix": "con",
+        "desc": "A design/trust primitive that is not a single code symbol."
+      },
+      "Invariant": {
+        "prefix": "inv",
+        "desc": "A testable guarantee or rule the system maintains."
+      },
+      "Process": {
+        "prefix": "proc",
+        "desc": "An ordered workflow / pipeline."
+      },
+      "ProcessStep": {
+        "prefix": "step",
+        "desc": "A stage within a Process."
+      },
+      "Extension": {
+        "prefix": "ext",
+        "desc": "An optional, opt-in, deletable lane that attaches via a Port."
+      },
+      "ADR": {
+        "prefix": "adr",
+        "desc": "An architecture decision record the docs cite as authority."
+      }
+    },
+    "predicates": {
+      "partOf": {
+        "domain": [
+          "Component",
+          "Port",
+          "Contract",
+          "Artifact",
+          "Enum",
+          "Verb",
+          "Process",
+          "ProcessStep",
+          "Extension",
+          "Invariant",
+          "Concept",
+          "Actor"
+        ],
+        "range": [
+          "Layer",
+          "Process",
+          "Component"
+        ],
+        "desc": "structural membership / containment"
+      },
+      "dependsOn": {
+        "domain": [
+          "Component",
+          "Verb",
+          "Extension",
+          "Process"
+        ],
+        "range": [
+          "Component",
+          "Port",
+          "Contract",
+          "Artifact",
+          "Enum"
+        ],
+        "desc": "runtime dependency"
+      },
+      "produces": {
+        "domain": [
+          "Component",
+          "Verb",
+          "Process",
+          "Extension"
+        ],
+        "range": [
+          "Artifact",
+          "Contract"
+        ],
+        "desc": "emits as output"
+      },
+      "consumes": {
+        "domain": [
+          "Component",
+          "Verb",
+          "Process"
+        ],
+        "range": [
+          "Artifact",
+          "Contract",
+          "Enum"
+        ],
+        "desc": "reads as input"
+      },
+      "implements": {
+        "domain": [
+          "Component"
+        ],
+        "range": [
+          "Port"
+        ],
+        "desc": "concrete adapter of a port protocol"
+      },
+      "attachesVia": {
+        "domain": [
+          "Extension"
+        ],
+        "range": [
+          "Port"
+        ],
+        "desc": "the port a lane plugs into"
+      },
+      "governs": {
+        "domain": [
+          "Concept",
+          "Invariant",
+          "ADR",
+          "Component"
+        ],
+        "range": [
+          "Component",
+          "Process",
+          "Artifact",
+          "Contract",
+          "Extension",
+          "Verb",
+          "Port",
+          "Layer"
+        ],
+        "desc": "constrains / regulates"
+      },
+      "enforces": {
+        "domain": [
+          "Component",
+          "Invariant",
+          "Process",
+          "Verb"
+        ],
+        "range": [
+          "Invariant",
+          "Concept"
+        ],
+        "desc": "makes a rule hold"
+      },
+      "specifiedBy": {
+        "domain": [
+          "Component",
+          "Contract",
+          "Process",
+          "Invariant",
+          "Concept",
+          "Enum"
+        ],
+        "range": [
+          "ADR"
+        ],
+        "desc": "traceable to a decision record"
+      },
+      "precedes": {
+        "domain": [
+          "ProcessStep"
+        ],
+        "range": [
+          "ProcessStep"
+        ],
+        "desc": "ordering within a process"
+      },
+      "performedBy": {
+        "domain": [
+          "ProcessStep",
+          "Process"
+        ],
+        "range": [
+          "Actor"
+        ],
+        "desc": "the actor that acts"
+      },
+      "hasValue": {
+        "domain": [
+          "Enum"
+        ],
+        "range": [
+          "EnumValue"
+        ],
+        "desc": "membership of a closed enumeration"
+      },
+      "typedBy": {
+        "domain": [
+          "Artifact",
+          "Contract"
+        ],
+        "range": [
+          "Contract",
+          "Enum"
+        ],
+        "desc": "the schema/enum that types this"
+      },
+      "exposes": {
+        "domain": [
+          "Component"
+        ],
+        "range": [
+          "Verb"
+        ],
+        "desc": "a surface exposes a verb"
+      },
+      "invokes": {
+        "domain": [
+          "Verb",
+          "ProcessStep"
+        ],
+        "range": [
+          "Component",
+          "Process"
+        ],
+        "desc": "triggers execution of"
+      }
+    },
+    "status": [
+      "now",
+      "next",
+      "planned",
+      "experimental"
+    ],
+    "verification": [
+      "asserted",
+      "conceptual"
+    ],
+    "idScheme": "<class-prefix>.<kebab-slug>; enum values: enumval.<enum-slug>.<value-slug>"
+  },
+  "stats": {
+    "entities": 232,
+    "relations": 377,
+    "byClass": {
+      "Layer": 9,
+      "Actor": 6,
+      "Port": 6,
+      "Component": 33,
+      "Contract": 17,
+      "Artifact": 13,
+      "Enum": 14,
+      "EnumValue": 55,
+      "Verb": 11,
+      "Concept": 16,
+      "Invariant": 13,
+      "Process": 7,
+      "ProcessStep": 18,
+      "Extension": 9,
+      "ADR": 5
+    }
+  },
+  "entities": [
+    {
+      "id": "actor.ci",
+      "class": "Actor",
+      "kind": null,
+      "label": "CI",
+      "definition": "The continuous-integration runner that acts on ci_should_fail / the exit code only.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/ci"
+      ],
+      "notes": null
+    },
+    {
+      "id": "actor.coding-agent",
+      "class": "Actor",
+      "kind": null,
+      "label": "Coding Agent",
+      "definition": "The AI coding agent (Claude Code / Codex) that operates EvalGlass as a typist and reader.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview",
+        "/how-it-works"
+      ],
+      "notes": null
+    },
+    {
+      "id": "actor.developer",
+      "class": "Actor",
+      "kind": null,
+      "label": "Developer",
+      "definition": "The human building the AI/agentic application and the only party that can grant gating authority.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "actor.host",
+      "class": "Actor",
+      "kind": null,
+      "label": "Host",
+      "definition": "The repo/project that owns the truth: datasets, thresholds, calibration, approvals.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/host-ownership"
+      ],
+      "notes": null
+    },
+    {
+      "id": "actor.reviewer",
+      "class": "Actor",
+      "kind": null,
+      "label": "Reviewer",
+      "definition": "The human who signs a validation_record or calibration, converting evidence into authority.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/annotation-workflow",
+        "/docs/calibration"
+      ],
+      "notes": null
+    },
+    {
+      "id": "actor.vendored-runtime",
+      "class": "Actor",
+      "kind": null,
+      "label": "Vendored Runtime",
+      "definition": "The managed code under evals/_evalglass/ that actually runs the evaluation and decides the verdict.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/run",
+        "/docs/reference/vendoring"
+      ],
+      "notes": null
+    },
+    {
+      "id": "adr.0005",
+      "class": "ADR",
+      "kind": null,
+      "label": "ADR 0005 — Config / authority-safe defaults",
+      "definition": "An under-specified metric is forced to informational+proposed by the Config Loader.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/adr-index"
+      ],
+      "notes": null
+    },
+    {
+      "id": "adr.0008",
+      "class": "ADR",
+      "kind": null,
+      "label": "ADR 0008 — Verdict Engine",
+      "definition": "The single decide_verdict path and precedence; VerdictPayload re-derivation.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/adr-index"
+      ],
+      "notes": null
+    },
+    {
+      "id": "adr.0009",
+      "class": "ADR",
+      "kind": null,
+      "label": "ADR 0009 — Provenance fingerprint",
+      "definition": "Ten dimensions, six gating; fail-closed comparability.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/adr-index"
+      ],
+      "notes": null
+    },
+    {
+      "id": "adr.0021",
+      "class": "ADR",
+      "kind": null,
+      "label": "ADR 0021 — Evidence approval",
+      "definition": "Synthetic forced proposed; self-approval forbidden.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/adr-index"
+      ],
+      "notes": null
+    },
+    {
+      "id": "adr.0025",
+      "class": "ADR",
+      "kind": null,
+      "label": "ADR 0025 — Evidence approval (cont.)",
+      "definition": "Annotation validation_record + benchmark self-approval rules.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/adr-index"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.authority-json",
+      "class": "Artifact",
+      "kind": "governance",
+      "label": "authority.json",
+      "definition": "Host-owned typed root of gating authority; empty on fresh install; no agent command can modify it.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/docs/promote-a-gate"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.baselines-main",
+      "class": "Artifact",
+      "kind": "host-data",
+      "label": "baselines/main.json",
+      "definition": "Explicitly promoted baseline with gating-dimension fingerprints; written only by baseline update.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/baselines"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.ci-workflow",
+      "class": "Artifact",
+      "kind": "managed",
+      "label": "CI workflow file",
+      "definition": "Scaffolded GitHub Actions workflow that bundles the vendored runtime and exits on ci_should_fail; adds no verdict logic.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/ci",
+        "/use-cases/ci"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.datasets",
+      "class": "Artifact",
+      "kind": "host-data",
+      "label": "datasets/ (JSONL gold)",
+      "definition": "Host-owned examples with proposed/validated status backing reference metrics.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/datasets"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.evalglass-yaml",
+      "class": "Artifact",
+      "kind": "host-config",
+      "label": "evalglass.yaml",
+      "definition": "Host-owned config parsed into RuntimeConfig; authority-safe by construction.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/config",
+        "/docs/reference/runtime/runtime-harness/config"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.extension-lane-meta",
+      "class": "Artifact",
+      "kind": "managed",
+      "label": "ExtensionLane metadata",
+      "definition": "Declarative manifest (name, port, module, deletion_rule, prerequisites); no code imported until LaneRegistry.resolve().",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/extension-lanes"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.honesty-charter",
+      "class": "Artifact",
+      "kind": "governance",
+      "label": "Honesty Charter",
+      "definition": "Public covenant (dated 2 Jun 2026) refusing fabricated trust signals; binds the site to the engine's standard.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/honesty"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.report-md",
+      "class": "Artifact",
+      "kind": "output",
+      "label": "report.md / CI annotations",
+      "definition": "Human-readable and GitHub-annotation renderings of the Scorecard; never authoritative.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/reports"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.runrecord-json",
+      "class": "Artifact",
+      "kind": "output",
+      "label": "runrecord.json",
+      "definition": "The complete reproducible record persisted alongside the scorecard.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runrecord"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.scorecard-json",
+      "class": "Artifact",
+      "kind": "output",
+      "label": "scorecard.json",
+      "definition": "The sole authoritative output; all renderings derive from it without recomputing the verdict.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/scorecards",
+        "/docs/reference/scorecard-json"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.traces",
+      "class": "Artifact",
+      "kind": "host-data",
+      "label": "traces/ (exported behavior)",
+      "definition": "Host-owned exported OTel/OpenInference/local JSON traces normalized via connect; no SDK/network on the required path.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/traces",
+        "/docs/connectors"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.vendor-manifest",
+      "class": "Artifact",
+      "kind": "managed",
+      "label": "vendor-manifest.json + evalglass.lock",
+      "definition": "Managed-file registry (content/tree hashes) + version lock enabling safe, auditable revendor and host-patch detection.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/vendoring",
+        "/docs/revendor-safely"
+      ],
+      "notes": null
+    },
+    {
+      "id": "art.vendored-runtime",
+      "class": "Artifact",
+      "kind": "managed",
+      "label": "evals/_evalglass/ (vendored runtime)",
+      "definition": "The sealed managed Core+Harness+adapters under version control; deletion-invariant; identical across runtimes.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass",
+      "evidence": [
+        "/docs/reference/vendoring/host-layout",
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.adapter-fake-judge",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "FakeJudgeModel",
+      "definition": "The deterministic judge on the required path — no keys, no network.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/adapters/judge_fake.py::FakeJudgeModel",
+      "evidence": [
+        "/docs/judges",
+        "/docs/reference/runtime/runtime-harness/judges"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.adapter-filesystem-store",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "Filesystem ResultStore",
+      "definition": "Persists scorecard.json / runrecord.json to disk.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/ports-and-adapters",
+        "/docs/reference/runtime/integrations"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.adapter-local-jsonl",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "LocalJsonl DatasetStore",
+      "definition": "Reads host-owned JSONL gold datasets at the edge.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/ports-and-adapters",
+        "/docs/reference/runtime/integrations"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.adapter-local-jsonl-trace",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "LocalJsonlTraceSource",
+      "definition": "Reads host-owned exported traces from local JSONL at the edge.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/integrations",
+        "/docs/traces"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.adapter-markdown-sink",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "Markdown / Terminal / CI-annotation sinks",
+      "definition": "Render the Scorecard without recomputing the verdict.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/reports"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.adapter-open-convention-trace",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "OpenConventionTraceSource",
+      "definition": "Maps the open-convention (OpenTelemetry/OpenInference) exported-trace shape to Examples.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/integrations",
+        "/docs/connectors"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.adapter-subprocess",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "Subprocess TaskRunner",
+      "definition": "Replays the subject app via subprocess to produce outputs.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/ports-and-adapters",
+        "/docs/reference/runtime/integrations"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.aggregate",
+      "class": "Component",
+      "kind": "engine-fn",
+      "label": "aggregate",
+      "definition": "Reduces only scored+valid Scores; excluded statuses counted but excluded from the math; empty metric is null; excluded_count>0 blocks an active gate.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/aggregation.py::aggregate",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/aggregation",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.claude-plugin",
+      "class": "Component",
+      "kind": "surface",
+      "label": "Claude Code plugin",
+      "definition": "Primary agent-facing operator surface exposing the /evalglass verbs; scaffolds and runs, grants no authority.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands",
+        "/get-plugin"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.codex-runtime",
+      "class": "Component",
+      "kind": "surface",
+      "label": "Codex second runtime (packaging)",
+      "definition": "Same canonical skills tree via a thin .codex-plugin manifest; single-source packaging and runtime independence proven (verdicts byte-identical). The runtime support is real now; the PUBLIC marketplace listing is a separate, not-yet-published step — see comp.public-codex-listing.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/codex"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.config-loader",
+      "class": "Component",
+      "kind": "harness-unit",
+      "label": "Config Loader",
+      "definition": "Parses evalglass.yaml into typed RuntimeConfig; fail-closed; authority-safe defaults force an under-specified metric to informational+proposed.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/config.py",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/config",
+        "/docs/config"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.decide-verdict",
+      "class": "Component",
+      "kind": "engine-fn",
+      "label": "decide_verdict / Verdict Engine",
+      "definition": "The single verdict path turning authority + measurement into one of informational/pass/fail/blocked; precedence blocked > fail > pass > informational.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/verdict.py::decide_verdict",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/verdict-engine",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.direct-cli",
+      "class": "Component",
+      "kind": "surface",
+      "label": "Direct vendoring CLI",
+      "definition": "Plugin-optional install/run path (python -m _evalglass.harness.cli run) producing byte-identical artifacts.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/cli.py",
+      "evidence": [
+        "/docs/install",
+        "/docs/local-first-workflow"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.eval-exact-match",
+      "class": "Component",
+      "kind": "evaluator",
+      "label": "exact-match evaluator",
+      "definition": "Built-in: compares output to host gold for exact equality.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.eval-field-presence",
+      "class": "Component",
+      "kind": "evaluator",
+      "label": "field-presence evaluator",
+      "definition": "Built-in: required-field presence on the output.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.eval-judge-score",
+      "class": "Component",
+      "kind": "evaluator",
+      "label": "judge-score evaluator",
+      "definition": "Built-in: turns judge evidence into a score (informational until calibrated).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/judges"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.eval-set-overlap",
+      "class": "Component",
+      "kind": "evaluator",
+      "label": "set-overlap evaluator",
+      "definition": "Built-in: set overlap of output vs gold.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.eval-structural-shape",
+      "class": "Component",
+      "kind": "evaluator",
+      "label": "structural-shape evaluator",
+      "definition": "Built-in: structural conformance of the output.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.eval-trajectory-shape",
+      "class": "Component",
+      "kind": "evaluator",
+      "label": "trajectory-shape evaluator",
+      "definition": "Built-in: inspects the agent trajectory/trace shape.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/traces",
+        "/use-cases/trace-analysis"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.evaluator-protocol",
+      "class": "Component",
+      "kind": "protocol",
+      "label": "Evaluator protocol",
+      "definition": "Produces Score/ScoreBatch from Example+EvidenceBundle. Returns non_evaluable, never 0.0.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/evaluators.py::Evaluator",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/contracts",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.exit-mapper",
+      "class": "Component",
+      "kind": "harness-unit",
+      "label": "Exit Mapper",
+      "definition": "Fixed lookup verdict→exit class: 0 (pass/informational), 1 (fail/blocked), 2 (infrastructure error only). Never fabricates a verdict.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/exits.py",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/reports",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.exported-trace-connector",
+      "class": "Component",
+      "kind": "adapter",
+      "label": "Exported-trace connector",
+      "definition": "Maps exported OpenTelemetry / OpenInference / local JSON traces to Examples at the edge; no SDK, no network on the required path. The shipped \"now\" connector.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/connectors",
+        "/docs/traces"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.fingerprint-dimension",
+      "class": "Component",
+      "kind": "engine-fn",
+      "label": "fingerprint_dimension",
+      "definition": "Computes the ten provenance dimension hashes (six gating); fail-closed comparability (absent dimension = changed).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/provenance.py::fingerprint_dimension",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/provenance-baselines",
+        "/docs/reference/trust-model/provenance"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.harness-cli",
+      "class": "Component",
+      "kind": "harness-unit",
+      "label": "Harness CLI (argparse)",
+      "definition": "Two commands (run, baseline update); maps the core verdict to an exit class; IO failure becomes an infrastructure error, never a quality verdict.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/cli.py",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/cli",
+        "/docs/reference/cli"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.installer",
+      "class": "Component",
+      "kind": "service",
+      "label": "EvalGlass Skill / Installer",
+      "definition": "discover/plan/install/revendor; vendors the managed runtime with manifest+lock; scaffolds proposed assets; host-patch guard.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install",
+        "/docs/revendor-safely"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.judge-collection",
+      "class": "Component",
+      "kind": "harness-unit",
+      "label": "Judge Collection & Calibration",
+      "definition": "Policy-aware judge evidence collection; FakeJudgeModel is the deterministic required path; a host CalibrationRecord lifts a judge to gating-eligible.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/judge.py",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/judges",
+        "/docs/judges",
+        "/docs/calibration"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.lane-registry",
+      "class": "Component",
+      "kind": "harness-unit",
+      "label": "Extension Lanes framework / LaneRegistry",
+      "definition": "Metadata-only, lazy-imported lane system attaching via the six ports; lanes return LaneResult + evidence only. The framework surface ships now; individual convenience lanes keep their own statuses.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/lanes.py",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/extension-lanes",
+        "/docs/reference/trust-model/extension-lanes"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.per-source-function-mapping",
+      "class": "Component",
+      "kind": "engine-fn",
+      "label": "Per-source-function score mapping",
+      "definition": "Future grouping of scores back to the producing call site; needs trace↔call-site correlation, deliberately not yet invented. The per-call --by-call view ships now and is NOT per-function grouping.",
+      "status": "planned",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/scorecards",
+        "/docs/reference/scorecard-json"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.public-codex-listing",
+      "class": "Component",
+      "kind": "surface",
+      "label": "Public Codex marketplace listing",
+      "definition": "The maintainer publication step (cross-repo sync PR + acceptance probe). NOT yet published — the /docs/codex page states a public Codex listing is not yet available.",
+      "status": "next",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/codex"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.report-sinks",
+      "class": "Component",
+      "kind": "harness-unit",
+      "label": "Report Sinks",
+      "definition": "Markdown/Terminal/CiAnnotation renderings of the immutable Scorecard; verdict read from scorecard.verdict, never recomputed; sinks do no I/O.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/report.py",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/reports"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.resolve-authority",
+      "class": "Component",
+      "kind": "engine-fn",
+      "label": "resolve_authority",
+      "definition": "Fail-closed three-stage authority ladder (resolve_authority(AuthorityInputs) → ResolvedAuthority) emitting typed reason codes; the data-policy hard gate accepts only {permitted, redacted}.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/authority.py::resolve_authority",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/authority-resolution",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.run-evaluation",
+      "class": "Component",
+      "kind": "engine-fn",
+      "label": "run_evaluation",
+      "definition": "Core composition entry point; validates scores, resolves comparability then authority, calls decide_verdict exactly once, packs the RunRecord.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/engine.py::run_evaluation",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/run-evaluation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "comp.runner",
+      "class": "Component",
+      "kind": "harness-unit",
+      "label": "Runner (composition root)",
+      "definition": "Converges the six ports into one Example spine (TraceEnvelope→EvalUnit→Example); enforces the trust properties; calls run_evaluation exactly once with typed Examples only.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/runner.py",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/runner",
+        "/docs/reference/trust-model/input-convergence"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.ahead-of-code",
+      "class": "Concept",
+      "kind": null,
+      "label": "Site & docs lead the code",
+      "definition": "Future-facing capability is allowed only when badged and never shown executing; the badge and the example must agree.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/roadmap",
+        "/honesty"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.capability-not-authority",
+      "class": "Concept",
+      "kind": null,
+      "label": "Capability is not authority",
+      "definition": "A feature being present never means a run gates on it; only a host-owned record confers gating power. A fresh install gates nothing.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.claim-boundary",
+      "class": "Concept",
+      "kind": null,
+      "label": "Claim boundary",
+      "definition": "What a Scorecard can and cannot prove: it licenses only what it checked — evidence, authority, calibration, comparability, measured scope — never proof the output is correct.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/claim-boundary"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.datapolicy-hard-gate",
+      "class": "Concept",
+      "kind": null,
+      "label": "DataPolicy hard gate",
+      "definition": "The accepted egress set is exactly {permitted, redacted}; any other value blocks an otherwise-authorized gate. Checked egress-before-effects.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/security"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.deletion-invariance",
+      "class": "Concept",
+      "kind": null,
+      "label": "Deletion-invariance",
+      "definition": "Removing the plugin, agent, or any optional lane leaves the required suite green and verdicts byte-identical.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/extension-lanes",
+        "/local-first"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.evidence-approval-governance",
+      "class": "Concept",
+      "kind": null,
+      "label": "Evidence Approval governance",
+      "definition": "In-code rules preventing self-approval: synthetic forced proposed, annotations need a signed validation_record, benchmarks cannot self-approve.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/evidence-approval",
+        "/docs/reference/runtime/runtime-harness/evidence-approval"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.host-owned-authority",
+      "class": "Concept",
+      "kind": null,
+      "label": "Host-owned authority",
+      "definition": "Gating power originates only from host-owned records; the framework reads them, never writes its own gold or approves its own thresholds.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/host-ownership",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.local-first",
+      "class": "Concept",
+      "kind": null,
+      "label": "Local-first",
+      "definition": "Runs on the developer's machine and in CI — no hosted platform, no API keys, no telemetry; the repo stays the source of truth.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/local-first",
+        "/docs/local-first-workflow"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.measurement-state",
+      "class": "Concept",
+      "kind": null,
+      "label": "Measurement state",
+      "definition": "Status (does a number exist?) is orthogonal to validity (can it be trusted?); only scored+valid enters aggregation.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.no-false-confidence",
+      "class": "Concept",
+      "kind": null,
+      "label": "No false confidence / no false green",
+      "definition": "A run reports only what it actually measured given the host's evidence and authority — never more correctness, safety, certification, comparability, or calibration than it has earned.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/honesty",
+        "/no-false-green"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.no-zero-rule",
+      "class": "Concept",
+      "kind": null,
+      "label": "No-0.0 rule",
+      "definition": "A missing/untrusted measurement is recorded as null with a Diagnostic, never coerced to 0.0; Score rejects NaN/±inf/bool.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/score-semantics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.runtime-independence",
+      "class": "Concept",
+      "kind": null,
+      "label": "Runtime independence",
+      "definition": "The verdict depends only on host config and evidence, so removing either plugin (Claude or Codex) yields byte-identical verdicts.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/codex",
+        "/docs/local-first-workflow"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.status-taxonomy",
+      "class": "Concept",
+      "kind": null,
+      "label": "Four-state status taxonomy",
+      "definition": "now / next / planned / experimental — the spine that keeps the deliberately-ahead-of-code site honest.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/roadmap",
+        "/docs/reference/trust-model/status"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.system-boundary",
+      "class": "Concept",
+      "kind": null,
+      "label": "System boundary",
+      "definition": "Four ownership layers give exactly one place to decide a verdict and prevent authority leaking into the framework.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/system-boundary"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.three-stage-ladder",
+      "class": "Concept",
+      "kind": null,
+      "label": "Three-stage authority ladder",
+      "definition": "Fail-closed per-metric resolution: not-authorized→informational; authorized-but-unsound→blocked; fully-authorized→can_gate. Typed reason codes.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/authority-resolution"
+      ],
+      "notes": null
+    },
+    {
+      "id": "con.worst-source-authority",
+      "class": "Concept",
+      "kind": null,
+      "label": "Worst-source authority",
+      "definition": "Across multiple inputs the weakest dataset status and least-permissive policy win, so a strong source cannot mask a weak one.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.aggregated-metric",
+      "class": "Contract",
+      "kind": null,
+      "label": "AggregatedMetric",
+      "definition": "The reduced value + included_count + status_counts for one metric; empty is null, never 0.0.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/aggregation.py::AggregatedMetric",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/aggregation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.calibration-record",
+      "class": "Contract",
+      "kind": null,
+      "label": "CalibrationRecord",
+      "definition": "Host-signed judge calibration (approver, rationale, variance over ≥2 runs) that lifts a judge to gating-eligible.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/calibration.py::CalibrationRecord",
+      "evidence": [
+        "/docs/calibration",
+        "/docs/judges"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.comparable-run-fingerprint",
+      "class": "Contract",
+      "kind": null,
+      "label": "ComparableRunFingerprint",
+      "definition": "The gating-dimension subset used for fail-closed baseline comparability.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/provenance.py::ComparableRunFingerprint",
+      "evidence": [
+        "/docs/reference/trust-model/baseline-comparability"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.diagnostic",
+      "class": "Contract",
+      "kind": null,
+      "label": "Diagnostic",
+      "definition": "Structured reason on every non-perfect result (code, severity, message, location, cause, evidence_refs). Never silent.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/diagnostics",
+        "/docs/explain-a-result"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.eval-unit",
+      "class": "Contract",
+      "kind": null,
+      "label": "EvalUnit",
+      "definition": "Intermediate convergence unit between a raw trace and an Example.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/evalunit"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.evidence-bundle",
+      "class": "Contract",
+      "kind": null,
+      "label": "EvidenceBundle",
+      "definition": "Typed effect-seam data evaluators consume; built by the Runner, vendor objects dropped at the edge.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/contracts",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.example",
+      "class": "Contract",
+      "kind": null,
+      "label": "Example",
+      "definition": "The converged unit of evaluation the Core sees (input/output/expected/evidence).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/input-convergence",
+        "/docs/reference/trust-model/evalunit"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.lane-result",
+      "class": "Contract",
+      "kind": null,
+      "label": "LaneResult",
+      "definition": "An extension lane's outcome (ran/skipped/blocked) + evidence/diagnostics — never authority or a verdict.",
+      "status": "next",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/extension-lanes"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.resolved-authority",
+      "class": "Contract",
+      "kind": null,
+      "label": "ResolvedAuthority",
+      "definition": "Per-metric authority outcome (can_gate, level, typed reason codes) from the three-stage ladder.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/authority.py::ResolvedAuthority",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/authority-resolution"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.run-fingerprint",
+      "class": "Contract",
+      "kind": null,
+      "label": "RunFingerprint",
+      "definition": "Ten SHA-256 dimension hashes; the six gating dimensions decide comparability.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/provenance.py::RunFingerprint",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/provenance-baselines",
+        "/docs/reference/trust-model/provenance"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.run-record",
+      "class": "Contract",
+      "kind": null,
+      "label": "RunRecord",
+      "definition": "The complete reproducible record: run_id, embedded scorecard, all per-example Scores, RunFingerprint, comparability. Round-trips or refuses malformed input.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/results.py::RunRecord",
+      "evidence": [
+        "/docs/reference/runrecord",
+        "/docs/reference/runtime/evaluation-core/runrecord"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.runtime-config",
+      "class": "Contract",
+      "kind": null,
+      "label": "RuntimeConfig",
+      "definition": "The typed parse of evalglass.yaml: metrics, datasets, traces, judges, thresholds, baseline, metric_status, threshold_approval.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/harness/config.py::RuntimeConfig",
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/config",
+        "/docs/config"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.score",
+      "class": "Contract",
+      "kind": null,
+      "label": "Score / ScoreBatch",
+      "definition": "Per-example result separating status from validity; enforces the no-0.0 rule; rejects NaN/inf/bool. Carries optional example_id/unit_id provenance.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/scores.py::Score",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/score-semantics",
+        "/docs/reference/trust-model/measurement-state"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.scorecard",
+      "class": "Contract",
+      "kind": null,
+      "label": "Scorecard",
+      "definition": "The authoritative bounded-claim structure: VerdictPayload, ci_should_fail, per-metric value/status_counts + ResolvedAuthority, baseline_state, diagnostics.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/results.py::Scorecard",
+      "evidence": [
+        "/docs/scorecards",
+        "/docs/reference/scorecard-json"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.trace-envelope",
+      "class": "Contract",
+      "kind": null,
+      "label": "TraceEnvelope",
+      "definition": "The normalized exported-trace wrapper the Runner converges into EvalUnits.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/traces",
+        "/docs/reference/trust-model/input-convergence"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.validation-record",
+      "class": "Contract",
+      "kind": null,
+      "label": "validation_record",
+      "definition": "Reviewer-signed record that converts informational annotation evidence into authority evidence.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/annotation-workflow",
+        "/docs/reference/trust-model/evidence-approval"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ctr.verdict-payload",
+      "class": "Contract",
+      "kind": null,
+      "label": "VerdictPayload",
+      "definition": "Complete verdict with passed/failed/blocked/informational gate lists; re-derives itself in __post_init__ and fails closed on tampering.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/verdict.py::VerdictPayload",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/verdict-engine",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.authority",
+      "class": "Enum",
+      "kind": null,
+      "label": "Authority",
+      "definition": "The per-metric outcome of the three-stage authority ladder.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/docs/reference/runtime/evaluation-core/authority-resolution"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.baseline-state",
+      "class": "Enum",
+      "kind": null,
+      "label": "BaselineState",
+      "definition": "The typed comparability claim.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/baseline-comparability"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.data-policy",
+      "class": "Enum",
+      "kind": null,
+      "label": "DataPolicy",
+      "definition": "The egress data policy on an authority input; the hard gate accepts only {permitted, redacted} — any other value blocks an otherwise-authorized gate.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.dataset-status",
+      "class": "Enum",
+      "kind": null,
+      "label": "DatasetStatus",
+      "definition": "The dataset asset state.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/datasets",
+        "/docs/reference/trust-model/evidence-approval"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.exit-class",
+      "class": "Enum",
+      "kind": null,
+      "label": "ExitClass",
+      "definition": "The fixed verdict→exit mapping.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.metric-status",
+      "class": "Enum",
+      "kind": null,
+      "label": "MetricStatus",
+      "definition": "The metric asset state machine.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/metric-type",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.score-status",
+      "class": "Enum",
+      "kind": null,
+      "label": "ScoreStatus",
+      "definition": "Does a number exist for this example?",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.validity",
+      "class": "Enum",
+      "kind": null,
+      "label": "Validity",
+      "definition": "Can the measurement be trusted?",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.verdict",
+      "class": "Enum",
+      "kind": null,
+      "label": "Verdict",
+      "definition": "The four outcomes from the single decide_verdict path.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.authority.informational",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Authority: informational",
+      "definition": "Member \"informational\" of the Authority enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/docs/reference/runtime/evaluation-core/authority-resolution"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.baseline-state.comparable",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "BaselineState: comparable",
+      "definition": "Member \"comparable\" of the BaselineState enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/baseline-comparability"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.baseline-state.comparison-not-requested",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "BaselineState: comparison_not_requested",
+      "definition": "Member \"comparison_not_requested\" of the BaselineState enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/baseline-comparability"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.baseline-state.missing-baseline",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "BaselineState: missing_baseline",
+      "definition": "Member \"missing_baseline\" of the BaselineState enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/baseline-comparability"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.baseline-state.not-comparable",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "BaselineState: not_comparable",
+      "definition": "Member \"not_comparable\" of the BaselineState enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/baseline-comparability"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.data-policy.permitted",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DataPolicy: permitted",
+      "definition": "Member \"permitted\" of the DataPolicy enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.data-policy.redacted",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DataPolicy: redacted",
+      "definition": "Member \"redacted\" of the DataPolicy enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.dataset-status.proposed",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DatasetStatus: proposed",
+      "definition": "Member \"proposed\" of the DatasetStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/datasets",
+        "/docs/reference/trust-model/evidence-approval"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.dataset-status.retired",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DatasetStatus: retired",
+      "definition": "Member \"retired\" of the DatasetStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/datasets",
+        "/docs/reference/trust-model/evidence-approval"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.dataset-status.validated",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DatasetStatus: validated",
+      "definition": "Member \"validated\" of the DatasetStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/datasets",
+        "/docs/reference/trust-model/evidence-approval"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.metric-status.calibrating",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "MetricStatus: calibrating",
+      "definition": "Member \"calibrating\" of the MetricStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/metric-type",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.metric-status.draft",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "MetricStatus: draft",
+      "definition": "Member \"draft\" of the MetricStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/metric-type",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.metric-status.gating",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "MetricStatus: gating",
+      "definition": "Member \"gating\" of the MetricStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/metric-type",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.metric-status.informational",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "MetricStatus: informational",
+      "definition": "Member \"informational\" of the MetricStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/metric-type",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.metric-status.retired",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "MetricStatus: retired",
+      "definition": "Member \"retired\" of the MetricStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/metric-type",
+        "/docs/metrics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.score-status.blocked",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ScoreStatus: blocked",
+      "definition": "Member \"blocked\" of the ScoreStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.score-status.error",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ScoreStatus: error",
+      "definition": "Member \"error\" of the ScoreStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.score-status.non-evaluable",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ScoreStatus: non_evaluable",
+      "definition": "Member \"non_evaluable\" of the ScoreStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.score-status.scored",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ScoreStatus: scored",
+      "definition": "Member \"scored\" of the ScoreStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.score-status.skipped",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ScoreStatus: skipped",
+      "definition": "Member \"skipped\" of the ScoreStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.validity.invalid",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Validity: invalid",
+      "definition": "Member \"invalid\" of the Validity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.validity.not-applicable",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Validity: not_applicable",
+      "definition": "Member \"not_applicable\" of the Validity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.validity.not-measured",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Validity: not_measured",
+      "definition": "Member \"not_measured\" of the Validity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.validity.valid",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Validity: valid",
+      "definition": "Member \"valid\" of the Validity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.verdict.blocked",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Verdict: blocked",
+      "definition": "Member \"blocked\" of the Verdict enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.verdict.fail",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Verdict: fail",
+      "definition": "Member \"fail\" of the Verdict enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.verdict.informational",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Verdict: informational",
+      "definition": "Member \"informational\" of the Verdict enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.verdict.pass",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Verdict: pass",
+      "definition": "Member \"pass\" of the Verdict enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.annotation-ui",
+      "class": "Extension",
+      "kind": null,
+      "label": "Annotation workflow (UI)",
+      "definition": "Routes uncertain examples to human review; authority only with a signed validation_record.",
+      "status": "experimental",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/extensions/annotation-ui",
+        "/docs/annotation-workflow"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.hosted-dashboard-sink",
+      "class": "Extension",
+      "kind": null,
+      "label": "Hosted dashboard sink",
+      "definition": "Read-only outward copy of the Scorecard for browsing; deletable, no telemetry, repo stays source of truth.",
+      "status": "next",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/extensions/dashboard",
+        "/scorecards"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.live-judge-lane",
+      "class": "Extension",
+      "kind": null,
+      "label": "Live-judge lane",
+      "definition": "Real-provider judge via stdlib urllib (no SDK); off by default; the required path uses the deterministic FakeJudgeModel.",
+      "status": "experimental",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/judges",
+        "/extensions/metric-builder"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.live-trace-connectors",
+      "class": "Extension",
+      "kind": null,
+      "label": "Live-trace connectors (Langfuse/Phoenix/LangSmith)",
+      "definition": "Opt-in deletable input lane for live pulls; no provider SDK on the required path; observes a recording, never orchestrates.",
+      "status": "planned",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/connectors",
+        "/roadmap"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.local-file-sink",
+      "class": "Extension",
+      "kind": null,
+      "label": "Local-file dashboard sink",
+      "definition": "Read-only Scorecard export to a local dir; a failed publish becomes LaneResult BLOCKED and cannot change the verdict.",
+      "status": "experimental",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/extensions/dashboard"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.metrics-explorer",
+      "class": "Extension",
+      "kind": null,
+      "label": "Metrics explorer",
+      "definition": "UI for clusters/deltas/distributions beyond one flat number per metric.",
+      "status": "planned",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/extensions/metric-builder"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.prompt-optimizer-handoff",
+      "class": "Extension",
+      "kind": null,
+      "label": "Prompt-optimizer hand-off",
+      "definition": "Read-only export of a Scorecard to an external optimizer; EvalGlass never auto-tunes.",
+      "status": "next",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/extensions/prompt-optimizer",
+        "/use-cases/prompt-optimization"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.synthetic-generator",
+      "class": "Extension",
+      "kind": null,
+      "label": "Synthetic-data generator (connect --synth)",
+      "definition": "Future example generation; ingests through the same proposed-forcing path the governance already enforces.",
+      "status": "planned",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/extensions/synthetic-data",
+        "/docs/synthetic-scenarios"
+      ],
+      "notes": null
+    },
+    {
+      "id": "ext.visual-baseline-view",
+      "class": "Extension",
+      "kind": null,
+      "label": "Visual baseline-comparison view",
+      "definition": "Standalone delta visualization atop the CLI compare/baseline path.",
+      "status": "planned",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/extensions/baseline-comparison",
+        "/use-cases/drift"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.byte-identical-verdicts",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Byte-identical verdicts across runtimes",
+      "definition": "Claude and Codex runtimes, and the plugin-removed CLI, produce byte-identical artifacts.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/codex",
+        "/docs/local-first-workflow"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.ci-should-fail",
+      "class": "Invariant",
+      "kind": null,
+      "label": "ci_should_fail = fail OR blocked",
+      "definition": "The only quality signal CI acts on is fixed by the Verdict Engine as (verdict is fail OR blocked).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/ci",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.core-isolation",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Core isolation (stdlib-only)",
+      "definition": "The Evaluation Core imports only the standard library; no I/O, clocks, randomness, subprocesses, or model calls. CI-enforced; CODEOWNERS-guarded.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "tools/check_core_isolation.py",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core",
+        "/docs/reference/trust-model/system-boundary"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.deletion-invariant-tested",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Deletion-invariance is tested",
+      "definition": "Removing plugin/agent/lanes is verified (not promised) to leave verdicts byte-identical and the required suite green.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/extension-lanes"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.egress-before-effects",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Egress before effects",
+      "definition": "The data-policy egress check runs before any subprocess or judge call.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/security"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.fail-closed-comparability",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Fail-closed comparability",
+      "definition": "An absent provenance dimension is treated as changed; no delta is claimed across incomparable runs.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/baseline-comparability"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.fresh-install-gates-nothing",
+      "class": "Invariant",
+      "kind": null,
+      "label": "A fresh install gates nothing",
+      "definition": "authority.json is empty by default, so a first run is informational and cannot fail a build.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview",
+        "/docs/promote-a-gate"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.incomplete-cannot-gate",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Incomplete cannot gate",
+      "definition": "A metric with excluded/incomplete measurement (excluded_count>0) cannot pass an active gate — it blocks.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/measurement-state",
+        "/docs/reference/runtime/evaluation-core/aggregation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.lanes-no-authority",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Lanes carry no authority",
+      "definition": "An extension lane returns evidence/diagnostics only — never a score, authority, or verdict.",
+      "status": "next",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/extension-lanes"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.no-gate-verb",
+      "class": "Invariant",
+      "kind": null,
+      "label": "No gate/approve/certify verb exists",
+      "definition": "There is deliberately no verb that grants authority; promotion is a host-owned YAML/authority edit.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/promote-a-gate",
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.no-self-approval",
+      "class": "Invariant",
+      "kind": null,
+      "label": "No self-approval",
+      "definition": "SyntheticDataset is forced proposed; annotations need a signed validation_record; approve_threshold_from_benchmark() always raises GovernanceError.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/evidence-approval"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.no-zero-enforced",
+      "class": "Invariant",
+      "kind": null,
+      "label": "No-0.0 enforced at construction",
+      "definition": "Score construction records missing measurements as null+Diagnostic and rejects NaN/±inf/bool.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": "src/evalglass/core/scores.py",
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/score-semantics"
+      ],
+      "notes": null
+    },
+    {
+      "id": "inv.verdict-tamper-rejection",
+      "class": "Invariant",
+      "kind": null,
+      "label": "Verdict tamper-rejection",
+      "definition": "VerdictPayload re-derives itself on construction and fails closed if its fields are tampered with.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/verdict-engine"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.agent-surface",
+      "class": "Layer",
+      "kind": null,
+      "label": "Agent / Operator Surface",
+      "definition": "Entry points that scaffold and explain but never compute or grant a verdict.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands",
+        "/get-plugin"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.contracts-authority",
+      "class": "Layer",
+      "kind": null,
+      "label": "Contracts & Host-Owned Authority",
+      "definition": "The typed schemas every layer speaks and the host-owned records that are the sole origin of gating power.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.evaluation-core",
+      "class": "Layer",
+      "kind": null,
+      "label": "Evaluation Core",
+      "definition": "Turns typed evidence into a deterministic verdict with zero effects. The single place an outcome is decided.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.host-layout",
+      "class": "Layer",
+      "kind": null,
+      "label": "Host Layout",
+      "definition": "The physical managed / host-owned split inside the user repo; managed region sealed and deletion-invariant.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/vendoring/host-layout",
+        "/local-first"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.lane-architecture",
+      "class": "Layer",
+      "kind": null,
+      "label": "Lane Architecture",
+      "definition": "How any extension attaches without gaining authority: typed ports, opt-in, deletable, evidence-only.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/extension-lanes",
+        "/extensions"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.lifecycle-gating",
+      "class": "Layer",
+      "kind": null,
+      "label": "Lifecycle & Gating",
+      "definition": "Install through gate, and safe runtime upgrades.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install",
+        "/docs/promote-a-gate"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.loop",
+      "class": "Layer",
+      "kind": null,
+      "label": "The Six-Step Loop",
+      "definition": "The recurring human+agent operating model the agent drives on the developer's behalf.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview",
+        "/how-it-works"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.positioning-creed",
+      "class": "Layer",
+      "kind": null,
+      "label": "Positioning & Creed",
+      "definition": "The honesty spine binding framework and site; what EvalGlass is, who it serves, and the promise that bounds every claim.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/",
+        "/honesty"
+      ],
+      "notes": null
+    },
+    {
+      "id": "layer.runtime-harness",
+      "class": "Layer",
+      "kind": null,
+      "label": "Runtime Harness",
+      "definition": "Owns all side effects; converges inputs through ports; enforces the input-edge trust properties. Grants no meaning.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness"
+      ],
+      "notes": null
+    },
+    {
+      "id": "port.dataset-store",
+      "class": "Port",
+      "kind": "protocol",
+      "label": "DatasetStore",
+      "definition": "Effect seam supplying host-owned example datasets.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/ports",
+        "/docs/reference/trust-model/ports-and-adapters"
+      ],
+      "notes": null
+    },
+    {
+      "id": "port.judge-model",
+      "class": "Port",
+      "kind": "protocol",
+      "label": "JudgeModel",
+      "definition": "Effect seam producing judge evidence (never a score).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/ports",
+        "/docs/reference/trust-model/ports-and-adapters"
+      ],
+      "notes": null
+    },
+    {
+      "id": "port.result-store",
+      "class": "Port",
+      "kind": "protocol",
+      "label": "ResultStore",
+      "definition": "Effect seam persisting Scorecard / RunRecord.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/ports",
+        "/docs/reference/trust-model/ports-and-adapters"
+      ],
+      "notes": null
+    },
+    {
+      "id": "port.score-sink",
+      "class": "Port",
+      "kind": "protocol",
+      "label": "ScoreSink",
+      "definition": "Effect seam rendering / exporting the immutable Scorecard.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/ports",
+        "/docs/reference/trust-model/ports-and-adapters"
+      ],
+      "notes": null
+    },
+    {
+      "id": "port.task-runner",
+      "class": "Port",
+      "kind": "protocol",
+      "label": "TaskRunner",
+      "definition": "Effect seam replaying the subject app to produce outputs.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/ports",
+        "/docs/reference/trust-model/ports-and-adapters"
+      ],
+      "notes": null
+    },
+    {
+      "id": "port.trace-source",
+      "class": "Port",
+      "kind": "protocol",
+      "label": "TraceSource",
+      "definition": "Effect seam supplying exported behavior traces.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/runtime-harness/ports",
+        "/docs/reference/trust-model/ports-and-adapters"
+      ],
+      "notes": null
+    },
+    {
+      "id": "proc.adoption-lifecycle",
+      "class": "Process",
+      "kind": null,
+      "label": "Adoption lifecycle (install → gate)",
+      "definition": "How a check moves from informational to enforced in CI, and how the runtime is upgraded safely.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install",
+        "/docs/promote-a-gate"
+      ],
+      "notes": null
+    },
+    {
+      "id": "proc.ci-gating",
+      "class": "Process",
+      "kind": null,
+      "label": "CI gating",
+      "definition": "The vendored runtime runs in CI and the build fails only after a host-approved gate produces fail or blocked.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/ci",
+        "/use-cases/ci"
+      ],
+      "notes": null
+    },
+    {
+      "id": "proc.compare-baseline",
+      "class": "Process",
+      "kind": null,
+      "label": "Compare / baseline",
+      "definition": "Resolve comparability via fingerprint match on the six gating dimensions; deltas only when comparable; baseline update promotes a baseline.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/baselines"
+      ],
+      "notes": null
+    },
+    {
+      "id": "proc.promote-a-gate",
+      "class": "Process",
+      "kind": null,
+      "label": "Promote-a-gate",
+      "definition": "The deliberate four-precondition host edit (validated dataset, approved threshold, metric_status: gating, calibrated judge) that activates a gate. No verb grants authority.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/promote-a-gate"
+      ],
+      "notes": null
+    },
+    {
+      "id": "proc.revendor-safely",
+      "class": "Process",
+      "kind": null,
+      "label": "Revendor-safely",
+      "definition": "setup --upgrade → revendor --dry-run (host-patch guard) → --confirm; managed files update, host-owned truth byte-identical.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/revendor-safely"
+      ],
+      "notes": null
+    },
+    {
+      "id": "proc.run-evaluation-pipeline",
+      "class": "Process",
+      "kind": null,
+      "label": "run_evaluation pipeline",
+      "definition": "Normalize → Measure → Aggregate & Qualify → Decide & Emit — the effect-free Core pipeline.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/run-evaluation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "proc.six-step-loop",
+      "class": "Process",
+      "kind": null,
+      "label": "The six-step loop",
+      "definition": "Ask → Observe → Shape → Run → Read → Improve — the recurring operating model.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview",
+        "/how-it-works"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.ci",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "CI integration (gate)",
+      "definition": "Workflow acts on ci_should_fail / exit code only.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.compare",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Compare / baseline",
+      "definition": "Show deltas only when typed comparable; promote a baseline explicitly.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.connect",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Connect",
+      "definition": "Supply exported traces; normalized at the edge.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.install",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Install / setup / vendor",
+      "definition": "Vendor the runtime with manifest+lock; scaffold proposed assets.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.promote-gate",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Promote-a-gate",
+      "definition": "Four-precondition host YAML/authority edit; no verb grants authority.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.revendor",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Revendor-safely",
+      "definition": "dry-run + confirm; managed files update, host truth byte-identical.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.run-informational",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Run (informational first)",
+      "definition": "A fresh install gates nothing; the first run is informational.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.lc.shape-validate",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Shape & validate checks",
+      "definition": "Scaffold metrics/judges; calibrate; host validates datasets.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/install"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.loop.ask",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Ask",
+      "definition": "State in natural language what changed.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.loop.improve",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Improve",
+      "definition": "Fix prompts/models, validate data, calibrate judges, or promote a gate.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.loop.observe",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Observe",
+      "definition": "Read repo, prompts, call sites (read-only), traces, examples.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.loop.read",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Read",
+      "definition": "Explain values, deltas (if comparable), authority, diagnostics, unknowns.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.loop.run",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Run",
+      "definition": "Evaluate locally; score, resolve comparability then authority, decide once.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.loop.shape",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Shape",
+      "definition": "Scaffold metrics/judges/rubrics/scenarios — all proposed/informational.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/overview"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.pipe.aggregate",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Aggregate & Qualify",
+      "definition": "Reduce scored+valid Scores; resolve comparability then authority.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/run-evaluation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.pipe.decide",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Decide & Emit",
+      "definition": "decide_verdict runs once; pack Scorecard + RunRecord.",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/run-evaluation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.pipe.measure",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Measure",
+      "definition": "Evaluators produce Scores (status×validity, no-0.0).",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/run-evaluation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "step.pipe.normalize",
+      "class": "ProcessStep",
+      "kind": null,
+      "label": "Normalize",
+      "definition": "Receive typed Examples + EvidenceBundle (vendor objects already dropped).",
+      "status": "now",
+      "verification": "conceptual",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/runtime/evaluation-core/run-evaluation"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.add-judge",
+      "class": "Verb",
+      "kind": "authoring",
+      "label": "/evalglass add-judge",
+      "definition": "Scaffold a judge metric (informational until calibrated).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.add-metric",
+      "class": "Verb",
+      "kind": "authoring",
+      "label": "/evalglass add-metric",
+      "definition": "Scaffold a non-authoritative metric (lands proposed/informational).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.baseline",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass baseline",
+      "definition": "Promote a baseline (baseline update) with gating-dimension fingerprints.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.calibrate",
+      "class": "Verb",
+      "kind": "authoring",
+      "label": "/evalglass calibrate",
+      "definition": "Run judge calibration against host labels and write a CalibrationRecord.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.ci",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass ci",
+      "definition": "Scaffold / drive the CI workflow that acts on ci_should_fail only.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.compare",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass compare",
+      "definition": "Resolve comparability and show deltas only when typed comparable.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.connect",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass connect",
+      "definition": "Supply exported traces; normalized at the edge, no SDK/network.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.explain",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass explain",
+      "definition": "Explain values, deltas, per-metric authority, diagnostics, unknowns.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.run",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass run",
+      "definition": "Evaluate locally and produce a Scorecard + RunRecord.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.setup",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass setup",
+      "definition": "Vendor the runtime, discover call sites read-only, scaffold proposed assets.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "verb.view",
+      "class": "Verb",
+      "kind": null,
+      "label": "/evalglass view",
+      "definition": "Render a Scorecard (incl. the --by-call per example/unit view).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/commands"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.authority.none",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Authority: none",
+      "definition": "Member \"none\" of the Authority enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/docs/reference/runtime/evaluation-core/authority-resolution"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.authority.gating",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Authority: gating",
+      "definition": "Member \"gating\" of the Authority enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/trust-model/authority",
+        "/docs/reference/runtime/evaluation-core/authority-resolution"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.data-policy.forbidden",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DataPolicy: forbidden",
+      "definition": "Member \"forbidden\" of the DataPolicy enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.data-policy.missing",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DataPolicy: missing",
+      "definition": "Member \"missing\" of the DataPolicy enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.data-policy.unknown",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "DataPolicy: unknown",
+      "definition": "Member \"unknown\" of the DataPolicy enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/trust-model/authority"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.exit-class.zero",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ExitClass: zero",
+      "definition": "Member \"zero\" of the ExitClass enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.exit-class.nonzero-fail",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ExitClass: nonzero_fail",
+      "definition": "Member \"nonzero_fail\" of the ExitClass enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.exit-class.nonzero-blocked",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ExitClass: nonzero_blocked",
+      "definition": "Member \"nonzero_blocked\" of the ExitClass enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.exit-class.infrastructure-error",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ExitClass: infrastructure_error",
+      "definition": "Member \"infrastructure_error\" of the ExitClass enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums",
+        "/docs/reference/verdicts"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.threshold-approval",
+      "class": "Enum",
+      "kind": null,
+      "label": "ThresholdApproval",
+      "definition": "Whether a metric's threshold is host-approved (proposed or approved).",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.threshold-approval.proposed",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ThresholdApproval: proposed",
+      "definition": "Member \"proposed\" of the ThresholdApproval enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.threshold-approval.approved",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "ThresholdApproval: approved",
+      "definition": "Member \"approved\" of the ThresholdApproval enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.judge-calibration",
+      "class": "Enum",
+      "kind": null,
+      "label": "JudgeCalibration",
+      "definition": "The calibration state of a judge metric; only a calibrated judge can gate.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.judge-calibration.uncalibrated",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "JudgeCalibration: uncalibrated",
+      "definition": "Member \"uncalibrated\" of the JudgeCalibration enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.judge-calibration.calibrating",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "JudgeCalibration: calibrating",
+      "definition": "Member \"calibrating\" of the JudgeCalibration enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.judge-calibration.calibrated",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "JudgeCalibration: calibrated",
+      "definition": "Member \"calibrated\" of the JudgeCalibration enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.judge-calibration.drifted",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "JudgeCalibration: drifted",
+      "definition": "Member \"drifted\" of the JudgeCalibration enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.judge-calibration.retired",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "JudgeCalibration: retired",
+      "definition": "Member \"retired\" of the JudgeCalibration enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.lane-port",
+      "class": "Enum",
+      "kind": null,
+      "label": "LanePort",
+      "definition": "The existing runtime port an extension lane attaches through.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.lane-port.trace-source",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "LanePort: trace_source",
+      "definition": "Member \"trace_source\" of the LanePort enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.lane-port.score-sink",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "LanePort: score_sink",
+      "definition": "Member \"score_sink\" of the LanePort enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.lane-port.judge-model",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "LanePort: judge_model",
+      "definition": "Member \"judge_model\" of the LanePort enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.lane-port.task-runner",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "LanePort: task_runner",
+      "definition": "Member \"task_runner\" of the LanePort enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.lane-status",
+      "class": "Enum",
+      "kind": null,
+      "label": "LaneStatus",
+      "definition": "The outcome of attempting an extension lane; never a quality verdict.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.lane-status.ran",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "LaneStatus: ran",
+      "definition": "Member \"ran\" of the LaneStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.lane-status.skipped",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "LaneStatus: skipped",
+      "definition": "Member \"skipped\" of the LaneStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.lane-status.blocked",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "LaneStatus: blocked",
+      "definition": "Member \"blocked\" of the LaneStatus enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enum.maturity",
+      "class": "Enum",
+      "kind": null,
+      "label": "Maturity",
+      "definition": "Capability-status of an extension lane (roadmap metadata); never a verdict.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.maturity.now",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Maturity: now",
+      "definition": "Member \"now\" of the Maturity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.maturity.next",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Maturity: next",
+      "definition": "Member \"next\" of the Maturity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.maturity.planned",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Maturity: planned",
+      "definition": "Member \"planned\" of the Maturity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    },
+    {
+      "id": "enumval.maturity.experimental",
+      "class": "EnumValue",
+      "kind": null,
+      "label": "Maturity: experimental",
+      "definition": "Member \"experimental\" of the Maturity enumeration.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": [
+        "/docs/reference/enums"
+      ],
+      "notes": null
+    }
+  ],
+  "relations": [
+    {
+      "predicate": "partOf",
+      "from": "art.authority-json",
+      "to": "layer.host-layout"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.baselines-main",
+      "to": "layer.host-layout"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.ci-workflow",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.datasets",
+      "to": "layer.host-layout"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.evalglass-yaml",
+      "to": "layer.host-layout"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "art.evalglass-yaml",
+      "to": "ctr.runtime-config"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.extension-lane-meta",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.honesty-charter",
+      "to": "layer.positioning-creed"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.report-md",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.runrecord-json",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "art.runrecord-json",
+      "to": "ctr.run-record"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.scorecard-json",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "art.scorecard-json",
+      "to": "ctr.scorecard"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.traces",
+      "to": "layer.host-layout"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.vendor-manifest",
+      "to": "layer.host-layout"
+    },
+    {
+      "predicate": "partOf",
+      "from": "art.vendored-runtime",
+      "to": "layer.host-layout"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.adapter-fake-judge",
+      "to": "port.judge-model"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.adapter-fake-judge",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.adapter-filesystem-store",
+      "to": "port.result-store"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.adapter-filesystem-store",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.adapter-filesystem-store",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.adapter-local-jsonl-trace",
+      "to": "port.trace-source"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.adapter-local-jsonl-trace",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.adapter-local-jsonl",
+      "to": "port.dataset-store"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.adapter-local-jsonl",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.adapter-markdown-sink",
+      "to": "port.score-sink"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.adapter-markdown-sink",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.adapter-open-convention-trace",
+      "to": "port.trace-source"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.adapter-open-convention-trace",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.adapter-subprocess",
+      "to": "port.task-runner"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.adapter-subprocess",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.aggregate",
+      "to": "ctr.score"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.aggregate",
+      "to": "inv.incomplete-cannot-gate"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.aggregate",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.aggregate",
+      "to": "ctr.aggregated-metric"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.add-judge"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.add-metric"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.baseline"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.calibrate"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.ci"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.compare"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.connect"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.explain"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.run"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.setup"
+    },
+    {
+      "predicate": "exposes",
+      "from": "comp.claude-plugin",
+      "to": "verb.view"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.claude-plugin",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.codex-runtime",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.config-loader",
+      "to": "art.authority-json"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.config-loader",
+      "to": "art.evalglass-yaml"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.config-loader",
+      "to": "con.capability-not-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.config-loader",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "specifiedBy",
+      "from": "comp.config-loader",
+      "to": "adr.0005"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.decide-verdict",
+      "to": "comp.aggregate"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.decide-verdict",
+      "to": "comp.resolve-authority"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.decide-verdict",
+      "to": "inv.ci-should-fail"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.decide-verdict",
+      "to": "inv.verdict-tamper-rejection"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.decide-verdict",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.decide-verdict",
+      "to": "ctr.verdict-payload"
+    },
+    {
+      "predicate": "specifiedBy",
+      "from": "comp.decide-verdict",
+      "to": "adr.0008"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.direct-cli",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.eval-exact-match",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.eval-exact-match",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.eval-field-presence",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.eval-field-presence",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.eval-judge-score",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.eval-judge-score",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.eval-set-overlap",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.eval-set-overlap",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.eval-structural-shape",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.eval-structural-shape",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.eval-trajectory-shape",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.eval-trajectory-shape",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.evaluator-protocol",
+      "to": "con.no-zero-rule"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.evaluator-protocol",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.evaluator-protocol",
+      "to": "ctr.score"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.exit-mapper",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.exit-mapper",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "specifiedBy",
+      "from": "comp.exit-mapper",
+      "to": "adr.0008"
+    },
+    {
+      "predicate": "implements",
+      "from": "comp.exported-trace-connector",
+      "to": "port.trace-source"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.exported-trace-connector",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.fingerprint-dimension",
+      "to": "art.baselines-main"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.fingerprint-dimension",
+      "to": "inv.fail-closed-comparability"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.fingerprint-dimension",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.fingerprint-dimension",
+      "to": "ctr.run-fingerprint"
+    },
+    {
+      "predicate": "specifiedBy",
+      "from": "comp.fingerprint-dimension",
+      "to": "adr.0009"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.harness-cli",
+      "to": "comp.config-loader"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.harness-cli",
+      "to": "comp.exit-mapper"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.harness-cli",
+      "to": "comp.runner"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.harness-cli",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.installer",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.judge-collection",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.lane-registry",
+      "to": "inv.lanes-no-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.lane-registry",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.per-source-function-mapping",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.public-codex-listing",
+      "to": "comp.codex-runtime"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.public-codex-listing",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.report-sinks",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.report-sinks",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.report-sinks",
+      "to": "art.report-md"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.resolve-authority",
+      "to": "art.authority-json"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.resolve-authority",
+      "to": "enum.data-policy"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.resolve-authority",
+      "to": "comp.aggregate"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.resolve-authority",
+      "to": "con.three-stage-ladder"
+    },
+    {
+      "predicate": "enforces",
+      "from": "comp.resolve-authority",
+      "to": "inv.egress-before-effects"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.resolve-authority",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.resolve-authority",
+      "to": "ctr.resolved-authority"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.run-evaluation",
+      "to": "ctr.example"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.run-evaluation",
+      "to": "comp.aggregate"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.run-evaluation",
+      "to": "comp.decide-verdict"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.run-evaluation",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.run-evaluation",
+      "to": "comp.fingerprint-dimension"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.run-evaluation",
+      "to": "comp.resolve-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.run-evaluation",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.run-evaluation",
+      "to": "art.runrecord-json"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.run-evaluation",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.run-evaluation",
+      "to": "ctr.scorecard"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.runner",
+      "to": "art.datasets"
+    },
+    {
+      "predicate": "consumes",
+      "from": "comp.runner",
+      "to": "art.traces"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.runner",
+      "to": "comp.judge-collection"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "comp.runner",
+      "to": "comp.run-evaluation"
+    },
+    {
+      "predicate": "partOf",
+      "from": "comp.runner",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.runner",
+      "to": "ctr.evidence-bundle"
+    },
+    {
+      "predicate": "produces",
+      "from": "comp.runner",
+      "to": "ctr.example"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.ahead-of-code",
+      "to": "layer.positioning-creed"
+    },
+    {
+      "predicate": "governs",
+      "from": "con.capability-not-authority",
+      "to": "art.authority-json"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.capability-not-authority",
+      "to": "layer.positioning-creed"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.claim-boundary",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.datapolicy-hard-gate",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.deletion-invariance",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "governs",
+      "from": "con.evidence-approval-governance",
+      "to": "art.datasets"
+    },
+    {
+      "predicate": "governs",
+      "from": "con.evidence-approval-governance",
+      "to": "ctr.validation-record"
+    },
+    {
+      "predicate": "governs",
+      "from": "con.evidence-approval-governance",
+      "to": "ext.synthetic-generator"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.evidence-approval-governance",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "specifiedBy",
+      "from": "con.evidence-approval-governance",
+      "to": "adr.0021"
+    },
+    {
+      "predicate": "specifiedBy",
+      "from": "con.evidence-approval-governance",
+      "to": "adr.0025"
+    },
+    {
+      "predicate": "governs",
+      "from": "con.host-owned-authority",
+      "to": "art.authority-json"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.host-owned-authority",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.local-first",
+      "to": "layer.positioning-creed"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.measurement-state",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "governs",
+      "from": "con.no-false-confidence",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.no-false-confidence",
+      "to": "layer.positioning-creed"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.no-zero-rule",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.runtime-independence",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.status-taxonomy",
+      "to": "layer.positioning-creed"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.system-boundary",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.three-stage-ladder",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "con.worst-source-authority",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.aggregated-metric",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.calibration-record",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.comparable-run-fingerprint",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.diagnostic",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.eval-unit",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.evidence-bundle",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.example",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.lane-result",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.resolved-authority",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "ctr.resolved-authority",
+      "to": "enum.authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.run-fingerprint",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.run-record",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.runtime-config",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.scorecard",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "ctr.scorecard",
+      "to": "enum.baseline-state"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "ctr.scorecard",
+      "to": "enum.verdict"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.score",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "ctr.score",
+      "to": "enum.score-status"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "ctr.score",
+      "to": "enum.validity"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.trace-envelope",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.validation-record",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ctr.verdict-payload",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "specifiedBy",
+      "from": "ctr.verdict-payload",
+      "to": "adr.0008"
+    },
+    {
+      "predicate": "typedBy",
+      "from": "ctr.verdict-payload",
+      "to": "enum.verdict"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.authority",
+      "to": "enumval.authority.informational"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.authority",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.baseline-state",
+      "to": "enumval.baseline-state.comparable"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.baseline-state",
+      "to": "enumval.baseline-state.comparison-not-requested"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.baseline-state",
+      "to": "enumval.baseline-state.missing-baseline"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.baseline-state",
+      "to": "enumval.baseline-state.not-comparable"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.baseline-state",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.data-policy",
+      "to": "enumval.data-policy.permitted"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.data-policy",
+      "to": "enumval.data-policy.redacted"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.data-policy",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.dataset-status",
+      "to": "enumval.dataset-status.proposed"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.dataset-status",
+      "to": "enumval.dataset-status.retired"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.dataset-status",
+      "to": "enumval.dataset-status.validated"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.dataset-status",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.exit-class",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.metric-status",
+      "to": "enumval.metric-status.calibrating"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.metric-status",
+      "to": "enumval.metric-status.draft"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.metric-status",
+      "to": "enumval.metric-status.gating"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.metric-status",
+      "to": "enumval.metric-status.informational"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.metric-status",
+      "to": "enumval.metric-status.retired"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.metric-status",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.score-status",
+      "to": "enumval.score-status.blocked"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.score-status",
+      "to": "enumval.score-status.error"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.score-status",
+      "to": "enumval.score-status.non-evaluable"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.score-status",
+      "to": "enumval.score-status.scored"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.score-status",
+      "to": "enumval.score-status.skipped"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.score-status",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.validity",
+      "to": "enumval.validity.invalid"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.validity",
+      "to": "enumval.validity.not-applicable"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.validity",
+      "to": "enumval.validity.not-measured"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.validity",
+      "to": "enumval.validity.valid"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.validity",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.verdict",
+      "to": "enumval.verdict.blocked"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.verdict",
+      "to": "enumval.verdict.fail"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.verdict",
+      "to": "enumval.verdict.informational"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.verdict",
+      "to": "enumval.verdict.pass"
+    },
+    {
+      "predicate": "partOf",
+      "from": "enum.verdict",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.annotation-ui",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.annotation-ui",
+      "to": "ctr.validation-record"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.annotation-ui",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.annotation-ui",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "attachesVia",
+      "from": "ext.hosted-dashboard-sink",
+      "to": "port.score-sink"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.hosted-dashboard-sink",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.hosted-dashboard-sink",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.hosted-dashboard-sink",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "attachesVia",
+      "from": "ext.live-judge-lane",
+      "to": "port.judge-model"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.live-judge-lane",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.live-judge-lane",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.live-judge-lane",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "attachesVia",
+      "from": "ext.live-trace-connectors",
+      "to": "port.trace-source"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.live-trace-connectors",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.live-trace-connectors",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.live-trace-connectors",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "attachesVia",
+      "from": "ext.local-file-sink",
+      "to": "port.score-sink"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.local-file-sink",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.local-file-sink",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.local-file-sink",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.metrics-explorer",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.metrics-explorer",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.metrics-explorer",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.metrics-explorer",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "attachesVia",
+      "from": "ext.prompt-optimizer-handoff",
+      "to": "port.score-sink"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.prompt-optimizer-handoff",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.prompt-optimizer-handoff",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.prompt-optimizer-handoff",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "attachesVia",
+      "from": "ext.synthetic-generator",
+      "to": "port.dataset-store"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.synthetic-generator",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.synthetic-generator",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.synthetic-generator",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.visual-baseline-view",
+      "to": "art.runrecord-json"
+    },
+    {
+      "predicate": "dependsOn",
+      "from": "ext.visual-baseline-view",
+      "to": "comp.lane-registry"
+    },
+    {
+      "predicate": "partOf",
+      "from": "ext.visual-baseline-view",
+      "to": "layer.lane-architecture"
+    },
+    {
+      "predicate": "produces",
+      "from": "ext.visual-baseline-view",
+      "to": "ctr.lane-result"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.byte-identical-verdicts",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.ci-should-fail",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "governs",
+      "from": "inv.core-isolation",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.core-isolation",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.deletion-invariant-tested",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.egress-before-effects",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.fail-closed-comparability",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.fresh-install-gates-nothing",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.incomplete-cannot-gate",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "governs",
+      "from": "inv.lanes-no-authority",
+      "to": "ext.live-judge-lane"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.lanes-no-authority",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "governs",
+      "from": "inv.no-gate-verb",
+      "to": "proc.promote-a-gate"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.no-gate-verb",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "governs",
+      "from": "inv.no-self-approval",
+      "to": "art.datasets"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.no-self-approval",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "enforces",
+      "from": "inv.no-zero-enforced",
+      "to": "con.no-zero-rule"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.no-zero-enforced",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "inv.verdict-tamper-rejection",
+      "to": "layer.contracts-authority"
+    },
+    {
+      "predicate": "partOf",
+      "from": "port.dataset-store",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "port.judge-model",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "port.result-store",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "port.score-sink",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "port.task-runner",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "port.trace-source",
+      "to": "layer.runtime-harness"
+    },
+    {
+      "predicate": "partOf",
+      "from": "proc.adoption-lifecycle",
+      "to": "layer.lifecycle-gating"
+    },
+    {
+      "predicate": "enforces",
+      "from": "proc.ci-gating",
+      "to": "inv.ci-should-fail"
+    },
+    {
+      "predicate": "partOf",
+      "from": "proc.ci-gating",
+      "to": "layer.lifecycle-gating"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "proc.ci-gating",
+      "to": "actor.ci"
+    },
+    {
+      "predicate": "consumes",
+      "from": "proc.compare-baseline",
+      "to": "art.baselines-main"
+    },
+    {
+      "predicate": "partOf",
+      "from": "proc.compare-baseline",
+      "to": "layer.lifecycle-gating"
+    },
+    {
+      "predicate": "enforces",
+      "from": "proc.promote-a-gate",
+      "to": "inv.no-gate-verb"
+    },
+    {
+      "predicate": "partOf",
+      "from": "proc.promote-a-gate",
+      "to": "layer.lifecycle-gating"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "proc.promote-a-gate",
+      "to": "actor.host"
+    },
+    {
+      "predicate": "partOf",
+      "from": "proc.revendor-safely",
+      "to": "layer.lifecycle-gating"
+    },
+    {
+      "predicate": "partOf",
+      "from": "proc.run-evaluation-pipeline",
+      "to": "layer.evaluation-core"
+    },
+    {
+      "predicate": "produces",
+      "from": "proc.run-evaluation-pipeline",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "partOf",
+      "from": "proc.six-step-loop",
+      "to": "layer.loop"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.ci",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.lc.ci",
+      "to": "step.lc.compare"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.compare",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.lc.compare",
+      "to": "step.lc.revendor"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.connect",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.lc.connect",
+      "to": "step.lc.run-informational"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.install",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.lc.install",
+      "to": "step.lc.connect"
+    },
+    {
+      "predicate": "invokes",
+      "from": "step.lc.promote-gate",
+      "to": "proc.promote-a-gate"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.promote-gate",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.lc.promote-gate",
+      "to": "step.lc.ci"
+    },
+    {
+      "predicate": "invokes",
+      "from": "step.lc.revendor",
+      "to": "proc.revendor-safely"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.revendor",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.run-informational",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.lc.run-informational",
+      "to": "step.lc.shape-validate"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.lc.shape-validate",
+      "to": "proc.adoption-lifecycle"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.lc.shape-validate",
+      "to": "actor.reviewer"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.lc.shape-validate",
+      "to": "step.lc.promote-gate"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.loop.ask",
+      "to": "proc.six-step-loop"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.loop.ask",
+      "to": "actor.developer"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.loop.ask",
+      "to": "step.loop.observe"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.loop.improve",
+      "to": "proc.six-step-loop"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.loop.improve",
+      "to": "actor.developer"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.loop.observe",
+      "to": "proc.six-step-loop"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.loop.observe",
+      "to": "actor.coding-agent"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.loop.observe",
+      "to": "step.loop.shape"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.loop.read",
+      "to": "proc.six-step-loop"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.loop.read",
+      "to": "actor.coding-agent"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.loop.read",
+      "to": "step.loop.improve"
+    },
+    {
+      "predicate": "invokes",
+      "from": "step.loop.run",
+      "to": "comp.run-evaluation"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.loop.run",
+      "to": "proc.six-step-loop"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.loop.run",
+      "to": "actor.vendored-runtime"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.loop.run",
+      "to": "step.loop.read"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.loop.shape",
+      "to": "proc.six-step-loop"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.loop.shape",
+      "to": "actor.coding-agent"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.loop.shape",
+      "to": "step.loop.run"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.pipe.aggregate",
+      "to": "proc.run-evaluation-pipeline"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.pipe.aggregate",
+      "to": "actor.vendored-runtime"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.pipe.aggregate",
+      "to": "step.pipe.decide"
+    },
+    {
+      "predicate": "invokes",
+      "from": "step.pipe.decide",
+      "to": "comp.decide-verdict"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.pipe.decide",
+      "to": "proc.run-evaluation-pipeline"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.pipe.decide",
+      "to": "actor.vendored-runtime"
+    },
+    {
+      "predicate": "invokes",
+      "from": "step.pipe.measure",
+      "to": "comp.evaluator-protocol"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.pipe.measure",
+      "to": "proc.run-evaluation-pipeline"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.pipe.measure",
+      "to": "actor.vendored-runtime"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.pipe.measure",
+      "to": "step.pipe.aggregate"
+    },
+    {
+      "predicate": "partOf",
+      "from": "step.pipe.normalize",
+      "to": "proc.run-evaluation-pipeline"
+    },
+    {
+      "predicate": "performedBy",
+      "from": "step.pipe.normalize",
+      "to": "actor.vendored-runtime"
+    },
+    {
+      "predicate": "precedes",
+      "from": "step.pipe.normalize",
+      "to": "step.pipe.measure"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.add-judge",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.add-metric",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.baseline",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "produces",
+      "from": "verb.baseline",
+      "to": "art.baselines-main"
+    },
+    {
+      "predicate": "invokes",
+      "from": "verb.calibrate",
+      "to": "comp.judge-collection"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.calibrate",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "produces",
+      "from": "verb.calibrate",
+      "to": "ctr.calibration-record"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.ci",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "invokes",
+      "from": "verb.compare",
+      "to": "proc.compare-baseline"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.compare",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "invokes",
+      "from": "verb.connect",
+      "to": "comp.exported-trace-connector"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.connect",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.explain",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "invokes",
+      "from": "verb.run",
+      "to": "comp.run-evaluation"
+    },
+    {
+      "predicate": "invokes",
+      "from": "verb.run",
+      "to": "comp.runner"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.run",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "produces",
+      "from": "verb.run",
+      "to": "art.scorecard-json"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.setup",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "partOf",
+      "from": "verb.view",
+      "to": "layer.agent-surface"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.authority",
+      "to": "enumval.authority.none"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.authority",
+      "to": "enumval.authority.gating"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.data-policy",
+      "to": "enumval.data-policy.forbidden"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.data-policy",
+      "to": "enumval.data-policy.missing"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.data-policy",
+      "to": "enumval.data-policy.unknown"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.exit-class",
+      "to": "enumval.exit-class.zero"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.exit-class",
+      "to": "enumval.exit-class.nonzero-fail"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.exit-class",
+      "to": "enumval.exit-class.nonzero-blocked"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.exit-class",
+      "to": "enumval.exit-class.infrastructure-error"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.threshold-approval",
+      "to": "enumval.threshold-approval.proposed"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.threshold-approval",
+      "to": "enumval.threshold-approval.approved"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.judge-calibration",
+      "to": "enumval.judge-calibration.uncalibrated"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.judge-calibration",
+      "to": "enumval.judge-calibration.calibrating"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.judge-calibration",
+      "to": "enumval.judge-calibration.calibrated"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.judge-calibration",
+      "to": "enumval.judge-calibration.drifted"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.judge-calibration",
+      "to": "enumval.judge-calibration.retired"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.lane-port",
+      "to": "enumval.lane-port.trace-source"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.lane-port",
+      "to": "enumval.lane-port.score-sink"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.lane-port",
+      "to": "enumval.lane-port.judge-model"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.lane-port",
+      "to": "enumval.lane-port.task-runner"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.lane-status",
+      "to": "enumval.lane-status.ran"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.lane-status",
+      "to": "enumval.lane-status.skipped"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.lane-status",
+      "to": "enumval.lane-status.blocked"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.maturity",
+      "to": "enumval.maturity.now"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.maturity",
+      "to": "enumval.maturity.next"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.maturity",
+      "to": "enumval.maturity.planned"
+    },
+    {
+      "predicate": "hasValue",
+      "from": "enum.maturity",
+      "to": "enumval.maturity.experimental"
+    }
+  ]
+}

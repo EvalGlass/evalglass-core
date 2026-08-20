@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evalglass/ontology/schema",
+  "title": "EvalGlass Ontology",
+  "description": "Structural schema for evalglass-ontology.json. Closed vocabularies (classes, predicates, status, verification) live in the document's own meta block and are enforced by check-ontology.mjs against the data; this schema validates shape.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ontology", "version", "about", "meta", "stats", "entities", "relations"],
+  "properties": {
+    "ontology": { "const": "evalglass" },
+    "version": { "type": "string" },
+    "generated": { "type": "string" },
+    "about": { "type": "string", "minLength": 20 },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classes", "predicates", "status", "verification", "idScheme"],
+      "properties": {
+        "classes": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": ["prefix", "desc"],
+            "additionalProperties": false,
+            "properties": { "prefix": { "type": "string" }, "desc": { "type": "string" } }
+          }
+        },
+        "predicates": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": ["domain", "range", "desc"],
+            "additionalProperties": false,
+            "properties": {
+              "domain": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+              "range": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+              "desc": { "type": "string" }
+            }
+          }
+        },
+        "status": { "type": "array", "items": { "enum": ["now", "next", "planned", "experimental"] }, "minItems": 1 },
+        "verification": { "type": "array", "items": { "enum": ["asserted", "conceptual"] }, "minItems": 1 },
+        "idScheme": { "type": "string" }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "required": ["entities", "relations", "byClass"],
+      "properties": {
+        "entities": { "type": "integer", "minimum": 1 },
+        "relations": { "type": "integer", "minimum": 1 },
+        "byClass": { "type": "object", "additionalProperties": { "type": "integer" } }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "class", "label", "definition", "status", "verification", "evidence"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z]+\\.[a-z0-9.-]+$" },
+          "class": { "type": "string" },
+          "kind": { "type": ["string", "null"] },
+          "label": { "type": "string", "minLength": 1 },
+          "definition": { "type": "string", "minLength": 10 },
+          "status": { "enum": ["now", "next", "planned", "experimental"] },
+          "verification": { "enum": ["asserted", "conceptual"] },
+          "repoLocator": { "type": ["string", "null"] },
+          "evidence": { "type": "array", "items": { "type": "string", "pattern": "^/" }, "minItems": 1 },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["predicate", "from", "to"],
+        "properties": {
+          "predicate": { "type": "string" },
+          "from": { "type": "string" },
+          "to": { "type": "string" }
+        }
+      }
+    }
+  }
+}

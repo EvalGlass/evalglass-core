@@ -1,0 +1,29 @@
+{
+  "ontology": "evalglass",
+  "version": "test-1",
+  "generated": "2026-01-01",
+  "about": "A fixture whose single entity has an empty id — the loader must fail closed.",
+  "meta": {
+    "classes": { "Layer": { "prefix": "layer", "desc": "A runtime layer." } },
+    "predicates": { "partOf": { "domain": ["Layer"], "range": ["Layer"], "desc": "Containment." } },
+    "status": ["now", "next", "planned", "experimental"],
+    "verification": ["asserted", "conceptual"],
+    "idScheme": "prefix.suffix"
+  },
+  "stats": { "entities": 1, "relations": 1, "byClass": { "Layer": 1 } },
+  "entities": [
+    {
+      "id": "",
+      "class": "Layer",
+      "kind": null,
+      "label": "Broken",
+      "definition": "An entity with an empty id that must be rejected.",
+      "status": "now",
+      "verification": "asserted",
+      "repoLocator": null,
+      "evidence": ["/docs/x"],
+      "notes": null
+    }
+  ],
+  "relations": [{ "predicate": "partOf", "from": "layer.core", "to": "layer.core" }]
+}
