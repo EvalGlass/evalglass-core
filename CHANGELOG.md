@@ -59,7 +59,7 @@ public contracts, authority, and verdict behaviour are unchanged.
   as the open, host-directed evaluation runtime that gives your team a rigorous system to *define,
   run, compare, and retain* evaluations over checks you own. It never inspects an application to
   decide, on its own, what to test; deriving *what* to measure (metric discovery) is a separate
-  concern that lives in the [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discovery)
+  concern that lives in the `evalglass-discovery`
   repo.
 
 ### Notes
@@ -83,7 +83,7 @@ EvalGlass is the **framework, not the oracle**: it supplies the machinery and le
 to measure. You know your app and how it fails; tell the agent the check you want and the
 `authoring-a-metric` skill scaffolds it. Automated *metric discovery* — deriving what to measure from
 an app's traces, prompts, and schemas — is deliberately **out of scope** for the core and lives in a
-separate [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discovery) repo.
+separate `evalglass-discovery` repo.
 
 ### Added
 
@@ -269,7 +269,7 @@ separate [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discover
 - **Automated metric discovery is intentionally out of scope.** The core gives you the framework; you
   direct the agent to author the metrics your app needs. The agentic discovery engine that derives
   metrics from an app's traces, prompts, and schemas lives in the separate
-  [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discovery) repo.
+  `evalglass-discovery` repo.
 - Optional lanes (live trace connectors, real-provider judges) are opt-in, pinned, and deletable; no
   required path imports them and no required test uses a live provider. Synthetic-data *generation*
   ships no generator by design (governance-only).

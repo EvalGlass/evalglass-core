@@ -261,7 +261,7 @@ test.
 
 That boundary is deliberate. Deriving *what* to measure from an application — reading its traces,
 prompts, and schemas to propose a bespoke suite — is **metric discovery**, and it lives in the
-separate [`evalglass-discovery`](https://github.com/EvalGlass/evalglass-discovery) repo, not here. In
+separate `evalglass-discovery` repo, not here. In
 short: **Core executes · Discovery finds · Intelligence explains.** Core is the substrate the others
 build on; nothing in it decides your evaluation agenda for you.
 
