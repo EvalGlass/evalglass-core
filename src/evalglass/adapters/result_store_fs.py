@@ -164,9 +164,13 @@ def verify_run(run_dir: Path) -> None:
 
 
 def _atomic_write_text(path: Path, text: str) -> None:
-    """Write ``text`` to ``path`` crash-safely: temp file -> fsync -> atomic rename."""
+    """Write ``text`` to ``path`` crash-safely: temp file -> fsync -> atomic rename.
+
+    The file is created ``0o600`` (owner read/write only): run records, scorecards, and
+    reports can carry host evaluation evidence, so they are not world-readable by default.
+    """
     tmp = path.with_name(f".{path.name}.tmp")
-    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
+    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
     try:
         os.write(fd, text.encode("utf-8"))
         os.fsync(fd)
