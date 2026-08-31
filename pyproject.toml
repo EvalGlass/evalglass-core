@@ -53,7 +53,7 @@ score-sink-export = []     # M5a S4 export sink — stdlib urllib (https)
 # lightweight `arize-phoenix-client` (the span-reading API), NOT the full `arize-phoenix`
 # server (which transitively pulls openai/anthropic/fastapi); the budget guard bans the server.
 langfuse-trace = ["langfuse>=4,<5"]              # adapters/trace_langfuse.py (EG-R1)
-phoenix-trace = ["arize-phoenix-client>=2,<3"]   # adapters/trace_phoenix.py (EG-R2)
+phoenix-trace = ["arize-phoenix-client>=2,<4"]   # adapters/trace_phoenix.py (EG-R2)
 langsmith-trace = ["langsmith>=0.8.18,<1"]       # adapters/trace_langsmith.py (EG-R3); floor is GHSA-f4xh-w4cj-qxq8 fix
 # ----- Grouped convenience extras: lean by default, complete by composition -----
 # These COMPOSE the granular extras above via self-reference (`evalglass[...]`); they pin
